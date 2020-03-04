@@ -12,15 +12,22 @@ class Messaging
     private $timestamp;
     private $message;
     private $type;
+    private $postback;
 
     public function __construct(array $data)
     {
         $this->senderId = $data["sender"]["id"];
         $this->recipientId = $data["recipient"]["id"];
         $this->timestamp = $data["timestamp"];
+
         if(isset($data["message"])) {
             $this->type = "message";
             $this->message = new Message($data["message"]);
+        }
+
+        if(isset($data["postback"])) {
+            $this->type = "postback";
+            $this->postback = new Postback($data["postback"]);
         }
     }
 

@@ -27,6 +27,11 @@ class BotHandler implements ShouldQueue
             $bot = new Bot($this->messaging);
             $bot->reply();
         }
+
+        if ($this->messaging->getType() == "postback") {
+            $bot = new Bot($this->messaging);
+            $bot->reply();
+        }
     }
 
 }
