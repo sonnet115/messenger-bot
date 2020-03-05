@@ -18,7 +18,80 @@ class Bot
         $id = $this->messaging->getSenderId();
         $this->sendMarkSeen($id);
         $this->sendSenderTyping($id);
-        $this->sendTemplate($id);
+        $this->sendReceipt($id);
+//        $this->disableComposer($id);
+        $this->enableComposer($id);
+
+//        if($this->messaging->getMessage()->getText() == "enable")
+//            $this->enableComposer($id);
+//        if($this->messaging->getMessage()->getText() == "disable")
+//            $this->disableComposer($id);
+    }
+
+    private function disableComposer($recipientId)
+    {
+        $messageData = [
+            "recipient" => [
+                "id" => $recipientId
+            ],
+            "persistent_menu" => [
+                [
+                    "locale" => "default",
+                    "composer_input_disabled" => true,
+                    "call_to_actions" => [
+                        [
+                            "type" => "postback",
+                            "title" => "Talk to an agent",
+                            "payload" => "CARE_HELP"
+                        ],
+                        [
+                            "type" => "postback",
+                            "title" => "Outfit suggestions",
+                            "payload" => "CURATION"
+                        ],
+                        [
+                            "type" => "web_url",
+                            "title" => "Shop now",
+                            "url" => "https://www.originalcoastclothing.com/",
+                            "webview_height_ratio" => "full"
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $ch = curl_init('https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' . env("PAGE_ACCESS_TOKEN"));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
+        curl_exec($ch);
+
+    }
+
+    private function enableComposer($recipientId)
+    {
+        $messageData = [
+            "recipient" => [
+                "id" => $recipientId
+            ],
+            "persistent_menu" => [
+                [
+                    "locale" => "default",
+                    "composer_input_disabled" => false,
+                ]
+            ]
+        ];
+
+        $ch = curl_init('https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' . env("PAGE_ACCESS_TOKEN"));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
+        curl_exec($ch);
+
     }
 
     private function sendSenderTyping($recipientId)
