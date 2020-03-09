@@ -30,7 +30,6 @@ class Bot
     {
         $quick_replies = new QuickReplies($recipientId);
         $messageData = $quick_replies->basicOptions();
-
         $this->apiRequest($messageData);
     }
 
