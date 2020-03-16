@@ -20,7 +20,7 @@ class QuickReplies
                 "id" => $this->recipientId
             ],
             "message" => [
-                "text" => "",
+                "text" => "Please Choose an option",
                 "quick_replies" => [
                     [
                         "content_type" => "text",
