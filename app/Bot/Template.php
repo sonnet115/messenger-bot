@@ -29,17 +29,17 @@ class Template
                                 "subtitle" => "Please fill up all information!",
                                 "default_action" => [
                                     "type" => "web_url",
-                                    "url" => "https://1936818c.ngrok.io/",
+                                    "url" => env("TUNNEL"),
                                     "webview_height_ratio" => "tall",
                                 ],
                                 "buttons" => [
                                     [
                                         "type" => "web_url",
-                                        "title" => "title",
-                                        "url" => "https://1936818c.ngrok.io/",
+                                        "title" => "Place Order",
+                                        "url" => env("TUNNEL"),
                                         "messenger_extensions" => 'true',
                                         "webview_height_ratio" => 'full',
-                                        "fallback_url" => "https://1936818c.ngrok.io/"
+                                        "fallback_url" => env("TUNNEL")
                                     ]
                                 ]
                             ]
