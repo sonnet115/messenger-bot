@@ -3,6 +3,7 @@
 namespace App\Bot;
 
 use App\Customer;
+use Illuminate\Support\Facades\Session;
 
 class DataHandler
 {

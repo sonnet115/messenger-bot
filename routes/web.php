@@ -21,4 +21,4 @@ Route::get("/test-bot", "BotController@receive")->middleware("verify");
 //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
 Route::post("/test-bot", "BotController@receive");
 
-Route::get("order-form", "OrderController@viewOrderForm")->name("order.form");
+Route::get("order-form/{id}", "OrderController@viewOrderForm")->name("order.form");

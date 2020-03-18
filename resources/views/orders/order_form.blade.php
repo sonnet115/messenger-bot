@@ -10,9 +10,11 @@
     <link rel="stylesheet" type="text/css" href="https://8d20de63.ngrok.io/assets/orders/css/iofrm-theme24.css">
 </head>
 <body>
+
 <div class="text-center" style="margin-top: 20px">
     <h3 class="text-muted">Place Order</h3>
 </div>
+
 <div class="form-body on-top" style="padding-top:0px">
     <div class="row">
         <div class="form-holder">
@@ -21,10 +23,13 @@
                     <form>
                         <div class="row">
                             <div class="col-12 col-sm-12">
-                                <input type="text" class="form-control" placeholder="First name">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" placeholder="First name"
+                                       value="{{$user_info->first_name != null ? $user_info->first_name : ""}}">
                             </div>
                             <div class="col-12 col-sm-12">
-                                <input type="text" class="form-control" placeholder="Last name">
+                                <input type="text" class="form-control" placeholder="Last name"
+                                       value="{{$user_info->last_name != null ? $user_info->last_name : ""}}">
                             </div>
                             <div class="col-12 col-sm-12">
                                 <input type="text" class="form-control" placeholder="Phone Number">
