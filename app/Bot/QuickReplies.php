@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Bot;
-
 
 class QuickReplies
 {
@@ -20,27 +18,32 @@ class QuickReplies
                 "id" => $this->recipientId
             ],
             "message" => [
-                "text" => "Please Choose an option",
+                "text" => "Choose an option",
                 "quick_replies" => [
                     [
                         "content_type" => "text",
-                        "title" => "Order Product",
-                        "payload" => "order_product",
+                        "title" => "Product Enquiry",
+                        "payload" => "PRODUCT_ENQUIRY",
                     ],
                     [
                         "content_type" => "text",
-                        "title" => "Product Enquiry",
-                        "payload" => "product_enquiry",
+                        "title" => "Order Product",
+                        "payload" => "ORDER_PRODUCT",
                     ],
                     [
                         "content_type" => "text",
                         "title" => "Track Order",
-                        "payload" => "track_order",
+                        "payload" => "TRACK_ORDER",
                     ],
                     [
                         "content_type" => "text",
-                        "title" => "Chat with Agent",
-                        "payload" => "chat_agent",
+                        "title" => "Pre-Order",
+                        "payload" => "PRE_ORDER",
+                    ],
+                    [
+                        "content_type" => "text",
+                        "title" => "Talk to Agent",
+                        "payload" => "TALK_TO_AGENT",
                     ],
                 ],
 

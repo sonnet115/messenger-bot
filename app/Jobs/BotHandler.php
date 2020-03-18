@@ -24,12 +24,12 @@ class BotHandler implements ShouldQueue
     public function handle()
     {
         if ($this->messaging->getType() == "message") {
-            $bot = new Bot($this->messaging);
+            $bot = new Bot($this->messaging, "message");
             $bot->reply();
         }
 
         if ($this->messaging->getType() == "postback") {
-            $bot = new Bot($this->messaging);
+            $bot = new Bot($this->messaging, "postback");
             $bot->reply();
         }
     }

@@ -21,27 +21,15 @@ class Template
                 "attachment" => [
                     "type" => "template",
                     "payload" => [
-                        "template_type" => "generic",
-                        "elements" => [
+                        "template_type" => "button",
+                        "text" => "Fill the form",
+                        "buttons" => [
                             [
-                                "title" => "Order Form",
-                                "image_url" => "http://bpgift.ciphershack.com/uploads/C22P0005_opened.jpg",
-                                "subtitle" => "Please fill up all information!",
-                                "default_action" => [
-                                    "type" => "web_url",
-                                    "url" => env("TUNNEL"),
-                                    "webview_height_ratio" => "tall",
-                                ],
-                                "buttons" => [
-                                    [
-                                        "type" => "web_url",
-                                        "title" => "Place Order",
-                                        "url" => env("TUNNEL"),
-                                        "messenger_extensions" => 'true',
-                                        "webview_height_ratio" => 'full',
-                                        "fallback_url" => env("TUNNEL")
-                                    ]
-                                ]
+                                "type" => "web_url",
+                                "url" => env("TUNNEL")."order-form",
+                                "title" => "Order Product",
+                                "messenger_extensions" => 'true',
+                                "webview_height_ratio" => "tall",
                             ]
                         ]
                     ]
@@ -50,7 +38,7 @@ class Template
         ];
     }
 
-    public function testTemplate()
+    public function productEnquiryTemplate()
     {
         return [
             "recipient" => [
@@ -60,19 +48,42 @@ class Template
                 "attachment" => [
                     "type" => "template",
                     "payload" => [
-                        "template_type" => "media",
-                        "elements" => [
+                        "template_type" => "button",
+                        "text" => "Click the button",
+                        "buttons" => [
                             [
-                                "media_type" => "image",
-                                "url" => "https://www.facebook.com/photo.php?fbid=601112986766364&set=a.247113122166354&type=3&theater",
-                                "buttons" => [
-                                    [
-                                        "type" => "web_url",
-                                        "url" => "http://bpgift.ciphershack.com/",
-                                        "title" => "View Website",
-                                        "messenger_extensions" => "true"
-                                    ]
-                                ]
+                                "type" => "web_url",
+                                "url" => env("TUNNEL"),
+                                "title" => "Product Enquiry",
+                                "messenger_extensions" => 'true',
+                                "webview_height_ratio" => "tall",
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    public function preOrderProductTemplate()
+    {
+        return [
+            "recipient" => [
+                "id" => $this->recipientId
+            ],
+            "message" => [
+                "attachment" => [
+                    "type" => "template",
+                    "payload" => [
+                        "template_type" => "button",
+                        "text" => "Click the button",
+                        "buttons" => [
+                            [
+                                "type" => "web_url",
+                                "url" => env("TUNNEL"),
+                                "title" => "Pre Order",
+                                "messenger_extensions" => 'true',
+                                "webview_height_ratio" => "tall",
                             ]
                         ]
                     ]

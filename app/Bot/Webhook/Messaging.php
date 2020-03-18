@@ -20,12 +20,12 @@ class Messaging
         $this->recipientId = $data["recipient"]["id"];
         $this->timestamp = $data["timestamp"];
 
-        if(isset($data["message"])) {
+        if (isset($data["message"])) {
             $this->type = "message";
             $this->message = new Message($data["message"]);
         }
 
-        if(isset($data["postback"])) {
+        if (isset($data["postback"])) {
             $this->type = "postback";
             $this->postback = new Postback($data["postback"]);
         }
@@ -49,6 +49,11 @@ class Messaging
     public function getMessage()
     {
         return $this->message;
+    }
+
+    public function getPostback()
+    {
+        return $this->postback;
     }
 
     public function getType()
