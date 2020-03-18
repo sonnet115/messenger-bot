@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form | Shop Name</title>
-    <link rel="stylesheet" type="text/css" href="https://8d20de63.ngrok.io/assets/orders/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://8d20de63.ngrok.io/assets/orders/css/fontawesome-all.min.css">
-    <link rel="stylesheet" type="text/css" href="https://8d20de63.ngrok.io/assets/orders/css/iofrm-style.css">
-    <link rel="stylesheet" type="text/css" href="https://8d20de63.ngrok.io/assets/orders/css/iofrm-theme24.css">
+    <link rel="stylesheet" type="text/css" href="{{env("TUNNEL")}}assets/orders/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{env("TUNNEL")}}assets/orders/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{env("TUNNEL")}}assets/orders/css/iofrm-style.css">
+    <link rel="stylesheet" type="text/css" href="{{env("TUNNEL")}}assets/orders/css/iofrm-theme24.css">
 </head>
 <body>
 
@@ -75,9 +75,9 @@
         </div>
     </div>
 </div>
-<script src="https://8d20de63.ngrok.io/assets/orders/js/jquery.min.js"></script>
-<script src="https://8d20de63.ngrok.io/assets/orders/js/popper.min.js"></script>
-<script src="https://8d20de63.ngrok.io/assets/orders/js/bootstrap.min.js"></script>
-<script src="https://8d20de63.ngrok.io/assets/orders/js/main.js"></script>
+<script src="{{env("TUNNEL")}}assets/orders/js/jquery.min.js"></script>
+<script src="{{env("TUNNEL")}}assets/orders/js/popper.min.js"></script>
+<script src="{{env("TUNNEL")}}assets/orders/js/bootstrap.min.js"></script>
+<script src="{{env("TUNNEL")}}assets/orders/js/main.js"></script>
 </body>
 </html>
