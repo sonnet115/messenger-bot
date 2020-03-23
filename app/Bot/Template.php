@@ -26,7 +26,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("TUNNEL") . "order-form/" . $this->recipientId,
+                                "url" => env("APP_URL") . "order-form/" . $this->recipientId,
                                 "title" => "Order Product",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
@@ -53,7 +53,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("TUNNEL"),
+                                "url" => env("APP_URL"),
                                 "title" => "Product Enquiry",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
@@ -80,7 +80,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("TUNNEL"),
+                                "url" => env("APP_URL"),
                                 "title" => "Pre Order",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
