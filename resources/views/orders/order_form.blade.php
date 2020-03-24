@@ -49,7 +49,7 @@
                             <label>Mobile Number <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Mobile Number"
                                    value="{{$customer_info->contact != null ? $customer_info->contact : ""}}"
-                                   name="mobile_number" required>
+                                   name="contact" required>
                         </div>
 
                         <div class="col-12">
@@ -77,7 +77,7 @@
 
                         <div class="col-12 col-sm-12">
                             <label>Product Code <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Product Code" name="product_code[]">
+                            <input type="text" class="form-control" placeholder="Product Code" name="product_code[]" required>
                         </div>
 
                         <div class="col-12 col-sm-12">
@@ -151,7 +151,7 @@
 
             let first_name = $("input[name=first_name]").val();
             let last_name = $("input[name=last_name]").val();
-            let mobile_number = $("input[name=mobile_number]").val();
+            let contact = $("input[name=contact]").val();
             let shipping_address = $("textarea[name=shipping_address]").val();
             let billing_address = $("textarea[name=billing_address]").val();
             let customer_fb_id = $("input[name=customer_fb_id]").val();
@@ -169,7 +169,7 @@
                 data: {
                     'first_name': first_name,
                     'last_name': last_name,
-                    'mobile_number': mobile_number,
+                    'contact': contact,
                     'shipping_address': shipping_address,
                     'billing_address': billing_address,
                     'product_code': product_code,
