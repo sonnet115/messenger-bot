@@ -54,13 +54,15 @@
 
                         <div class="col-12">
                             <label>Shipping Address <span class="text-danger">*</span></label>
-                            <textarea class="form-control" placeholder="Shipping Address" name="shipping_address">{{$customer_info->shipping_address != null ? $customer_info->shipping_address : ""}}</textarea>
+                            <textarea class="form-control" placeholder="Shipping Address"
+                                      name="shipping_address">{{$customer_info->shipping_address != null ? $customer_info->shipping_address : ""}}</textarea>
                         </div>
 
                         <div class="col-12">
                             <label>Billing Address <span class="text-danger"
                                                          style="font-size: 11px">[Optional]</span></label>
-                            <textarea class="form-control" placeholder="Billing Address" name="billing_address">{{$customer_info->billing_address != null ? $customer_info->billing_address : ""}}</textarea>
+                            <textarea class="form-control" placeholder="Billing Address"
+                                      name="billing_address">{{$customer_info->billing_address != null ? $customer_info->billing_address : ""}}</textarea>
                         </div>
 
                         <div class="col-4 col-sm-4">
@@ -106,65 +108,86 @@
             </div>
 
             {{--hidden fields--}}
-            <input type="text" value="{{$customer_info->fb_id}}" name="customer_fb_id">
+            <input type="hidden" value="{{$customer_info->fb_id}}" name="customer_fb_id">
 
         </div>
-        <script src="{{env("APP_URL")}}assets/orders/js/jquery.min.js"></script>
-        <script src="{{env("APP_URL")}}assets/orders/js/popper.min.js"></script>
-        <script src="{{env("APP_URL")}}assets/orders/js/bootstrap.min.js"></script>
-        <script src="{{env("APP_URL")}}assets/orders/js/main.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("#add_more_btn").on("click", function () {
-                    let product_info_field = '  <div class="col-12 col-sm-12" style="margin-top: 20px">\n' +
-                        '                            <label>Product Code <span class="text-danger">*</span></label>\n' +
-                        '                            <input type="text" class="form-control" placeholder="Product Code" name="product_code[]">\n' +
-                        '                       </div>\n' +
-                        '                       <div class="col-12 col-sm-12">\n' +
-                        '                            <label>Product Qty <span class="text-danger">*</span></label>\n' +
-                        '                            <input type="number" class="form-control" value="1" placeholder="Product Quantity" name="product_qty[]"\n' +
-                        '                                   required>\n' +
-                        '                       </div>';
+    </div>
+</div>
 
-                    $("#product_info_container").append(product_info_field);
-                });
+<!-- The Modal Starts-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body" style="font-size: 14px">
 
-                $("#submit").on("click", function () {
-                    let base_url = window.location.host;
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The Modal Ends-->
 
-                    let first_name = $("input[name=first_name]").val();
-                    let last_name = $("input[name=last_name]").val();
-                    let mobile_number = $("input[name=mobile_number]").val();
-                    let shipping_address = $("textarea[name=shipping_address]").val();
-                    let billing_address = $("textarea[name=billing_address]").val();
-                    let customer_fb_id = $("input[name=customer_fb_id]").val();
+<script src="{{env("APP_URL")}}assets/orders/js/jquery.min.js"></script>
+<script src="{{env("APP_URL")}}assets/orders/js/popper.min.js"></script>
+<script src="{{env("APP_URL")}}assets/orders/js/bootstrap.min.js"></script>
+<script src="{{env("APP_URL")}}assets/orders/js/main.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#add_more_btn").on("click", function () {
+            let product_info_field = '  <div class="col-12 col-sm-12" style="margin-top: 20px">\n' +
+                '                            <label>Product Code <span class="text-danger">*</span></label>\n' +
+                '                            <input type="text" class="form-control" placeholder="Product Code" name="product_code[]">\n' +
+                '                       </div>\n' +
+                '                       <div class="col-12 col-sm-12">\n' +
+                '                            <label>Product Qty <span class="text-danger">*</span></label>\n' +
+                '                            <input type="number" class="form-control" value="1" placeholder="Product Quantity" name="product_qty[]"\n' +
+                '                                   required>\n' +
+                '                       </div>';
 
-                    let product_code = $("input[name='product_code[]']").map(function () {
-                        return $(this).val();
-                    }).get();
-                    let product_qty = $("input[name='product_qty[]']").map(function () {
-                        return $(this).val();
-                    }).get();
+            $("#product_info_container").append(product_info_field);
+        });
 
-                    $.ajax({
-                        url: '/store-order',
-                        type: "GET",
-                        data: {
-                            'first_name': first_name,
-                            'last_name': last_name,
-                            'mobile_number': mobile_number,
-                            'shipping_address': shipping_address,
-                            'billing_address': billing_address,
-                            'product_code': product_code,
-                            'product_qty': product_qty,
-                            'customer_fb_id': customer_fb_id,
-                        },
-                        success: function (result) {
-                            console.log(result);
-                        }
-                    });
-                })
-            })
-        </script>
+        $("#submit").on("click", function () {
+            let base_url = window.location.host;
+
+            let first_name = $("input[name=first_name]").val();
+            let last_name = $("input[name=last_name]").val();
+            let mobile_number = $("input[name=mobile_number]").val();
+            let shipping_address = $("textarea[name=shipping_address]").val();
+            let billing_address = $("textarea[name=billing_address]").val();
+            let customer_fb_id = $("input[name=customer_fb_id]").val();
+
+            let product_code = $("input[name='product_code[]']").map(function () {
+                return $(this).val();
+            }).get();
+            let product_qty = $("input[name='product_qty[]']").map(function () {
+                return $(this).val();
+            }).get();
+
+            $.ajax({
+                url: '/store-order',
+                type: "GET",
+                data: {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'mobile_number': mobile_number,
+                    'shipping_address': shipping_address,
+                    'billing_address': billing_address,
+                    'product_code': product_code,
+                    'product_qty': product_qty,
+                    'customer_fb_id': customer_fb_id,
+                },
+                success: function (result) {
+                    $(".modal-body").html(result);
+
+                    $('#myModal').modal('toggle');
+
+                    setTimeout(function () {
+                        $('#myModal').modal('hide');
+                    }, 4000);
+                }
+            });
+        })
+    })
+</script>
 </body>
 </html>

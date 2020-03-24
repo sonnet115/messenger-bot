@@ -23,3 +23,5 @@ Route::post("/test-bot", "BotController@receive");
 
 Route::get("order-form/{id}", "OrderController@viewOrderForm")->name("order.form");
 Route::get("store-order", "OrderController@storeOrder")->name("order.store");
+
+Route::get("test-order", "OrderController@getProductCodeAndPrice");
