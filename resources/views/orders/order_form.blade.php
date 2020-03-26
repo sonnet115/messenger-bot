@@ -36,6 +36,7 @@
                             <input type="text" class="form-control" placeholder="First name"
                                    value="{{$customer_info->first_name != null ? $customer_info->first_name : ""}}"
                                    name="first_name" required>
+                            <p id="first_name_error" class="text-danger" style="font-size: 13px"></p>
                         </div>
 
                         <div class="col-12 col-sm-12">
@@ -43,19 +44,22 @@
                             <input type="text" class="form-control" placeholder="Last name"
                                    value="{{$customer_info->last_name != null ? $customer_info->last_name : ""}}"
                                    name="last_name" required>
+                            <p id="last_name_error" class="text-danger" style="font-size: 13px"></p>
                         </div>
 
                         <div class="col-12 col-sm-12">
-                            <label>Mobile Number <span class="text-danger">*</span></label>
+                            <label>Contact Number <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Mobile Number"
                                    value="{{$customer_info->contact != null ? $customer_info->contact : ""}}"
                                    name="contact" required>
+                            <p id="contact_error" class="text-danger" style="font-size: 13px"></p>
                         </div>
 
                         <div class="col-12">
                             <label>Shipping Address <span class="text-danger">*</span></label>
                             <textarea class="form-control" placeholder="Shipping Address"
                                       name="shipping_address">{{$customer_info->shipping_address != null ? $customer_info->shipping_address : ""}}</textarea>
+                            <p id="shipping_address_error" class="text-danger" style="font-size: 13px"></p>
                         </div>
 
                         <div class="col-12">
@@ -75,22 +79,26 @@
                             <hr>
                         </div>
 
-                        <div class="col-12 col-sm-12">
+                        <div class="col-6 col-sm-6">
                             <label>Product Code <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Product Code" name="product_code[]" required>
+                            <input type="text" class="form-control" placeholder="Product Code"
+                                   name="product_code[]"
+                                   required>
+                            <p class="product_code_error text-danger" style="font-size: 13px"></p>
                         </div>
 
-                        <div class="col-12 col-sm-12">
-                            <label>Product Name <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" value="1" placeholder="Product Quantity"
+                        <div class="col-4 col-sm-4">
+                            <label>Product Qty <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" value="0" placeholder="Product Quantity"
                                    name="product_qty[]"
                                    required>
                         </div>
 
-                        <div id="product_info_container" class="row" style="padding-right: 5px;padding-left: 5px">
+                        <div id="product_info_container" class="col-12 col-sm-12"
+                             style="padding-right: 5px;padding-left: 5px">
 
                         </div>
-                        <div class="col-12 col-sm-6 text-right" style="padding-right: 5px">
+                        <div class="col-12 col-sm-12 text-right" style="padding-right: 5px">
                             <button class="btn btn-sm btn-success" id="add_more_btn"
                                     style="padding: 5px 13px;font-size: 12px;border-radius: 2px">
                                 <i class="fa fa-plus"></i> ADD
@@ -133,22 +141,61 @@
 <script>
     $(document).ready(function () {
         $("#add_more_btn").on("click", function () {
-            let product_info_field = '  <div class="col-12 col-sm-12" style="margin-top: 20px">\n' +
-                '                            <label>Product Code <span class="text-danger">*</span></label>\n' +
-                '                            <input type="text" class="form-control" placeholder="Product Code" name="product_code[]">\n' +
-                '                       </div>\n' +
-                '                       <div class="col-12 col-sm-12">\n' +
-                '                            <label>Product Qty <span class="text-danger">*</span></label>\n' +
-                '                            <input type="number" class="form-control" value="1" placeholder="Product Quantity" name="product_qty[]"\n' +
-                '                                   required>\n' +
-                '                       </div>';
+            let product_info_field = '<div class="row">\n' +
+                '                                <div class="col-6 col-sm-6">\n' +
+                '                                    <label>Product Code <span class="text-danger">*</span></label>\n' +
+                '                                    <input type="text" class="form-control" placeholder="Product Code"\n' +
+                '                                           name="product_code[]"\n' +
+                '                                           required>\n' +
+                '                                   <p class="product_code_error text-danger" style="font-size: 13px"></p>' +
+                '                                </div>\n' +
+                '\n' +
+                '                                <div class="col-4 col-sm-4">\n' +
+                '                                    <label>Product Qty <span class="text-danger">*</span></label>\n' +
+                '                                    <input type="number" class="form-control" value="0" placeholder="Product Quantity"\n' +
+                '                                           name="product_qty[]"\n' +
+                '                                           required>\n' +
+                '                                </div>\n' +
+                '\n' +
+                '                                <div class="col-2 col-sm-2 text-right" style="padding-right: 10px;padding-top: 30px">\n' +
+                '                                    <button class="btn btn-sm btn-danger delete_btn"\n' +
+                '                                            style="padding: 5px 10px;font-size: 12px;border-radius: 2px">\n' +
+                '                                        <i class="fa fa-trash"></i>\n' +
+                '                                    </button>\n' +
+                '                                </div>\n' +
+                '                            </div>\n';
 
             $("#product_info_container").append(product_info_field);
+
+            $(".delete_btn").on("click", function () {
+                $(this).parent().parent().remove();
+            });
+
+            $("input[name='product_code[]']").keyup(function () {
+                let product_code_container = $(this);
+                $("#submit").attr("disabled", true);
+
+                $.ajax({
+                    url: '/check-product',
+                    type: "GET",
+                    data: {
+                        "product_code": product_code_container.val()
+                    },
+
+                    success: function (result) {
+                        let error_field = product_code_container.parent().find('.product_code_error');
+                        if (!result) {
+                            error_field.html("Invalid Product Code");
+                        } else {
+                            $("#submit").attr("disabled", false);
+                            error_field.html("");
+                        }
+                    }
+                });
+            });
         });
 
         $("#submit").on("click", function () {
-            let base_url = window.location.host;
-
             let first_name = $("input[name=first_name]").val();
             let last_name = $("input[name=last_name]").val();
             let contact = $("input[name=contact]").val();
@@ -162,6 +209,23 @@
             let product_qty = $("input[name='product_qty[]']").map(function () {
                 return $(this).val();
             }).get();
+
+
+            if (!validate("First Name", first_name, "first_name_error", 1)) {
+                return;
+            }
+
+            if (!validate("Last Name", last_name, "last_name_error", 1)) {
+                return;
+            }
+
+            if (!validate("Contact Number", contact, "contact_error", 3)) {
+                return;
+            }
+
+            if (!validate("Shipping Address", shipping_address, "shipping_address_error", 2)) {
+                return;
+            }
 
             $.ajax({
                 url: '/store-order',
@@ -186,7 +250,70 @@
                     }, 4000);
                 }
             });
-        })
+        });
+
+        $("input[name='product_code[]']").keyup(function () {
+            let product_code_container = $(this);
+            $("#submit").attr("disabled", true);
+
+            $.ajax({
+                url: '/check-product',
+                type: "GET",
+                data: {
+                    "product_code": product_code_container.val()
+                },
+
+                success: function (result) {
+                    let error_field = product_code_container.parent().find('.product_code_error');
+                    if (!result) {
+                        error_field.html("Invalid Product Code");
+                    } else {
+                        $("#submit").attr("disabled", false);
+                        error_field.html("");
+                    }
+                }
+            });
+        });
+
+        function validate(field_name, value, error_field, validation_type) {
+            switch (validation_type) {
+                case 1:
+                    if (value === "") {
+                        $('#' + error_field).html(field_name + " cannot be empty.");
+                        return false;
+                    } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+                        $('#' + error_field).html(field_name + " will only contain alphabet.");
+                        return false;
+                    } else {
+                        $('#' + error_field).html("");
+                        return true;
+                    }
+                    break;
+
+                case 2:
+                    if (value === "") {
+                        $('#' + error_field).html(field_name + " cannot be empty.");
+                        return false;
+                    } else {
+                        $('#' + error_field).html("");
+                        return true;
+                    }
+                    break;
+                case 3:
+                    if (!/\+?(88)?0?1[56789][0-9]{8}\b/g.test(value)) {
+                        $('#' + error_field).html(field_name + " is invalid");
+                        return false;
+                    } else if (value === "") {
+                        $('#' + error_field).html(field_name + " cannot be empty.");
+                        return false;
+                    } else {
+                        $('#' + error_field).html("");
+                        return true;
+                    }
+                    break;
+            }
+
+        }
     })
 </script>
 </body>

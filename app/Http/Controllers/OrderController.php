@@ -20,7 +20,15 @@ class OrderController extends Controller
 
     public function storeOrderQueue(Request $request)
     {
-        dispatch(new OrderHandler($request->all()));
+        dispatch(new OrderHandler($request->all()))->delay(now()->addSeconds(20));
         return response()->json("Order Placed Successfully. You will get receipt shortly.");
+    }
+
+    public function checkProductCode(Request $request)
+    {
+        if (!(Product::where('code', $request->product_code)->count() > 0)) {
+            return response()->json(false);
+        }
+        return response()->json(true);
     }
 }

@@ -6,11 +6,14 @@ class DecisionMaker
 {
     private $user_response;
     private $recipientId;
+    private $common;
 
     public function __construct($user_response, $recipientId)
     {
         $this->user_response = $user_response;
         $this->recipientId = $recipientId;
+
+        $this->common = new Common();
     }
 
     public function preparedResponses()
@@ -43,7 +46,7 @@ class DecisionMaker
     {
         $quick_replies = new QuickReplies($this->recipientId);
         $messageData = $quick_replies->basicOptions();
-        $this->sendAPIRequest($messageData);
+        $this->common->sendAPIRequest($messageData);
     }
 
     private function sendTemplate($template_type)
@@ -58,7 +61,7 @@ class DecisionMaker
             $messageData = $form_template->preOrderProductTemplate();
         }
 
-        $this->sendAPIRequest($messageData);
+        $this->common->sendAPIRequest($messageData);
     }
 
     private function sendSenderTyping()
@@ -69,7 +72,7 @@ class DecisionMaker
             ],
             "sender_action" => "typing_on",
         ];
-        $this->sendAPIRequest($messageData);
+        $this->common->sendAPIRequest($messageData);
     }
 
     private function sendMarkSeen()
@@ -80,7 +83,7 @@ class DecisionMaker
             ],
             "sender_action" => "mark_seen",
         ];
-        $this->sendAPIRequest($messageData);
+        $this->common->sendAPIRequest($messageData);
     }
 
     private function setPersistentMenu()
@@ -148,17 +151,6 @@ class DecisionMaker
             ]
         ];
         $ch = curl_init('https://graph.facebook.com/v6.0/me/custom_user_settings?access_token=' . env("PAGE_ACCESS_TOKEN"));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
-        curl_exec($ch);
-    }
-
-    private function sendAPIRequest($messageData)
-    {
-        $ch = curl_init('https://graph.facebook.com/v2.6/me/messages?access_token=' . env("PAGE_ACCESS_TOKEN"));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
