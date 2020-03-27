@@ -79,19 +79,24 @@
                             <hr>
                         </div>
 
-                        <div class="col-6 col-sm-6">
-                            <label>Product Code <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Product Code"
-                                   name="product_code[]"
-                                   required>
-                            <p class="product_code_error text-danger" style="font-size: 13px"></p>
-                        </div>
+                        <div class="col-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-6 col-sm-6">
+                                    <label>Product Code <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" placeholder="Product Code"
+                                           name="product_code[]"
+                                           required>
+                                    <p class="product_code_error text-danger" style="font-size: 13px"></p>
+                                </div>
 
-                        <div class="col-4 col-sm-4">
-                            <label>Product Qty <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" value="0" placeholder="Product Quantity"
-                                   name="product_qty[]"
-                                   required>
+                                <div class="col-4 col-sm-4">
+                                    <label>Product Qty <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" placeholder="Product Quantity"
+                                           name="product_qty[]"
+                                           required>
+                                    <p class="product_qty_error text-danger" style="font-size: 13px"></p>
+                                </div>
+                            </div>
                         </div>
 
                         <div id="product_info_container" class="col-12 col-sm-12"
@@ -152,9 +157,10 @@
                 '\n' +
                 '                                <div class="col-4 col-sm-4">\n' +
                 '                                    <label>Product Qty <span class="text-danger">*</span></label>\n' +
-                '                                    <input type="number" class="form-control" value="0" placeholder="Product Quantity"\n' +
+                '                                    <input type="number" class="form-control" placeholder="Product Quantity"\n' +
                 '                                           name="product_qty[]"\n' +
                 '                                           required>\n' +
+                '                                    <p class="product_qty_error text-danger" style="font-size: 13px"></p>' +
                 '                                </div>\n' +
                 '\n' +
                 '                                <div class="col-2 col-sm-2 text-right" style="padding-right: 10px;padding-top: 30px">\n' +
@@ -172,26 +178,92 @@
             });
 
             $("input[name='product_code[]']").keyup(function () {
+                $("#submit").attr("disabled", true);
                 let product_code_container = $(this);
+                product_code_container.parent().parent().find("input[name='product_qty[]']").val("");
+
+                let error_field = product_code_container.parent().find('.product_code_error');
+
+                let code = product_code_container.val();
+                if (code === "") {
+                    error_field.html("Code Cannot be empty.");
+                    return false;
+                } else {
+                    $.ajax({
+                        url: '/check-product',
+                        type: "GET",
+                        data: {
+                            "product_code": product_code_container.val()
+                        },
+
+                        success: function (result) {
+                            if (!result) {
+                                error_field.html("Invalid Product Code");
+                            } else {
+                                let count = 0;
+                                $.each($(".product_qty_error"), function () {
+                                    if ($(this).html() !== "") {
+                                        count++;
+                                    }
+                                });
+
+                                if (count === 0) {
+                                    $("#submit").attr("disabled", false);
+                                }
+                                error_field.html("");
+                            }
+                        }
+                    });
+                }
+            });
+
+            $("input[name='product_qty[]']").keyup(function () {
                 $("#submit").attr("disabled", true);
 
-                $.ajax({
-                    url: '/check-product',
-                    type: "GET",
-                    data: {
-                        "product_code": product_code_container.val()
-                    },
+                let product_qty_container = $(this);
+                let qty = product_qty_container.val();
+                let error_code_field = product_qty_container.parent().parent().find('.product_code_error').html();
+                let error_field = product_qty_container.parent().find('.product_qty_error');
+                let code = product_qty_container.parent().parent().find("input[name='product_code[]']").val();
 
-                    success: function (result) {
-                        let error_field = product_code_container.parent().find('.product_code_error');
-                        if (!result) {
-                            error_field.html("Invalid Product Code");
-                        } else {
-                            $("#submit").attr("disabled", false);
-                            error_field.html("");
+                if (code === "" || error_code_field !== "") {
+                    error_field.html("Please enter valid product code");
+                    return false;
+                }
+
+                if (qty === "") {
+                    error_field.html("Qty Cannot be empty.");
+                    return false;
+                } else if (!/^[1-9][0-9]*$/.test(qty)) {
+                    error_field.html("Qty will contain only digits (1-9).");
+                    return false;
+                } else {
+                    $.ajax({
+                        url: '/check-qty',
+                        type: "GET",
+                        data: {
+                            "product_code": code
+                        },
+
+                        success: function (result) {
+                            if (parseInt(qty) > parseInt(result.stock)) {
+                                error_field.html("Not enough in stock.");
+                            } else {
+                                let count = 0;
+                                $.each($(".product_code_error"), function () {
+                                    if ($(this).html() !== "") {
+                                        count++;
+                                    }
+                                });
+
+                                if (count === 0) {
+                                    $("#submit").attr("disabled", false);
+                                }
+                                error_field.html("");
+                            }
                         }
-                    }
-                });
+                    });
+                }
             });
         });
 
@@ -253,26 +325,92 @@
         });
 
         $("input[name='product_code[]']").keyup(function () {
+            $("#submit").attr("disabled", true);
             let product_code_container = $(this);
+            product_code_container.parent().parent().find("input[name='product_qty[]']").val("");
+
+            let error_field = product_code_container.parent().find('.product_code_error');
+
+            let code = product_code_container.val();
+            if (code === "") {
+                error_field.html("Code Cannot be empty.");
+                return false;
+            } else {
+                $.ajax({
+                    url: '/check-product',
+                    type: "GET",
+                    data: {
+                        "product_code": product_code_container.val()
+                    },
+
+                    success: function (result) {
+                        if (!result) {
+                            error_field.html("Invalid Product Code");
+                        } else {
+                            let count = 0;
+                            $.each($(".product_qty_error"), function () {
+                                if ($(this).html() !== "") {
+                                    count++;
+                                }
+                            });
+
+                            if (count === 0) {
+                                $("#submit").attr("disabled", false);
+                            }
+                            error_field.html("");
+                        }
+                    }
+                });
+            }
+        });
+
+        $("input[name='product_qty[]']").keyup(function () {
             $("#submit").attr("disabled", true);
 
-            $.ajax({
-                url: '/check-product',
-                type: "GET",
-                data: {
-                    "product_code": product_code_container.val()
-                },
+            let product_qty_container = $(this);
+            let qty = product_qty_container.val();
+            let error_code_field = product_qty_container.parent().parent().find('.product_code_error').html();
+            let error_field = product_qty_container.parent().find('.product_qty_error');
+            let code = product_qty_container.parent().parent().find("input[name='product_code[]']").val();
 
-                success: function (result) {
-                    let error_field = product_code_container.parent().find('.product_code_error');
-                    if (!result) {
-                        error_field.html("Invalid Product Code");
-                    } else {
-                        $("#submit").attr("disabled", false);
-                        error_field.html("");
+            if (code === "" || error_code_field !== "") {
+                error_field.html("Please enter valid product code");
+                return false;
+            }
+
+            if (qty === "") {
+                error_field.html("Qty Cannot be empty.");
+                return false;
+            } else if (!/^[1-9][0-9]*$/.test(qty)) {
+                error_field.html("Qty will contain only digits (1-9).");
+                return false;
+            } else {
+                $.ajax({
+                    url: '/check-qty',
+                    type: "GET",
+                    data: {
+                        "product_code": code
+                    },
+
+                    success: function (result) {
+                        if (parseInt(qty) > parseInt(result.stock)) {
+                            error_field.html("Not enough in stock.");
+                        } else {
+                            let count = 0;
+                            $.each($(".product_code_error"), function () {
+                                if ($(this).html() !== "") {
+                                    count++;
+                                }
+                            });
+
+                            if (count === 0) {
+                                $("#submit").attr("disabled", false);
+                            }
+                            error_field.html("");
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
         function validate(field_name, value, error_field, validation_type) {

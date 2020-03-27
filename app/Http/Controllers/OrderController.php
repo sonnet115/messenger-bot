@@ -31,4 +31,10 @@ class OrderController extends Controller
         }
         return response()->json(true);
     }
+
+    public function checkProductQty(Request $request)
+    {
+        return Product::select('stock')->where('code', $request->product_code)->first();
+
+    }
 }
