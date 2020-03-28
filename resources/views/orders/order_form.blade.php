@@ -268,6 +268,8 @@
         });
 
         $("#submit").on("click", function () {
+            $(this).attr("disabled", true);
+
             let first_name = $("input[name=first_name]").val();
             let last_name = $("input[name=last_name]").val();
             let contact = $("input[name=contact]").val();
@@ -313,6 +315,8 @@
                     'customer_fb_id': customer_fb_id,
                 },
                 success: function (result) {
+                    $("#submit").attr("disabled", false);
+
                     $(".modal-body").html(result);
 
                     $('#myModal').modal('toggle');
@@ -320,6 +324,7 @@
                     setTimeout(function () {
                         $('#myModal').modal('hide');
                     }, 4000);
+
                 }
             });
         });

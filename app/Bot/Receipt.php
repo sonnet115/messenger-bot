@@ -5,10 +5,12 @@ namespace App\Bot;
 class Receipt
 {
     private $recipientId;
+    private $placed_order_data;
 
-    public function __construct($recipientId)
+    public function __construct($recipientId, $placed_order_data)
     {
         $this->recipientId = $recipientId;
+        $this->placed_order_data = $placed_order_data;
     }
 
     public function sendReceipt()
@@ -22,26 +24,14 @@ class Receipt
                     "type" => "template",
                     "payload" => [
                         "template_type" => "receipt",
-                        "recipient_name" => "Stephane Crozatier",
-                        "order_number" => "12345678902",
-                        "currency" => "USD",
-                        "payment_method" => "Visa 2345",
+                        "recipient_name" => $this->placed_order_data[0]->customers->first_name . " " . $this->placed_order_data[0]->customers->last_name,
+                        "order_number" => $this->placed_order_data[0]->order_code,
+                        "currency" => "BDT",
+                        "payment_method" => "Cash on Delivery",
                         "order_url" => "http://petersapparel.parseapp.com/order?order_id=123456",
-                        "timestamp" => "1428444852",
-                        "address" => [
-                            "street_1" => "1 Hacker Way",
-                            "street_2" => "",
-                            "city" => "Menlo Park",
-                            "postal_code" => "94025",
-                            "state" => "CA",
-                            "country" => "US"
-                        ],
-                        "summary" => [
-                            "subtotal" => 75.00,
-                            "shipping_cost" => 4.95,
-                            "total_tax" => 6.19,
-                            "total_cost" => 56.14
-                        ],
+                        "timestamp" => strtotime($this->placed_order_data[0]->created_at),
+                        "address" => $this->address(),
+                        "summary" => $this->summary(),
                         "adjustments" => [
                             [
                                 "name" => "New Customer Discount",
@@ -52,27 +42,49 @@ class Receipt
                                 "amount" => 10
                             ]
                         ],
-                        "elements" => [
-                            [
-                                "title" => "Classic White T-Shirt",
-                                "subtitle" => "100% Soft and Luxurious Cotton",
-                                "quantity" => 2,
-                                "price" => 50,
-                                "currency" => "USD",
-                                "image_url" => "http://petersapparel.parseapp.com/img/whiteshirt.png"
-                            ],
-                            [
-                                "title" => "Classic Gray T-Shirt",
-                                "subtitle" => "100% Soft and Luxurious Cotton",
-                                "quantity" => 1,
-                                "price" => 25,
-                                "currency" => "USD",
-                                "image_url" => "http://petersapparel.parseapp.com/img/grayshirt.png"
-                            ]
-                        ]
+                        "elements" => $this->products()
                     ]
                 ]
             ]
         ];
+    }
+
+    public function address()
+    {
+        return [
+            "street_1" => $this->placed_order_data[0]->customers->shipping_address,
+            "street_2" => "",
+            "city" => "Dhaka",
+            "postal_code" => "1207",
+            "state" => "Dhaka",
+            "country" => "BD"
+        ];
+    }
+
+    public function summary()
+    {
+        return [
+            "subtotal" => 75.00,
+            "shipping_cost" => 4.95,
+            "total_tax" => 6.19,
+            "total_cost" => 56.14
+        ];
+    }
+
+    public function products()
+    {
+        $p = array();
+        foreach ($this->placed_order_data as $d) {
+            array_push($p, [
+                "title" => $d->products->name,
+                "subtitle" => "Product_Code:" . $d->products->code,
+                "quantity" => $d->product_qty,
+                "price" => $d->product_price,
+                "currency" => "BDT",
+                "image_url" => "http://134.209.108.173/uploads/C05V0144_mega_handover.png"
+            ]);
+        }
+
+        return json_encode($p);
     }
 }
