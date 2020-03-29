@@ -56,10 +56,9 @@ class OrderController extends Controller
             $product_qty = $data['product_qty'];
 
             $stock_out_product = array();
+            $order_code = time() . "_" . mt_rand(1000, 100000);
 
             for ($i = 0; $i < sizeof($product_codes); $i++) {
-                $order_code = time() . "_" . mt_rand(1000, 100000);
-
                 if ($product_codes[$i] != null) {
                     $product_details = $this->getProductCodeAndPrice($product_codes[$i]);
 

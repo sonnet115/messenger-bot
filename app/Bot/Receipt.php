@@ -24,7 +24,7 @@ class Receipt
                     "type" => "template",
                     "payload" => [
                         "template_type" => "receipt",
-                        "recipient_name" => $this->placed_order_data[0]->customers->first_name . " " . $this->placed_order_data[0]->customers->last_name,
+                        "recipient_name" => $this->placed_order_data[0]->customers->first_name . ", " . $this->placed_order_data[0]->customers->last_name . " Mobile: " . $this->placed_order_data[0]->customers->contact,
                         "order_number" => $this->placed_order_data[0]->order_code,
                         "currency" => "BDT",
                         "payment_method" => "Cash on Delivery",
@@ -32,16 +32,6 @@ class Receipt
                         "timestamp" => strtotime($this->placed_order_data[0]->created_at),
                         "address" => $this->address(),
                         "summary" => $this->summary(),
-                        "adjustments" => [
-                            [
-                                "name" => "New Customer Discount",
-                                "amount" => 20
-                            ],
-                            [
-                                "name" => "$10 Off Coupon",
-                                "amount" => 10
-                            ]
-                        ],
                         "elements" => $this->products()
                     ]
                 ]
@@ -63,11 +53,14 @@ class Receipt
 
     public function summary()
     {
+        $subtotal = 0;
+        foreach ($this->placed_order_data as $d) {
+            $subtotal = $subtotal + $d->subtotal;
+        }
         return [
-            "subtotal" => 75.00,
-            "shipping_cost" => 4.95,
-            "total_tax" => 6.19,
-            "total_cost" => 56.14
+            "subtotal" => $subtotal,
+            "shipping_cost" => 60,
+            "total_cost" => $subtotal + 60
         ];
     }
 
