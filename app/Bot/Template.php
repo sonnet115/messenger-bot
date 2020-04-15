@@ -53,7 +53,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL"),
+                                "url" => env("APP_URL") . "product-search-form",
                                 "title" => "Product Enquiry",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",

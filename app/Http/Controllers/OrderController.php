@@ -68,6 +68,14 @@ class OrderController extends Controller
                         $qty = $product_qty[$i];
                     }
 
+                    if ($product_details->discounts) {
+                        $discount_amount = $this->calculateDiscountAmount($product_details->price, $product_details->discounts->dis_percentage);
+                        $discounted_price = $product_details->price - $discount_amount;
+                    } else {
+                        $discount_amount = 0;
+                        $discounted_price = 0;
+                    }
+
                     if ($qty > $product_details->stock) {
                         array_push($stock_out_product, $product_codes[$i]);
                         continue;
@@ -80,6 +88,7 @@ class OrderController extends Controller
                     $order->product_qty = $qty;
                     $order->product_price = $product_details->price;
                     $order->subtotal = $qty * $product_details->price;
+                    $order->discount_amount = $qty * $discount_amount;
                     $order->save();
 
                     $this->updateProductStock($product_details->id, $qty);
@@ -89,7 +98,8 @@ class OrderController extends Controller
             DB::commit();
             if (!empty($stock_out_product)) {
                 $stock_out_product_list = implode(" and ", $stock_out_product);
-                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product " . $stock_out_product_list . " is out of stock. We enlisted them as pre-order. We will notify you as soon as they are available. Thanks"));
+                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product " . $stock_out_product_list . "
+                                        is out of stock. We enlisted them as pre-order. We will notify you as soon as they are available.Thanks"));
                 //Store order as pre-order for this products
             }
             $this->processReceipt($data['customer_fb_id'], $order_code);
@@ -109,7 +119,7 @@ class OrderController extends Controller
 
     public function getProductCodeAndPrice($product_code)
     {
-        return Product::select('id', 'price', 'stock')->where('code', $product_code)->first();
+        return Product::select('id', 'price', 'stock')->where('code', $product_code)->with('discounts')->first();
     }
 
     public function updateProductStock($product_id, $qty)
@@ -130,9 +140,18 @@ class OrderController extends Controller
         return Product::select('stock')->where('code', $request->product_code)->first();
     }
 
-    public function getOrders()
+    public function calculateDiscountAmount($product_price, $dis_percentage)
     {
-        $dd = Order::where('order_code', '1585424960_8868')->with('products')->with('customers')->get();
+        return ($product_price * $dis_percentage) / 100;
+    }
+
+
+    //test function
+    public function getTestData()
+    {
+        $dd = Order::where('order_code', '1586268692_99853')->with('products')->with('customers')->get();
+        dd($dd);
+
         $p = array();
         foreach ($dd as $d) {
             array_push($p, [

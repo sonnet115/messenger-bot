@@ -13,11 +13,11 @@ class CreateDiscountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('dicounts', function (Blueprint $table) {
+        Schema::create('discounts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->date('from');
-            $table->date('to');
+            $table->date('dis_from');
+            $table->date('dis_to');
             $table->bigInteger('pid');
             $table->string('dis_percentage');
             $table->string('max_customers');

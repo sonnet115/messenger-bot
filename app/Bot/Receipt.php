@@ -6,11 +6,13 @@ class Receipt
 {
     private $recipientId;
     private $placed_order_data;
+    private $total_discount;
 
     public function __construct($recipientId, $placed_order_data)
     {
         $this->recipientId = $recipientId;
         $this->placed_order_data = $placed_order_data;
+        $this->total_discount = 0;
     }
 
     public function sendReceipt()
@@ -24,7 +26,7 @@ class Receipt
                     "type" => "template",
                     "payload" => [
                         "template_type" => "receipt",
-                        "recipient_name" => $this->placed_order_data[0]->customers->first_name . ", " . $this->placed_order_data[0]->customers->last_name . " Mobile: " . $this->placed_order_data[0]->customers->contact,
+                        "recipient_name" => $this->placed_order_data[0]->customers->first_name . " " . $this->placed_order_data[0]->customers->last_name . ", Mobile: " . $this->placed_order_data[0]->customers->contact,
                         "order_number" => $this->placed_order_data[0]->order_code,
                         "currency" => "BDT",
                         "payment_method" => "Cash on Delivery",
@@ -32,6 +34,7 @@ class Receipt
                         "timestamp" => strtotime($this->placed_order_data[0]->created_at),
                         "address" => $this->address(),
                         "summary" => $this->summary(),
+                        "adjustments" => $this->discount(),
                         "elements" => $this->products()
                     ]
                 ]
@@ -54,21 +57,38 @@ class Receipt
     public function summary()
     {
         $subtotal = 0;
+        $this->total_discount = 0;
+
         foreach ($this->placed_order_data as $d) {
             $subtotal = $subtotal + $d->subtotal;
+            $this->total_discount = $this->total_discount + $d->discount_amount;
         }
+
         return [
             "subtotal" => $subtotal,
             "shipping_cost" => 60,
-            "total_cost" => $subtotal + 60
+            "total_cost" => ($subtotal - $this->total_discount) + 60
         ];
+    }
+
+    public function discount()
+    {
+        $discount = array();
+
+        array_push($discount, [
+            "name" => "Discount",
+            "amount" => (double)$this->total_discount,
+        ]);
+
+        return json_encode($discount);
     }
 
     public function products()
     {
-        $p = array();
+        $products = array();
+
         foreach ($this->placed_order_data as $d) {
-            array_push($p, [
+            array_push($products, [
                 "title" => $d->products->name,
                 "subtitle" => "Product_Code:" . $d->products->code,
                 "quantity" => $d->product_qty,
@@ -78,6 +98,6 @@ class Receipt
             ]);
         }
 
-        return json_encode($p);
+        return json_encode($products);
     }
 }

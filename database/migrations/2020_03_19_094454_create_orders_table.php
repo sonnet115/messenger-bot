@@ -18,9 +18,11 @@ class CreateOrdersTable extends Migration
             $table->string('order_code');
             $table->bigInteger('pid');
             $table->string('customer_id');
-            $table->string('product_qty');
-            $table->string('product_price');
-            $table->string('subtotal');
+            $table->double('product_qty');
+            $table->double('product_price');
+            $table->double('subtotal');
+            $table->smallInteger('order_status')->default(0);
+            $table->integer('discount_amount')->default(0);
             $table->timestamps();
         });
     }

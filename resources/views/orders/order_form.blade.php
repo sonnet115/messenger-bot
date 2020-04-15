@@ -302,7 +302,7 @@
             }
 
             $.ajax({
-                url: '/store-order',
+                url: '/order-store',
                 type: "GET",
                 data: {
                     'first_name': first_name,
@@ -453,7 +453,6 @@
                         $('#' + error_field).html("");
                         return true;
                     }
-                    break;
             }
 
         }
