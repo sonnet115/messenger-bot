@@ -14,4 +14,9 @@ class Product extends Model
             ->where('dis_from', '<=', date("Y-m-d"))
             ->where('dis_to', '>=', date("Y-m-d"));
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'pid', 'id');
+    }
 }

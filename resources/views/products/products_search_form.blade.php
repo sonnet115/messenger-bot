@@ -46,6 +46,7 @@
         </div>
     </div>
 </div>
+<input type="text" value="{{$customer_id}}" id="customer_id">
 
 <!-- The Modal Starts-->
 <div class="modal fade" id="product_list_modal">
@@ -56,728 +57,8 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body ">
-                <div class="container">
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-                    <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
-                        <div class="col-6" style="max-height: 200px">
-                            <div id="demo" class="carousel slide shadow-sm rounded" data-ride="carousel">
-                                <!-- The slideshow -->
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://i.picsum.photos/id/600/200/200.jpg" alt="Los Angeles"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/100/2500/1656.jpg" alt="Chicago"
-                                             style="max-height: 170px;">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" alt="New York"
-                                             style="max-height: 170px;">
-                                    </div>
-                                </div>
-
-                                <!-- Left and right controls -->
-                                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                    <span class="carousel-control-prev-icon text-dark"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#demo" data-slide="next">
-                                    <span class="carousel-control-next-icon text-dark"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="font-size: 13px">
-                            <p>Name: <b>Pakistani Three piece</b></p>
-                            <p>Code: <b>PP0320345</b></p>
-                            <p>In Stock: <b>1000</b></p>
-                            <p>Price: <b>1000</b></p>
-                        </div>
-                    </div>
-
+                <div class="container" id="product_container">
+                    {{--Products will be displayed here--}}
                 </div>
             </div>
         </div>
@@ -802,12 +83,91 @@
                 },
                 success: function (result) {
                     console.log(result);
+                    $("#product_container").html("");
+
+                    for (let i = 0; i < result.length; i++) {
+                        let product_details = productDetails(result[i].name, result[i].code, result[i].stock, result[i].price, result[i].discounts);
+                        let discount_available = discountAvailable(result[i].discounts);
+                        let images = productImage(result[i].images);
+                        let products = allProductDetails(product_details, discount_available, images, result[i].code);
+
+                        $("#product_container").append(products);
+                    }
                     $("#product_list_modal").modal('toggle');
                 }
             });
 
         })
     })
+
+    function productDetails(name, code, stock, price, discount) {
+        let discounted_price = '';
+        if (discount !== null) {
+            discounted_price = '<p>Discounted Price: <b>' + (price - (price * discount.dis_percentage) / 100) + '</b> BDT</p>';
+        }
+        return '<p>Name: <b>' + name + '</b></p>\n' +
+            '<p>Code: <b>' + code + '</b></p>\n' +
+            '<p>In Stock: <b>' + stock + '</b></p>\n' +
+            '<p>Price: <b>' + price + '</b> BDT</p>\n' +
+            '' + discounted_price;
+    }
+
+    function discountAvailable(discount) {
+        if (discount !== null) {
+            return '<div class="col-sm-12 text-center">' +
+                '       <p style="font-size: 13px">' +
+                '           <span class="text-danger">Discount Available: </span> ' +
+                '           <span style="font-size: 11px">From <b>' + discount.dis_from + '</b> to <b>' + discount.dis_to + '</b></span>' +
+                '       </p>' +
+                '   </div>\n';
+        } else {
+            return '';
+        }
+    }
+
+    function productImage(all_images) {
+        let image = '';
+        for (let i = 0; i < all_images.length; i++) {
+            if (i == 0) {
+                image += '<div class="carousel-item active">\n' +
+                    '         <img src="' + all_images[i].image_url + '" style="max-height: 170px;">' +
+                    '     </div>';
+            } else {
+                image += '<div class="carousel-item">\n' +
+                    '         <img src="' + all_images[i].image_url + '" style="max-height: 170px;">' +
+                    '     </div>';
+            }
+
+        }
+        return image;
+    }
+
+    function allProductDetails(product_details, discount_available, images, code) {
+        let order_url = '{{env("APP_URL")."order-form/"}}' + $("#customer_id").val();
+
+        return '  <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n' +
+            '                        ' + discount_available +
+            '                        <div class="col-6" style="max-height: 200px">\n' +
+            '                           <div id="' + code + '" class="carousel slide shadow-sm rounded" data-ride="carousel">\n' +
+            '                                <div class="carousel-inner">\n' +
+            '                                   ' + images +
+            '                                </div>\n' +
+            '                                <a class="carousel-control-prev" href="#' + code + '" data-slide="prev">\n' +
+            '                                    <span class="carousel-control-prev-icon text-dark"></span>\n' +
+            '                                </a>\n' +
+            '                                <a class="carousel-control-next" href="#' + code + '" data-slide="next">\n' +
+            '                                    <span class="carousel-control-next-icon text-dark"></span>\n' +
+            '                                </a>\n' +
+            '                            </div>\n' +
+            '                            <div class="col-sm-12 text-center" style="margin-top: 10px">' +
+            '                                 <a href="' + order_url + '" class="btn btn-success btn-sm">Order Now</a> ' +
+            '                            </div>\n' +
+            '                        </div>\n' +
+            '                         <div class="col-6" style="font-size: 13px">\n' +
+            '                            ' + product_details +
+            '                         </div>\n' +
+            '                    </div>';
+    }
 </script>
 </body>
 </html>

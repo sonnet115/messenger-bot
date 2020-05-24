@@ -7,14 +7,18 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function viewProductSearchForm()
+    public function viewProductSearchForm(Request $request)
     {
-        return view("products.products_search_form");
+        $customer_id = $request->segment(2);
+        return view("products.products_search_form")->with('customer_id', $customer_id);
     }
 
     public function getProduct(Request $request)
     {
-        $products = Product::where('code', $request->product_code)->get();
+        $products = Product::where('code', $request->product_code)
+            ->orWhere('name', 'like', '%' . $request->product_code . '%')
+            ->with('images')
+            ->with('discounts')->get();
         return response()->json($products);
     }
 

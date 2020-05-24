@@ -7,6 +7,8 @@ class DecisionMaker
     private $user_response;
     private $recipientId;
     private $common;
+    private $handover;
+    private $text_message;
 
     public function __construct($user_response, $recipientId)
     {
@@ -14,6 +16,8 @@ class DecisionMaker
         $this->recipientId = $recipientId;
 
         $this->common = new Common();
+        $this->handover = new Handover($recipientId);
+        $this->text_message = new TextMessages($recipientId);
     }
 
     public function preparedResponses()
@@ -34,6 +38,9 @@ class DecisionMaker
                 break;
             case "PRODUCT_ENQUIRY":
                 $this->sendTemplate("PRODUCT_ENQUIRY");
+                break;
+            case "TALK_TO_AGENT":
+                $this->sendHandover();
                 break;
             case "GET_STARTED":
             default:
@@ -84,6 +91,12 @@ class DecisionMaker
             "sender_action" => "mark_seen",
         ];
         $this->common->sendAPIRequest($messageData);
+    }
+
+    private function sendHandover()
+    {
+        $this->common->sendHandoverRequest($this->handover->handoverControlToHumanAgent());
+        $this->common->sendAPIRequest($this->text_message->sendTextMessage("An agent will contact you shortly. Please wait."));
     }
 
     private function setPersistentMenu()

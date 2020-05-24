@@ -63,7 +63,6 @@ class Receipt
             $subtotal = $subtotal + $d->subtotal;
             $this->total_discount = $this->total_discount + $d->discount_amount;
         }
-
         return [
             "subtotal" => $subtotal,
             "shipping_cost" => 60,
@@ -74,6 +73,9 @@ class Receipt
     public function discount()
     {
         $discount = array();
+        if ($this->total_discount == 0) {
+            return "";
+        }
 
         array_push($discount, [
             "name" => "Discount",
@@ -94,7 +96,7 @@ class Receipt
                 "quantity" => $d->product_qty,
                 "price" => $d->product_price,
                 "currency" => "BDT",
-                "image_url" => "http://134.209.108.173/uploads/C05V0144_mega_handover.png"
+                "image_url" => "https://i.picsum.photos/id/1021/2048/1206.jpg"
             ]);
         }
 

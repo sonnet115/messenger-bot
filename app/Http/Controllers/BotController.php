@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Bot\Webhook\Entry;
 use App\Jobs\BotHandler;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BotController extends Controller
 {
@@ -20,5 +20,4 @@ class BotController extends Controller
         }
         return json_encode(response());
     }
-
 }

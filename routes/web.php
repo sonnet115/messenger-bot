@@ -28,7 +28,7 @@ Route::get("check-product", "OrderController@checkProductCode")->name("product.c
 Route::get("check-qty", "OrderController@checkProductQty")->name("product.qty.check");
 
 //Route for product enquiry
-Route::get("product-search-form", "ProductController@viewProductSearchForm")->name("product.search.form");
+Route::get("product-search-form/{id}", "ProductController@viewProductSearchForm")->name("product.search.form");
 Route::get("get-product", "ProductController@getProduct")->name("product.get");
 
 
