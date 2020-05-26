@@ -37,11 +37,6 @@ class QuickReplies
                     ],
                     [
                         "content_type" => "text",
-                        "title" => "Pre-Order",
-                        "payload" => "PRE_ORDER",
-                    ],
-                    [
-                        "content_type" => "text",
                         "title" => "Talk to Agent",
                         "payload" => "TALK_TO_AGENT",
                     ],

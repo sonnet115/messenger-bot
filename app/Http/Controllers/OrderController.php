@@ -7,6 +7,7 @@ use App\Bot\Template;
 use App\Bot\TextMessages;
 use App\Customer;
 use App\Order;
+use App\PreOrder;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class OrderController extends Controller
 
     public function __construct()
     {
+        $this->common = new Common();
         $this->job_controller = new JobController();
     }
 
@@ -38,7 +40,6 @@ class OrderController extends Controller
 
     public function processOrder($data)
     {
-        $this->common = new Common();
         $this->text_message = new TextMessages($data['customer_fb_id']);
         $this->template = new Template($data['customer_fb_id']);
 
@@ -145,11 +146,54 @@ class OrderController extends Controller
         return ($product_price * $dis_percentage) / 100;
     }
 
+    public function viewTrackOrderForm()
+    {
+        return view("orders.track_order_form");
+    }
+
+    public function getOrderStatus(Request $request)
+    {
+        $order_status = Order::where('order_code', $request->order_code)->with('products')->get();
+        return response()->json($order_status);
+    }
+
+    public function storePreOrder(Request $request)
+    {
+        $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
+        $product_id = Product::select('id')->where('code', $request->pre_order_product_code)->first();
+        $pre_order_exists = PreOrder::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
+
+        if ($pre_order_exists) {
+            return response()->json("Already Pre Ordered");
+        } else {
+            $this->job_controller->storePreOrderJob($request->all());
+            return response()->json("Pre Order Request Successful! You will be notified when product is available");
+        }
+    }
+
+    public function processPreOrder($data)
+    {
+        try {
+            $this->text_message = new TextMessages($data['customer_fb_id']);
+            $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
+            $product_id = Product::select('id')->where('code', $data['pre_order_product_code'])->first();
+
+            $pre_order = new PreOrder();
+            $pre_order->pid = $product_id->id;
+            $pre_order->customer_id = $customer_id->id;
+            $pre_order->customer_fb_id = $data['customer_fb_id'];
+            $pre_order->save();
+        } catch (\Exception $e) {
+            dd($e);
+            $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your Pre-Order Request Failed. Try Again!"));
+        }
+    }
+
 
     //test function
     public function getTestData()
     {
-        $dd = Order::where('order_code', '1586268692_99853')->with('products')->with('customers')->get();
+        $dd = Order::where('order_code', '1590432293_84634')->with('products')->get();
         dd($dd);
 
         $p = array();

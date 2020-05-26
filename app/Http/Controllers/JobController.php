@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\OrderHandler;
+use App\Jobs\PreOrderHandler;
 use App\Jobs\ReceiptHandler;
 
 class JobController extends Controller
@@ -14,7 +15,12 @@ class JobController extends Controller
 
     public function sendReceiptJob($recipient_id, $placed_order_data)
     {
-        dispatch(new ReceiptHandler($recipient_id, $placed_order_data))->delay(now()->addSeconds(5));
+        dispatch(new ReceiptHandler($recipient_id, $placed_order_data))->delay(now()->addSeconds(1));
+    }
+
+    public function storePreOrderJob($order_data)
+    {
+        dispatch(new PreOrderHandler($order_data))->delay(now()->addSeconds(1));
     }
 
 }

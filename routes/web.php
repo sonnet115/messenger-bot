@@ -27,6 +27,13 @@ Route::get("order-store", "OrderController@storeOrder")->name("order.store");
 Route::get("check-product", "OrderController@checkProductCode")->name("product.code.check");
 Route::get("check-qty", "OrderController@checkProductQty")->name("product.qty.check");
 
+//Routes for track orders
+Route::get("track-order-form", "OrderController@viewTrackOrderForm")->name("track.order.form");
+Route::get("get-order-status", "OrderController@getOrderStatus")->name("order.status.get");
+
+//Routes for pre orders
+Route::get("pre-order", "OrderController@storePreOrder")->name("pre-order.store");
+
 //Route for product enquiry
 Route::get("product-search-form/{id}", "ProductController@viewProductSearchForm")->name("product.search.form");
 Route::get("get-product", "ProductController@getProduct")->name("product.get");

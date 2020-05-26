@@ -92,4 +92,31 @@ class Template
         ];
     }
 
+    public function trackOrderProductTemplate()
+    {
+        return [
+            "recipient" => [
+                "id" => $this->recipientId
+            ],
+            "message" => [
+                "attachment" => [
+                    "type" => "template",
+                    "payload" => [
+                        "template_type" => "button",
+                        "text" => "Click the button",
+                        "buttons" => [
+                            [
+                                "type" => "web_url",
+                                "url" => env("APP_URL") . "track-order-form",
+                                "title" => "Track Order",
+                                "messenger_extensions" => 'true',
+                                "webview_height_ratio" => "tall",
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
 }

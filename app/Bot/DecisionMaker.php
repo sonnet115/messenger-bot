@@ -33,8 +33,8 @@ class DecisionMaker
             case "ORDER_PRODUCT":
                 $this->sendTemplate("ORDER_PRODUCT");
                 break;
-            case "PRE_ORDER":
-                $this->sendTemplate("PRE_ORDER");
+            case "TRACK_ORDER":
+                $this->sendTemplate("TRACK_ORDER");
                 break;
             case "PRODUCT_ENQUIRY":
                 $this->sendTemplate("PRODUCT_ENQUIRY");
@@ -62,10 +62,10 @@ class DecisionMaker
 
         if ($template_type == "ORDER_PRODUCT") {
             $messageData = $form_template->orderFormTemplate();
+        } else if ($template_type == "TRACK_ORDER") {
+            $messageData = $form_template->trackOrderProductTemplate();
         } else if ($template_type == "PRODUCT_ENQUIRY") {
             $messageData = $form_template->productEnquiryTemplate();
-        } else if ($template_type == "PRE_ORDER") {
-            $messageData = $form_template->preOrderProductTemplate();
         }
 
         $this->common->sendAPIRequest($messageData);
