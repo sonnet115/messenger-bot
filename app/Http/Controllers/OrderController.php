@@ -102,6 +102,14 @@ class OrderController extends Controller
                 $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product " . $stock_out_product_list . "
                                         is out of stock. We enlisted them as pre-order. We will notify you as soon as they are available.Thanks"));
                 //Store order as pre-order for this products
+                for ($i = 0; $i < sizeof($stock_out_product); $i++) {
+                    $data = array(
+                        'customer_fb_id' => $data['customer_fb_id'],
+                        'pre_order_product_code' => $stock_out_product[$i],
+                    );
+
+                    $this->processPreOrder($data);
+                }
             }
             $this->processReceipt($data['customer_fb_id'], $order_code);
 

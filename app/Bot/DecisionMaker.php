@@ -40,7 +40,10 @@ class DecisionMaker
                 $this->sendTemplate("PRODUCT_ENQUIRY");
                 break;
             case "TALK_TO_AGENT":
-                $this->sendHandover();
+                $this->sendHandover("An agent will contact you shortly. Please tell us what do you want to know.");
+                break;
+            case "CANCEL_ORDER":
+                $this->sendHandover("An agent will contact you shortly.Please tell us your reason to cancel");
                 break;
             case "GET_STARTED":
             default:
@@ -93,10 +96,10 @@ class DecisionMaker
         $this->common->sendAPIRequest($messageData);
     }
 
-    private function sendHandover()
+    private function sendHandover($message)
     {
         $this->common->sendHandoverRequest($this->handover->handoverControlToHumanAgent());
-        $this->common->sendAPIRequest($this->text_message->sendTextMessage("An agent will contact you shortly. Please wait."));
+        $this->common->sendAPIRequest($this->text_message->sendTextMessage($message));
     }
 
     private function setPersistentMenu()
