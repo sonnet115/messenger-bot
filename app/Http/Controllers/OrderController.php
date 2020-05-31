@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Bot\Common;
 use App\Bot\Template;
 use App\Bot\TextMessages;
+use App\Cart;
 use App\Customer;
 use App\Order;
 use App\PreOrder;
@@ -29,7 +30,7 @@ class OrderController extends Controller
     {
         $customer_id = $request->segment(2);
         $get_customer_info = Customer::where('fb_id', $customer_id)->first();
-        return view("orders.order_form")->with("customer_info", $get_customer_info);
+        return view("orders.check_out")->with("customer_info", $get_customer_info);
     }
 
     public function storeOrder(Request $request)
@@ -76,6 +77,8 @@ class OrderController extends Controller
                         $discount_amount = 0;
                         $discounted_price = 0;
                     }
+
+                    $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
 
                     if ($qty > $product_details->stock) {
                         array_push($stock_out_product, $product_codes[$i]);
@@ -172,10 +175,10 @@ class OrderController extends Controller
         $pre_order_exists = PreOrder::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
 
         if ($pre_order_exists) {
-            return response()->json("Already Pre Ordered");
+            return response()->json("Already Pre Ordered", 409);
         } else {
             $this->job_controller->storePreOrderJob($request->all());
-            return response()->json("Pre Order Request Successful! You will be notified when product is available");
+            return response()->json("Pre Order Request Successful! You will be notified when product is available", 200);
         }
     }
 
@@ -185,18 +188,75 @@ class OrderController extends Controller
             $this->text_message = new TextMessages($data['customer_fb_id']);
             $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
             $product_id = Product::select('id')->where('code', $data['pre_order_product_code'])->first();
+            $pre_order_exists = PreOrder::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
 
-            $pre_order = new PreOrder();
-            $pre_order->pid = $product_id->id;
-            $pre_order->customer_id = $customer_id->id;
-            $pre_order->customer_fb_id = $data['customer_fb_id'];
-            $pre_order->save();
+            if (!$pre_order_exists) {
+                $pre_order = new PreOrder();
+                $pre_order->pid = $product_id->id;
+                $pre_order->customer_id = $customer_id->id;
+                $pre_order->customer_fb_id = $data['customer_fb_id'];
+                $pre_order->save();
+            }
         } catch (\Exception $e) {
-            dd($e);
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your Pre-Order Request Failed. Try Again!"));
         }
     }
 
+    public function addToCart(Request $request)
+    {
+        $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
+        $product_id = Product::select('id')->where('code', $request->cart_product_code)->first();
+        $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
+
+        if ($product_exists_in_cart) {
+            return response()->json("Already In Cart", 409);
+        } else {
+            $this->job_controller->addToCartJob($request->all());
+            return response()->json("Added To Cart", 200);
+        }
+    }
+
+    public function processAddToCart($data)
+    {
+        try {
+            $this->text_message = new TextMessages($data['customer_fb_id']);
+            $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
+            $product_id = Product::select('id')->where('code', $data['cart_product_code'])->first();
+            $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
+
+            if (!$product_exists_in_cart) {
+                $cart = new Cart();
+                $cart->pid = $product_id->id;
+                $cart->customer_id = $customer_id->id;
+                $cart->customer_fb_id = $data['customer_fb_id'];
+                $cart->save();
+            }
+        } catch (\Exception $e) {
+            $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product cannot be added to cart. Try Again!"));
+        }
+    }
+
+    public function getCartProducts(Request $request)
+    {
+        $cart_products = Cart::where('customer_fb_id', $request->customer_fb_id)->with('products')->get();
+        return response()->json($cart_products);
+    }
+
+    public function removeCartProducts(Request $request)
+    {
+        if ($this->processRemoveCartProducts($request->product_code, $request->customer_fb_id)) {
+            return response()->json("Product removed from cart successfully.", 200);
+        } else {
+            return response()->json("Cannot remove product. Please try again!", 408);
+        }
+    }
+
+    public function processRemoveCartProducts($product_code, $customer_fb_id)
+    {
+//        $product_id = Product::select('id')->where('code', $product_code)->first();
+//        return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
+        return true;
+    }
 
     //test function
     public function getTestData()

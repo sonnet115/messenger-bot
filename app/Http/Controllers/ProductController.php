@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\DataTables;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,7 @@ class ProductController extends Controller
             ->with('images')
             ->with('discounts')->get();
         return response()->json($products);
+        //return datatables($products)->toJson();
     }
 
 }

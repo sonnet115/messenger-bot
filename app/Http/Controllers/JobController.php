@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CartHandler;
 use App\Jobs\OrderHandler;
 use App\Jobs\PreOrderHandler;
 use App\Jobs\ReceiptHandler;
@@ -21,6 +22,11 @@ class JobController extends Controller
     public function storePreOrderJob($order_data)
     {
         dispatch(new PreOrderHandler($order_data))->delay(now()->addSeconds(1));
+    }
+
+    public function addToCartJob($product_data)
+    {
+        dispatch(new CartHandler($product_data))->delay(now()->addSeconds(1));
     }
 
 }

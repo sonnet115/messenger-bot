@@ -12,6 +12,10 @@
         .modal {
             overflow: auto !important;
         }
+
+        .outline_btn {
+            border: 1px solid !important;
+        }
     </style>
 </head>
 <body style="overflow-x: hidden">
@@ -40,8 +44,9 @@
                         </div>
 
                         <div class="col-12 col-sm-12 text-center">
-                            <button id="search" class="btn btn-success" style="border-radius: 5px;padding: 10px 20px"><i
-                                    class="fa fa-search"></i> Search
+                            <button id="search" class="btn btn-success" style="border-radius: 25px;padding: 10px 20px">
+                                <i
+                                    class="fa fa-search"></i> Search Product
                             </button>
                         </div>
 
@@ -64,6 +69,16 @@
             <div class="modal-body ">
                 <div class="container" id="product_container">
                     {{--Products will be displayed here--}}
+                    <div class="table-wrap">
+                        <table id="user_list_table" class="table table-bordered table-responsive w-100 display">
+                            <thead class="btn-gradient-info">
+                            <tr>
+                                <th class="text-center text-white">Image</th>
+                                <th class="text-center text-white">Product Details</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,56 +103,83 @@
 <script src="{{env("APP_URL")}}assets/orders/js/bootstrap.min.js"></script>
 <script src="{{env("APP_URL")}}assets/orders/js/main.js"></script>
 <script>
+
     $(document).ready(function () {
         $("#search").on('click', function () {
             let product_code = $("input[name='product_code']").val();
-            $("#searched_product_code").html(product_code);
-            $.ajax({
-                url: '/get-product',
-                type: "GET",
-                data: {
-                    'product_code': product_code,
-                },
-                success: function (result) {
-                    console.log(result);
-                    $("#product_container").html("");
+            if (product_code === "") {
+                $("#product_code_error").html("Product code cannot be empty");
+            } else {
+                $("#searched_product_code").html(product_code);
+                $.ajax({
+                    url: '/get-product',
+                    type: "GET",
+                    data: {
+                        'product_code': product_code,
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        $("#product_container").html("");
+                        if (result.length > 0) {
+                            for (let i = 0; i < result.length; i++) {
+                                let product_details = productDetails(result[i].name, result[i].code, result[i].stock, result[i].price, result[i].discounts);
+                                let discount_available = discountAvailable(result[i].discounts);
+                                let images = productImage(result[i].images);
+                                let order_pre_order_button = orderPreOrderButton(result[i].stock, result[i].code);
+                                let products = allProductDetails(product_details, discount_available, images, result[i].code, order_pre_order_button);
 
-                    for (let i = 0; i < result.length; i++) {
-                        let product_details = productDetails(result[i].name, result[i].code, result[i].stock, result[i].price, result[i].discounts);
-                        let discount_available = discountAvailable(result[i].discounts);
-                        let images = productImage(result[i].images);
-                        let order_pre_order_button = orderPreOrderButton(result[i].stock, result[i].code);
-                        let products = allProductDetails(product_details, discount_available, images, result[i].code, order_pre_order_button);
+                                $("#product_container").append(products);
 
-                        $("#product_container").append(products);
+                                $("#pre-order_" + result[i].code).on("click", function () {
+                                    let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                    console.log(pre_order_product_code);
+                                    let button = $(this);
 
-                        $("#pre-order_" + result[i].code).on("click", function () {
-                            let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                            console.log(pre_order_product_code);
-                            let button = $(this);
+                                    $.ajax({
+                                        url: '/pre-order',
+                                        type: "GET",
+                                        data: {
+                                            'pre_order_product_code': pre_order_product_code,
+                                            'customer_fb_id': $("#customer_id").val(),
+                                        },
+                                        success: function (result, jqXHR) {
+                                            showNotification(result, "text-success", button);
+                                        },
+                                        error: function (error, jqXHR) {
+                                            showNotification(error.responseJSON, "text-danger", button);
+                                        }
+                                    });
+                                });
 
-                            $.ajax({
-                                url: '/pre-order',
-                                type: "GET",
-                                data: {
-                                    'pre_order_product_code': pre_order_product_code,
-                                    'customer_fb_id': $("#customer_id").val(),
-                                },
-                                success: function (result) {
-                                    $("#notification_modal").modal('toggle');
+                                $("#cart_button_" + result[i].code).on("click", function () {
+                                    let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                    console.log(cart_product_code);
+                                    let button = $(this);
 
-                                    $("#notification_modal_body").html(result);
-                                    setTimeout(function () {
-                                        $('#notification_modal').modal('hide');
-                                        button.hide(300);
-                                    }, 4000);
-                                }
-                            });
-                        });
+                                    $.ajax({
+                                        url: '/add-to-cart',
+                                        type: "GET",
+                                        data: {
+                                            'cart_product_code': cart_product_code,
+                                            'customer_fb_id': $("#customer_id").val(),
+                                        },
+                                        success: function (result, jqXHR) {
+                                            showNotification(result, "text-success", button);
+                                        },
+                                        error: function (error, jqXHR) {
+                                            showNotification(error.responseJSON, "text-danger", button);
+                                        }
+                                    });
+                                });
+                            }
+                            $("#product_list_modal").modal('toggle');
+                        } else {
+                            showNotification("No Products Found", "text-danger", null);
+                        }
+
                     }
-                    $("#product_list_modal").modal('toggle');
-                }
-            });
+                });
+            }
         });
     });
 
@@ -195,7 +237,7 @@
         const order_url = '{{env("APP_URL")."order-form/"}}' + $("#customer_id").val();
         if (stock > 0) {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                '       <a href="' + order_url + '" class="btn btn-success btn-sm">Order Now</a> ' +
+                '       <button class="btn btn-success btn-sm" id="cart_button_' + product_code + '">Add to Cart</button> ' +
                 '   </div>';
         } else {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
@@ -226,6 +268,19 @@
             '                            ' + product_details +
             '                         </div>\n' +
             '                    </div>';
+    }
+
+    function showNotification(message, text_class, button) {
+        $("#notification_modal").modal('toggle');
+
+        $("#notification_modal_body").html(message);
+        $("#notification_modal_body").addClass(" " + text_class);
+        if (button != null) {
+            button.hide(300);
+        }
+        setTimeout(function () {
+            $('#notification_modal').modal('hide');
+        }, 4000);
     }
 </script>
 </body>

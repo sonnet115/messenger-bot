@@ -23,6 +23,7 @@ Route::post("/test-bot", "BotController@receive");
 
 //Routes for place orders
 Route::get("order-form/{id}", "OrderController@viewOrderForm")->name("order.form");
+Route::get("get-cart-products", "OrderController@getCartProducts")->name("cart.get");
 Route::get("order-store", "OrderController@storeOrder")->name("order.store");
 Route::get("check-product", "OrderController@checkProductCode")->name("product.code.check");
 Route::get("check-qty", "OrderController@checkProductQty")->name("product.qty.check");
@@ -33,6 +34,10 @@ Route::get("get-order-status", "OrderController@getOrderStatus")->name("order.st
 
 //Routes for pre orders
 Route::get("pre-order", "OrderController@storePreOrder")->name("pre-order.store");
+
+//Routes for add to cart
+Route::get("add-to-cart", "OrderController@addToCart")->name("add.cart");
+Route::get("remove-cart-product", "OrderController@removeCartProducts")->name("remove.cart");
 
 //Route for product enquiry
 Route::get("product-search-form/{id}", "ProductController@viewProductSearchForm")->name("product.search.form");
