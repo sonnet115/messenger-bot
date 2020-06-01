@@ -19,7 +19,7 @@ class ProductController extends Controller
         $products = Product::where('code', $request->product_code)
             ->orWhere('name', 'like', '%' . $request->product_code . '%')
             ->with('images')
-            ->with('discounts')->get();
+            ->with('discounts')->paginate(15);
         return response()->json($products);
         //return datatables($products)->toJson();
     }

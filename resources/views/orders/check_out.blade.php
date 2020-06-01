@@ -185,7 +185,6 @@
                                             $("#product_info_container").append(add_more_product);
                                             $(".basic_info").hide(500);
                                         }
-                                        showNotification(result, "text-success", 2000);
                                     });
                                 },
                                 error: function (error, jqXHR) {

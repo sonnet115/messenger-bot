@@ -65,7 +65,7 @@ class Template
         ];
     }
 
-    public function preOrderProductTemplate()
+    public function viewCartTemplate()
     {
         return [
             "recipient" => [
@@ -107,7 +107,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL") . "track-order-form",
+                                "url" => env("APP_URL") . "track-order-form/" . $this->recipientId,
                                 "title" => "Track Order",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",

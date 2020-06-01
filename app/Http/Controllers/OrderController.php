@@ -157,9 +157,12 @@ class OrderController extends Controller
         return ($product_price * $dis_percentage) / 100;
     }
 
-    public function viewTrackOrderForm()
+    public function viewTrackOrderForm(Request $request)
     {
-        return view("orders.track_order_form");
+        $customer_id = $request->segment(2);
+        $customer_id = Customer::select('id')->where('fb_id', $customer_id)->first();
+        $order_status = Order::with('products')->get();
+        return view("orders.track_order_form")->with("orders", $order_status);
     }
 
     public function getOrderStatus(Request $request)
@@ -253,9 +256,8 @@ class OrderController extends Controller
 
     public function processRemoveCartProducts($product_code, $customer_fb_id)
     {
-//        $product_id = Product::select('id')->where('code', $product_code)->first();
-//        return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
-        return true;
+        $product_id = Product::select('id')->where('code', $product_code)->first();
+        return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
     }
 
     //test function

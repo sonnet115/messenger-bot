@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form | Shop Name</title>
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/iofrm-style.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/iofrm-theme24.css">
@@ -20,26 +24,65 @@
                         <div class="col-3 col-sm-3">
                             <hr>
                         </div>
-                        <div class="col-6 col-sm-6 text-danger text-center">
-                            Track Order
+                        <div class="col-6 col-sm-6">
+                            <h3 class="text-danger text-center">Your Orders</h3>
                         </div>
                         <div class="col-3 col-sm-3">
                             <hr>
                         </div>
 
-                        <div class="col-12 col-sm-12">
-                            <label>Order Code <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter Order Code..."
-                                   name="order_code" required>
-                            <p id="order_code_error" class="text-danger" style="font-size: 13px"></p>
-                        </div>
+                        {{--                        <div class="col-12 col-sm-12">--}}
+                        {{--                            <label>Order Code <span class="text-danger">*</span></label>--}}
+                        {{--                            <input type="text" class="form-control" placeholder="Enter Order Code..."--}}
+                        {{--                                   name="order_code" required>--}}
+                        {{--                            <p id="order_code_error" class="text-danger" style="font-size: 13px"></p>--}}
+                        {{--                        </div>--}}
 
-                        <div class="col-12 col-sm-12 text-center">
-                            <button id="search" class="btn btn-success" style="border-radius: 5px;padding: 10px 20px"><i
-                                    class="fa fa-search"></i> Track Order
-                            </button>
-                        </div>
+                        {{--                        <div class="col-12 col-sm-12 text-center">--}}
+                        {{--                            <button id="search" class="btn btn-success" style="border-radius: 5px;padding: 10px 20px"><i--}}
+                        {{--                                    class="fa fa-search"></i> Track Order--}}
+                        {{--                            </button>--}}
+                        {{--                        </div>--}}
 
+                        <div class="row" style="margin:0 auto">
+                            <div id="accordion" style="padding: 10px">
+                                <?php
+                                $duplicate_order_code = "";
+                                ?>
+                                @foreach($orders as $order)
+                                    @if($duplicate_order_code !== $order->order_code)
+                                        <div class="card shadow" style="min-width: 400px">
+                                            <div class="card-header">
+                                                <a class="card-link code_container"
+                                                   href="#order_{{$order->order_code}}">
+                                                    ORDER CODE: <span
+                                                        class="text-muted code">{{$order->order_code}}</span>
+                                                </a>
+                                            </div>
+                                            <div id="order_{{$order->order_code}}"
+                                                 class="collapse"
+                                                 data-parent="#accordion">
+                                                <div class="card-body"
+                                                     id="order_status_container_{{$order->order_code}}">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <p><strong>Product Name:</strong> <span></span>
+                                                            </p>
+                                                            <p><strong>Product Qty: </strong> <span></span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <?php
+                                        $duplicate_order_code = $order->order_code
+                                        ?>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,53 +90,36 @@
     </div>
 </div>
 
-<!-- The Modal Starts-->
-<div class="modal fade" id="order_details_modal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">You Order Code "<span id="searched_order_code"></span>"</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body ">
-                <div class="container" id="order_status_container">
-                    {{--Order Details will be displayed here--}}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- The Modal Ends-->
-
-<script src="{{env("APP_URL")}}assets/orders/js/jquery.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/popper.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/bootstrap.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/main.js"></script>
 <script>
     $(document).ready(function () {
-        $("#search").on('click', function () {
-            let order_code = $("input[name='order_code']").val();
+        $(".code_container").on('click', function () {
+            // let order_code = $("input[name='order_code']").val();
+            let order_code = $(this).find('.code').html();
+            let code_container = $(this);
             $("#searched_order_code").html(order_code);
 
-            $.ajax({
-                url: '/get-order-status',
-                type: "GET",
-                data: {
-                    'order_code': order_code,
-                },
-                success: function (result) {
-                    $("#order_status_container").html("");
-                    console.log(result);
-                    if (result.length > 0) {
-                        let products = productDetails(result);
-                        $("#order_status_container").append(products);
-                    } else {
-                        $("#order_status_container").append('<p class="text-danger text-center">No order found</p>');
+            if ($("#order_status_container_" + order_code).children().length <= 0) {
+                $.ajax({
+                    url: '/get-order-status',
+                    type: "GET",
+                    data: {
+                        'order_code': order_code,
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        $("#order_status_container_" + order_code).html("");
+                        if (result.length > 0) {
+                            let products = productDetails(result);
+                            $("#order_status_container_" + order_code).append(products);
+                        } else {
+                            $("#order_status_container_" + order_code).append('<p class="text-danger text-center">No order found</p>');
+                        }
+                        $('#order_' + order_code).collapse('toggle');
                     }
-
-                    $("#order_details_modal").modal('toggle');
-                }
-            });
+                });
+            }else{
+                $('#order_' + order_code).collapse('toggle');
+            }
 
         })
     })
