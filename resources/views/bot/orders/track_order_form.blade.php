@@ -83,7 +83,7 @@
 
             if ($("#order_status_container_" + order_code).children().length <= 0) {
                 $.ajax({
-                    url: '/get-order-status',
+                    url: '/bot/get-order-status',
                     type: "GET",
                     data: {
                         'order_code': order_code,

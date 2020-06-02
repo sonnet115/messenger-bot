@@ -122,13 +122,13 @@
     $(document).ready(function () {
         $("#search").on('click', function () {
             let product_code = $("input[name='product_code']").val();
-            const cart_url = '{{env("APP_URL")."cart/"}}' + $("#customer_id").val();
+            const cart_url = '{{env("APP_URL")."bot/cart/"}}' + $("#customer_id").val();
             if (product_code === "") {
                 $("#product_code_error").html("Product code cannot be empty");
             } else {
                 $("#searched_product_code").html(product_code);
                 $.ajax({
-                    url: '/get-product',
+                    url: '/bot/get-product',
                     type: "GET",
                     data: {
                         'product_code': product_code,
@@ -151,7 +151,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: '/pre-order',
+                                        url: '/bot/pre-order',
                                         type: "GET",
                                         data: {
                                             'pre_order_product_code': pre_order_product_code,
@@ -173,7 +173,7 @@
                                     let add_to_cart_button = $(this);
 
                                     $.ajax({
-                                        url: '/add-to-cart',
+                                        url: '/bot/add-to-cart',
                                         type: "GET",
                                         data: {
                                             'cart_product_code': cart_product_code,
@@ -231,7 +231,7 @@
                                 let button = $(this);
 
                                 $.ajax({
-                                    url: '/pre-order',
+                                    url: '/bot/pre-order',
                                     type: "GET",
                                     data: {
                                         'pre_order_product_code': pre_order_product_code,
@@ -252,7 +252,7 @@
                                 let button = $(this);
 
                                 $.ajax({
-                                    url: '/add-to-cart',
+                                    url: '/bot/add-to-cart',
                                     type: "GET",
                                     data: {
                                         'cart_product_code': cart_product_code,
@@ -305,7 +305,7 @@
                                 let button = $(this);
 
                                 $.ajax({
-                                    url: '/pre-order',
+                                    url: '/bot/pre-order',
                                     type: "GET",
                                     data: {
                                         'pre_order_product_code': pre_order_product_code,
@@ -326,7 +326,7 @@
                                 let button = $(this);
 
                                 $.ajax({
-                                    url: '/add-to-cart',
+                                    url: '/bot/add-to-cart',
                                     type: "GET",
                                     data: {
                                         'cart_product_code': cart_product_code,

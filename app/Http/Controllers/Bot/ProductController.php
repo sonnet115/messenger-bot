@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function viewProductSearchForm(Request $request)
     {
-        $customer_id = $request->segment(2);
+        $customer_id = $request->segment(3);
         return view("bot.products.products_search_form")->with('customer_id', $customer_id);
     }
 
@@ -19,7 +19,7 @@ class ProductController extends Controller
         $products = Product::where('code', $request->product_code)
             ->orWhere('name', 'like', '%' . $request->product_code . '%')
             ->with('images')
-            ->with('discounts')->paginate(15);
+            ->with('discounts')->paginate(10);
         return response()->json($products);
     }
 

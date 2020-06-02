@@ -10,35 +10,40 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['prefix' => 'bot'], function () {
+    //Route for verification
+    Route::get("/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
 
-//Route for verification
-Route::get("/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
+    //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
+    Route::post("/verify-web-hook", "Bot\BotController@verifyWebhook");
 
-//where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
-Route::post("/verify-web-hook", "Bot\BotController@verifyWebhook");
+    //Routes for place orders
+    Route::get("cart/{id}", "Bot\OrderController@viewOrderForm")->name("cart.show");
+    Route::get("get-cart-products", "Bot\OrderController@getCartProducts")->name("cart.get");
+    Route::get("order-store", "Bot\OrderController@storeOrder")->name("order.store");
+    Route::get("check-product", "Bot\OrderController@checkProductCode")->name("product.code.check");
+    Route::get("check-qty", "Bot\OrderController@checkProductQty")->name("product.qty.check");
 
-//Routes for place orders
-Route::get("cart/{id}", "Bot\OrderController@viewOrderForm")->name("cart.show");
-Route::get("get-cart-products", "Bot\OrderController@getCartProducts")->name("cart.get");
-Route::get("order-store", "Bot\OrderController@storeOrder")->name("order.store");
-Route::get("check-product", "Bot\OrderController@checkProductCode")->name("product.code.check");
-Route::get("check-qty", "Bot\OrderController@checkProductQty")->name("product.qty.check");
+    //Routes for track orders
+    Route::get("track-order-form/{id}", "Bot\OrderController@viewTrackOrderForm")->name("track.order.form");
+    Route::get("get-order-status", "Bot\OrderController@getOrderStatus")->name("order.status.get");
 
-//Routes for track orders
-Route::get("track-order-form/{id}", "Bot\OrderController@viewTrackOrderForm")->name("track.order.form");
-Route::get("get-order-status", "Bot\OrderController@getOrderStatus")->name("order.status.get");
+    //Routes for pre orders
+    Route::get("pre-order", "Bot\OrderController@storePreOrder")->name("pre-order.store");
 
-//Routes for pre orders
-Route::get("pre-order", "Bot\OrderController@storePreOrder")->name("pre-order.store");
+    //Routes for add to cart
+    Route::get("add-to-cart", "Bot\OrderController@addToCart")->name("add.cart");
+    Route::get("remove-cart-product", "Bot\OrderController@removeCartProducts")->name("remove.cart");
 
-//Routes for add to cart
-Route::get("add-to-cart", "Bot\OrderController@addToCart")->name("add.cart");
-Route::get("remove-cart-product", "Bot\OrderController@removeCartProducts")->name("remove.cart");
+    //Route for product enquiry
+    Route::get("product-search-form/{id}", "Bot\ProductController@viewProductSearchForm")->name("product.search.form");
+    Route::get("get-product", "Bot\ProductController@getProduct")->name("product.get");
 
-//Route for product enquiry
-Route::get("product-search-form/{id}", "Bot\ProductController@viewProductSearchForm")->name("product.search.form");
-Route::get("get-product", "Bot\ProductController@getProduct")->name("product.get");
+    //test route
+    Route::get("get-test-data", "OrderController@getTestData")->name('order.details');
+});
 
 
-//test route
-Route::get("get-test-data", "OrderController@getTestData")->name('order.details');
+Route::group(['prefix' => 'admin'], function () {
+    Route::get("add-product", "Admin_Panel\ProductController@addProduct")->name("product.add");
+});

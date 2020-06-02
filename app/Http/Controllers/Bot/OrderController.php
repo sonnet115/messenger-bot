@@ -29,7 +29,7 @@ class OrderController extends Controller
 
     public function viewOrderForm(Request $request)
     {
-        $customer_id = $request->segment(2);
+        $customer_id = $request->segment(3);
         $get_customer_info = Customer::where('fb_id', $customer_id)->first();
         return view("bot.orders.check_out")->with("customer_info", $get_customer_info);
     }
@@ -159,7 +159,7 @@ class OrderController extends Controller
 
     public function viewTrackOrderForm(Request $request)
     {
-        $customer_fb_id = $request->segment(2);
+        $customer_fb_id = $request->segment(3);
         $customer_id = Customer::select('id')->where('fb_id', $customer_fb_id)->first();
         $order_status = Order::where('customer_id', $customer_id->id)->with('products')->get();
         return view("bot.orders.track_order_form")->with("orders", $order_status);
