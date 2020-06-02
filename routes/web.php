@@ -12,10 +12,10 @@
 */
 
 //Route for verification
-Route::get("/verify-web-hook", "Bot.BotController@verifyWebhook")->middleware("verify");
+Route::get("/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
 
 //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
-Route::post("/verify-web-hook", "Bot/BotController@verifyWebhook");
+Route::post("/verify-web-hook", "Bot\BotController@verifyWebhook");
 
 //Routes for place orders
 Route::get("cart/{id}", "Bot\OrderController@viewOrderForm")->name("cart.show");

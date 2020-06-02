@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Bot;
 
 use App\Bot\Webhook\Entry;
 use App\Http\Controllers\Controller;
-use App\Jobs\BotHandler;
+use App\Jobs\Bot\BotHandler;
 use Illuminate\Http\Request;
 
 class BotController extends Controller
