@@ -19,8 +19,8 @@ class CreateDiscountsTable extends Migration
             $table->date('dis_from');
             $table->date('dis_to');
             $table->bigInteger('pid');
-            $table->string('dis_percentage');
-            $table->string('max_customers');
+            $table->string('dis_percentage')->default(0);
+            $table->string('max_customers')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateDiscountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dicounts');
+        Schema::dropIfExists('discounts');
     }
 }
