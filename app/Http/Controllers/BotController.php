@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 
 class BotController extends Controller
 {
-    public function receive(Request $request)
+    public function verifyWebhook(Request $request)
     {
         $entries = Entry::getEntries($request);
         foreach ($entries as $entry) {

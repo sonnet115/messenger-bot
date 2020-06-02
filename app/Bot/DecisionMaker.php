@@ -30,14 +30,17 @@ class DecisionMaker
     private function fetchResponse()
     {
         switch ($this->user_response) {
+            case "VIEW_CART":
+                $this->sendTemplate("VIEW_CART");
+                break;
             case "ORDER_PRODUCT":
                 $this->sendTemplate("ORDER_PRODUCT");
                 break;
             case "TRACK_ORDER":
                 $this->sendTemplate("TRACK_ORDER");
                 break;
-            case "PRODUCT_ENQUIRY":
-                $this->sendTemplate("PRODUCT_ENQUIRY");
+            case "PRODUCT_SEARCH":
+                $this->sendTemplate("PRODUCT_SEARCH");
                 break;
             case "TALK_TO_AGENT":
                 $this->sendHandover("An agent will contact you shortly. Please tell us what do you want to know.");
@@ -46,6 +49,9 @@ class DecisionMaker
                 $this->sendHandover("An agent will contact you shortly.Please tell us your reason to cancel");
                 break;
             case "GET_STARTED":
+                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Welcome To DEMO BOT"));
+                $this->sendQuickReply();
+                break;
             default:
                 $this->sendQuickReply();
                 break;
@@ -63,12 +69,14 @@ class DecisionMaker
     {
         $form_template = new Template($this->recipientId);
 
-        if ($template_type == "ORDER_PRODUCT") {
-            $messageData = $form_template->orderFormTemplate();
+        if ($template_type == "VIEW_CART") {
+            $messageData = $form_template->viewCartTemplate();
+        } else if ($template_type == "ORDER_PRODUCT") {
+            $messageData = $form_template->orderProductTemplate();
         } else if ($template_type == "TRACK_ORDER") {
             $messageData = $form_template->trackOrderProductTemplate();
-        } else if ($template_type == "PRODUCT_ENQUIRY") {
-            $messageData = $form_template->productEnquiryTemplate();
+        } else if ($template_type == "PRODUCT_SEARCH") {
+            $messageData = $form_template->productSearchTemplate();
         }
 
         $this->common->sendAPIRequest($messageData);

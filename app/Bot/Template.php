@@ -11,34 +11,7 @@ class Template
         $this->recipientId = $recipientId;
     }
 
-    public function orderFormTemplate()
-    {
-        return [
-            "recipient" => [
-                "id" => $this->recipientId
-            ],
-            "message" => [
-                "attachment" => [
-                    "type" => "template",
-                    "payload" => [
-                        "template_type" => "button",
-                        "text" => "Fill the form",
-                        "buttons" => [
-                            [
-                                "type" => "web_url",
-                                "url" => env("APP_URL") . "order-form/" . $this->recipientId,
-                                "title" => "Order Product",
-                                "messenger_extensions" => 'true',
-                                "webview_height_ratio" => "tall",
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    public function productEnquiryTemplate()
+    public function orderProductTemplate()
     {
         return [
             "recipient" => [
@@ -54,7 +27,34 @@ class Template
                             [
                                 "type" => "web_url",
                                 "url" => env("APP_URL") . "product-search-form/" . $this->recipientId,
-                                "title" => "Product Enquiry",
+                                "title" => "Order Product",
+                                "messenger_extensions" => 'true',
+                                "webview_height_ratio" => "tall",
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    public function productSearchTemplate()
+    {
+        return [
+            "recipient" => [
+                "id" => $this->recipientId
+            ],
+            "message" => [
+                "attachment" => [
+                    "type" => "template",
+                    "payload" => [
+                        "template_type" => "button",
+                        "text" => "Click the button",
+                        "buttons" => [
+                            [
+                                "type" => "web_url",
+                                "url" => env("APP_URL") . "product-search-form/" . $this->recipientId,
+                                "title" => "Search Product",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
                             ]
@@ -80,8 +80,8 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL"),
-                                "title" => "Pre Order",
+                                "url" => env("APP_URL") . "cart/" . $this->recipientId,
+                                "title" => "View Cart",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
                             ]

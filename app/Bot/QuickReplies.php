@@ -22,8 +22,13 @@ class QuickReplies
                 "quick_replies" => [
                     [
                         "content_type" => "text",
-                        "title" => "Product Enquiry",
-                        "payload" => "PRODUCT_ENQUIRY",
+                        "title" => "View Cart",
+                        "payload" => "VIEW_CART"
+                    ],
+                    [
+                        "content_type" => "text",
+                        "title" => "Search Product",
+                        "payload" => "PRODUCT_SEARCH",
                     ],
                     [
                         "content_type" => "text",

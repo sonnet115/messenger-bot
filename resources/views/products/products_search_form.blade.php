@@ -122,7 +122,7 @@
     $(document).ready(function () {
         $("#search").on('click', function () {
             let product_code = $("input[name='product_code']").val();
-            const cart_url = '{{env("APP_URL")."order-form/"}}' + $("#customer_id").val();
+            const cart_url = '{{env("APP_URL")."cart/"}}' + $("#customer_id").val();
             if (product_code === "") {
                 $("#product_code_error").html("Product code cannot be empty");
             } else {
@@ -405,7 +405,7 @@
     function orderPreOrderButton(stock, product_code) {
         if (stock > 0) {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                '       <a href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '">Add to Cart</a> ' +
+                '       <a href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i >Add to Cart</a> ' +
                 '   </div>';
         } else {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +

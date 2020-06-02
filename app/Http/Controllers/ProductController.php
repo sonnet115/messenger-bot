@@ -21,7 +21,6 @@ class ProductController extends Controller
             ->with('images')
             ->with('discounts')->paginate(15);
         return response()->json($products);
-        //return datatables($products)->toJson();
     }
 
 }

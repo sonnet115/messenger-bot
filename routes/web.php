@@ -16,13 +16,13 @@ Route::get('/', function () {
 });
 
 //Route for verification
-Route::get("/test-bot", "BotController@receive")->middleware("verify");
+Route::get("/verify-web-hook", "BotController@verifyWebhook")->middleware("verify");
 
 //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
-Route::post("/test-bot", "BotController@receive");
+Route::post("/verify-web-hook", "BotController@verifyWebhook");
 
 //Routes for place orders
-Route::get("order-form/{id}", "OrderController@viewOrderForm")->name("order.form");
+Route::get("cart/{id}", "OrderController@viewOrderForm")->name("cart.show");
 Route::get("get-cart-products", "OrderController@getCartProducts")->name("cart.get");
 Route::get("order-store", "OrderController@storeOrder")->name("order.store");
 Route::get("check-product", "OrderController@checkProductCode")->name("product.code.check");
