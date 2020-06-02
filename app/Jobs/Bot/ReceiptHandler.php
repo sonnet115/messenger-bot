@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Bot;
 
 use App\Bot\Common;
 use App\Bot\Receipt;

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form | Shop Name</title>
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/fontawesome-all.min.css">
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/iofrm-style.css">
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/iofrm-theme24.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/iofrm-style.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/iofrm-theme24.css">
     <style>
         .product_details {
             font-size: 13px !important;
@@ -128,10 +128,10 @@
 </div>
 <!-- The Notification Modal Ends-->
 
-<script src="{{env("APP_URL")}}assets/orders/js/jquery.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/popper.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/bootstrap.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/main.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/jquery.min.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/popper.min.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/bootstrap.min.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/main.js"></script>
 <script>
     $(document).ready(function () {
         let customer_fb_id = $("input[name=customer_fb_id]").val();
@@ -322,7 +322,9 @@
                                 showNotification(result, "text-success", 4000);
                                 setTimeout(function () {
                                     $("#product_info_container").html("");
-                                    $("#submit").hide();
+                                    let add_more_product = noProductFound(product_search_url);
+                                    $("#product_info_container").append(add_more_product);
+                                    $(".basic_info").hide(500);
                                 }, 5000);
                             }
                         });

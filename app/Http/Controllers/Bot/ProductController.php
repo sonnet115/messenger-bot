@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Bot;
 
-use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function viewProductSearchForm(Request $request)
     {
         $customer_id = $request->segment(2);
-        return view("products.products_search_form")->with('customer_id', $customer_id);
+        return view("bot.products.products_search_form")->with('customer_id', $customer_id);
     }
 
     public function getProduct(Request $request)

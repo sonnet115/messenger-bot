@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Bot;
 
 use App\Bot\Webhook\Entry;
+use App\Http\Controllers\Controller;
 use App\Jobs\BotHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class BotController extends Controller
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Bot;
 
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Bot\OrderController;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class PreOrderHandler implements ShouldQueue
+class OrderHandler implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -24,6 +24,6 @@ class PreOrderHandler implements ShouldQueue
 
     public function handle()
     {
-        $this->order_controller->processPreOrder($this->data);
+        $this->order_controller->processOrder($this->data);
     }
 }

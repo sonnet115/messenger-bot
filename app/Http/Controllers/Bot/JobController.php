@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Bot;
 
-use App\Jobs\CartHandler;
-use App\Jobs\OrderHandler;
-use App\Jobs\PreOrderHandler;
-use App\Jobs\ReceiptHandler;
+use App\Http\Controllers\Controller;
+use App\Jobs\Bot\OrderHandler;
+use App\Jobs\Bot\CartHandler;
+use App\Jobs\Bot\PreOrderHandler;
+use App\Jobs\Bot\ReceiptHandler;
 
 class JobController extends Controller
 {

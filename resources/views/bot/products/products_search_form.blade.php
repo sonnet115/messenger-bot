@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form | Shop Name</title>
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/fontawesome-all.min.css">
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/iofrm-style.css">
-    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/orders/css/iofrm-theme24.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/iofrm-style.css">
+    <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/orders/css/iofrm-theme24.css">
     <style>
         .modal {
             overflow: auto !important;
@@ -113,10 +113,10 @@
 </div>
 <!-- The Notification Modal Ends-->
 
-<script src="{{env("APP_URL")}}assets/orders/js/jquery.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/popper.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/bootstrap.min.js"></script>
-<script src="{{env("APP_URL")}}assets/orders/js/main.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/jquery.min.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/popper.min.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/bootstrap.min.js"></script>
+<script src="{{env("APP_URL")}}assets/bot/orders/js/main.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -405,11 +405,11 @@
     function orderPreOrderButton(stock, product_code) {
         if (stock > 0) {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                '       <a href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i >Add to Cart</a> ' +
+                '       <a href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i > Add to Cart</a> ' +
                 '   </div>';
         } else {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                '       <button class="order_pre_order_btn outline_btn btn btn-outline-danger btn-sm" id="pre-order_' + product_code + '">Pre-Order</button> ' +
+                '       <button class="order_pre_order_btn outline_btn btn btn-outline-danger btn-sm" id="pre-order_' + product_code + '"><i class="fa fa-gift"></i > Pre-Order</button> ' +
                 '   </div>';
         }
     }

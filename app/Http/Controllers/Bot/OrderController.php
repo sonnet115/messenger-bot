@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Bot;
 
+use App\Http\Controllers\Controller;
 use App\Bot\Common;
 use App\Bot\Template;
 use App\Bot\TextMessages;
@@ -30,7 +31,7 @@ class OrderController extends Controller
     {
         $customer_id = $request->segment(2);
         $get_customer_info = Customer::where('fb_id', $customer_id)->first();
-        return view("orders.check_out")->with("customer_info", $get_customer_info);
+        return view("bot.orders.check_out")->with("customer_info", $get_customer_info);
     }
 
     public function storeOrder(Request $request)
@@ -115,7 +116,6 @@ class OrderController extends Controller
                 }
             }
             $this->processReceipt($data['customer_fb_id'], $order_code);
-
         } catch (\Exception $e) {
             DB::rollBack();
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
@@ -159,10 +159,10 @@ class OrderController extends Controller
 
     public function viewTrackOrderForm(Request $request)
     {
-        $customer_id = $request->segment(2);
-        $customer_id = Customer::select('id')->where('fb_id', $customer_id)->first();
-        $order_status = Order::with('products')->get();
-        return view("orders.track_order_form")->with("orders", $order_status);
+        $customer_fb_id = $request->segment(2);
+        $customer_id = Customer::select('id')->where('fb_id', $customer_fb_id)->first();
+        $order_status = Order::where('customer_id', $customer_id->id)->with('products')->get();
+        return view("bot.orders.track_order_form")->with("orders", $order_status);
     }
 
     public function getOrderStatus(Request $request)
