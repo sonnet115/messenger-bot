@@ -45,5 +45,6 @@ Route::group(['prefix' => 'bot'], function () {
 
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get("add-product", "Admin_Panel\ProductController@addProduct")->name("product.add");
+    //Route::get("add-product", "Admin_Panel\ProductController@addProduct")->name("product.add");
+    Route::get("dashboard", "Admin_Panel\DashboardController@showDashboard")->name("dashboard.show");
 });
