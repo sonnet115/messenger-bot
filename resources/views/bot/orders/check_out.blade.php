@@ -22,9 +22,206 @@
         .outline_btn {
             border: 1px solid !important;
         }
+
+        .sk-circle {
+            position: absolute;
+            top: 48%;
+            left: 48%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sk-circle .sk-child {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .sk-circle .sk-child:before {
+            content: '';
+            display: block;
+            margin: 0 auto;
+            width: 15%;
+            height: 15%;
+            background-color: #f3edff;
+            border-radius: 100%;
+            -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
+            animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
+        }
+
+        .sk-circle .sk-circle2 {
+            -webkit-transform: rotate(30deg);
+            -ms-transform: rotate(30deg);
+            transform: rotate(30deg);
+        }
+
+        .sk-circle .sk-circle3 {
+            -webkit-transform: rotate(60deg);
+            -ms-transform: rotate(60deg);
+            transform: rotate(60deg);
+        }
+
+        .sk-circle .sk-circle4 {
+            -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+
+        .sk-circle .sk-circle5 {
+            -webkit-transform: rotate(120deg);
+            -ms-transform: rotate(120deg);
+            transform: rotate(120deg);
+        }
+
+        .sk-circle .sk-circle6 {
+            -webkit-transform: rotate(150deg);
+            -ms-transform: rotate(150deg);
+            transform: rotate(150deg);
+        }
+
+        .sk-circle .sk-circle7 {
+            -webkit-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .sk-circle .sk-circle8 {
+            -webkit-transform: rotate(210deg);
+            -ms-transform: rotate(210deg);
+            transform: rotate(210deg);
+        }
+
+        .sk-circle .sk-circle9 {
+            -webkit-transform: rotate(240deg);
+            -ms-transform: rotate(240deg);
+            transform: rotate(240deg);
+        }
+
+        .sk-circle .sk-circle10 {
+            -webkit-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+
+        .sk-circle .sk-circle11 {
+            -webkit-transform: rotate(300deg);
+            -ms-transform: rotate(300deg);
+            transform: rotate(300deg);
+        }
+
+        .sk-circle .sk-circle12 {
+            -webkit-transform: rotate(330deg);
+            -ms-transform: rotate(330deg);
+            transform: rotate(330deg);
+        }
+
+        .sk-circle .sk-circle2:before {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+
+        .sk-circle .sk-circle3:before {
+            -webkit-animation-delay: -1s;
+            animation-delay: -1s;
+        }
+
+        .sk-circle .sk-circle4:before {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+
+        .sk-circle .sk-circle5:before {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
+
+        .sk-circle .sk-circle6:before {
+            -webkit-animation-delay: -0.7s;
+            animation-delay: -0.7s;
+        }
+
+        .sk-circle .sk-circle7:before {
+            -webkit-animation-delay: -0.6s;
+            animation-delay: -0.6s;
+        }
+
+        .sk-circle .sk-circle8:before {
+            -webkit-animation-delay: -0.5s;
+            animation-delay: -0.5s;
+        }
+
+        .sk-circle .sk-circle9:before {
+            -webkit-animation-delay: -0.4s;
+            animation-delay: -0.4s;
+        }
+
+        .sk-circle .sk-circle10:before {
+            -webkit-animation-delay: -0.3s;
+            animation-delay: -0.3s;
+        }
+
+        .sk-circle .sk-circle11:before {
+            -webkit-animation-delay: -0.2s;
+            animation-delay: -0.2s;
+        }
+
+        .sk-circle .sk-circle12:before {
+            -webkit-animation-delay: -0.1s;
+            animation-delay: -0.1s;
+        }
+
+        @-webkit-keyframes sk-circleBounceDelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+            40% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes sk-circleBounceDelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+            40% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+
+        .spinner-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #004663;
+            z-index: 999999;
+        }
     </style>
 </head>
 <body style="overflow-x: hidden">
+<div class="spinner-wrapper">
+    <div class="sk-circle">
+        <div class="sk-circle1 sk-child"></div>
+        <div class="sk-circle2 sk-child"></div>
+        <div class="sk-circle3 sk-child"></div>
+        <div class="sk-circle4 sk-child"></div>
+        <div class="sk-circle5 sk-child"></div>
+        <div class="sk-circle6 sk-child"></div>
+        <div class="sk-circle7 sk-child"></div>
+        <div class="sk-circle8 sk-child"></div>
+        <div class="sk-circle9 sk-child"></div>
+        <div class="sk-circle10 sk-child"></div>
+        <div class="sk-circle11 sk-child"></div>
+        <div class="sk-circle12 sk-child"></div>
+    </div>
+</div>
 
 <div class="text-center" style="margin-top: 20px">
     <h3 class="text-muted">Checkout</h3>
@@ -134,6 +331,14 @@
 <script src="{{env("APP_URL")}}assets/bot/orders/js/main.js"></script>
 <script>
     $(document).ready(function () {
+        //Preloader
+        let preloaderFadeOutTime = 500;
+
+        function hidePreloader() {
+            let preloader = $('.spinner-wrapper');
+            preloader.fadeOut(preloaderFadeOutTime);
+        }
+
         let customer_fb_id = $("input[name=customer_fb_id]").val();
         let product_search_url = '{{env("APP_URL")."bot/product-search-form/"}}' + customer_fb_id;
 
@@ -166,6 +371,7 @@
 
                         $("#delete_btn_" + result[i].products.code).on("click", function () {
                             let delete_btn = $(this);
+                            delete_btn.html("<i class='fas fa-sync fa-spin'></i>");
                             $.ajax({
                                 url: '/bot/remove-cart-product',
                                 type: "GET",
@@ -199,6 +405,7 @@
                             let increment_btn = $(this);
                             let decrement_btn = $("#decrement_btn_" + result[i].products.code);
                             increment_btn.attr("disabled", true);
+                            increment_btn.html("<i class='fas fa-spinner fa-spin'></i>");
 
                             let qty_container = $(this).parent().find('.product_qty');
                             let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
@@ -220,6 +427,7 @@
                                         decrement_btn.attr("disabled", false);
                                     }
                                     $("#submit").attr("disabled", false);
+                                    increment_btn.html("<i class='fa fa-plus-square'></i>");
                                 }
                             });
                         });
@@ -239,6 +447,7 @@
                                 qty_input_field.val(1);
                                 $("#submit").attr("disabled", false);
                             } else {
+                                decrement_btn.html("<i class='fas fa-spinner fa-spin'></i>");
                                 $.ajax({
                                     url: '/bot/check-qty',
                                     type: "GET",
@@ -256,6 +465,7 @@
                                             increment_btn.attr("disabled", false);
                                         }
                                         $("#submit").attr("disabled", false);
+                                        decrement_btn.html("<i class='fa fa-minus-square'></i>");
                                     }
                                 });
 
@@ -333,6 +543,7 @@
                     let no_product = noProductFound(product_search_url);
                     $("#product_info_container").html(no_product);
                 }
+                hidePreloader();
             }
         });
 
@@ -401,7 +612,11 @@
                 '               style="padding: 5px 10px;font-size: 12px;border-radius: 2px">\n' +
                 '               <i class="fa fa-plus-square"></i>\n' +
                 '        </button>\n' +
-                '        <p style="text-align: center;font-size: 15px;margin: 5px 5px 5px 0" class="product_qty">1</p>\n' +
+                '        <button class="btn btn-sm"\n' +
+                '                style="padding: 5px 10px;font-size: 12px;border-radius: 2px;background: white">\n' +
+                '                <span style="text-align: center;font-size: 15px;margin: 0px"\n' +
+                '                      class="product_qty">1</span>\n' +
+                '        </button>\n' +
                 '        <input type="hidden" class="form-control" placeholder="Product Qty" required\n' +
                 '                                               name="product_qty[]" id="qty_' + product_code + '">\n' +
                 '        <button id="decrement_btn_' + product_code + '" class="outline_btn btn btn-sm btn-outline-danger shadow-sm"\n' +
@@ -424,14 +639,14 @@
 
         function addMoreAndCheckoutButton(more_product_url) {
             return '<div class="row" style="margin-top: 20px">\n' +
-                '         <div class="col-6 col-sm-6" style="margin-bottom: 20px;">\n' +
-                '              <a href="' + more_product_url + '" style="border-radius: 50px;"\n' +
+                '         <div class="col-12 col-sm-6 text-center text-sm-left" style="margin-bottom: 20px;">\n' +
+                '              <a href="' + more_product_url + '" style="border-radius: 50px;min-width: 170px"\n' +
                 '                  class="btn btn-outline-primary outline_btn">\n' +
                 '                  <i class="fa fa-shopping-cart"></i> More Products\n' +
                 '              </a>\n' +
                 '         </div>\n' +
-                '         <div class="col-6 col-sm-6 text-right" style="margin-bottom: 20px;">\n' +
-                '              <button id="checkout_btn" style="border-radius: 50px;"\n' +
+                '         <div class="col-12 col-sm-6 text-center text-sm-right" style="margin-bottom: 20px;">\n' +
+                '              <button id="checkout_btn" style="border-radius: 50px;min-width: 170px"\n' +
                 '                    class="btn btn-outline-success outline_btn">\n' +
                 '                     <i class="fa fa-check-circle"></i> Checkout\n' +
                 '               </button>\n' +
