@@ -17,6 +17,7 @@
             font-size: 13px !important;
             margin: 5px 0 !important;
         }
+
         .sk-circle {
             position: absolute;
             top: 48%;
@@ -286,6 +287,9 @@
             let order_code = $(this).find('.code').html();
             $("#searched_order_code").html(order_code);
 
+            let code_container = $(this);
+            code_container.html("<p style='font-size: 15px' class='text-center text-success'>Loading order <i class='fas fa-spinner fa-pulse'></i></p>")
+
             if ($("#order_status_container_" + order_code).children().length <= 0) {
                 $.ajax({
                     url: '/bot/get-order-status',
@@ -303,9 +307,11 @@
                             $("#order_status_container_" + order_code).append('<p class="text-danger text-center">No order found</p>');
                         }
                         $('#order_' + order_code).collapse('toggle');
+                        code_container.html("ORDER CODE: <span class='text-dark code'>" + order_code + "</span>");
                     }
                 });
             } else {
+                code_container.html("ORDER CODE: <span class='text-dark code'>" + order_code + "</span>");
                 $('#order_' + order_code).collapse('toggle');
             }
 

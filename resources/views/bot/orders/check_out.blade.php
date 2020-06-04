@@ -45,7 +45,7 @@
             margin: 0 auto;
             width: 15%;
             height: 15%;
-            background-color: #333;
+            background-color: #f3edff;
             border-radius: 100%;
             -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
             animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
@@ -200,7 +200,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ff6347;
+            background-color: #004663;
             z-index: 999999;
         }
     </style>
@@ -335,11 +335,9 @@
         let preloaderFadeOutTime = 500;
 
         function hidePreloader() {
-            var preloader = $('.spinner-wrapper');
+            let preloader = $('.spinner-wrapper');
             preloader.fadeOut(preloaderFadeOutTime);
         }
-
-        hidePreloader();
 
         let customer_fb_id = $("input[name=customer_fb_id]").val();
         let product_search_url = '{{env("APP_URL")."bot/product-search-form/"}}' + customer_fb_id;
@@ -373,6 +371,7 @@
 
                         $("#delete_btn_" + result[i].products.code).on("click", function () {
                             let delete_btn = $(this);
+                            delete_btn.html("<i class='fas fa-sync fa-spin'></i>");
                             $.ajax({
                                 url: '/bot/remove-cart-product',
                                 type: "GET",
@@ -406,6 +405,7 @@
                             let increment_btn = $(this);
                             let decrement_btn = $("#decrement_btn_" + result[i].products.code);
                             increment_btn.attr("disabled", true);
+                            increment_btn.html("<i class='fas fa-spinner fa-spin'></i>");
 
                             let qty_container = $(this).parent().find('.product_qty');
                             let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
@@ -427,6 +427,7 @@
                                         decrement_btn.attr("disabled", false);
                                     }
                                     $("#submit").attr("disabled", false);
+                                    increment_btn.html("<i class='fa fa-plus-square'></i>");
                                 }
                             });
                         });
@@ -446,6 +447,7 @@
                                 qty_input_field.val(1);
                                 $("#submit").attr("disabled", false);
                             } else {
+                                decrement_btn.html("<i class='fas fa-spinner fa-spin'></i>");
                                 $.ajax({
                                     url: '/bot/check-qty',
                                     type: "GET",
@@ -463,6 +465,7 @@
                                             increment_btn.attr("disabled", false);
                                         }
                                         $("#submit").attr("disabled", false);
+                                        decrement_btn.html("<i class='fa fa-minus-square'></i>");
                                     }
                                 });
 
@@ -540,6 +543,7 @@
                     let no_product = noProductFound(product_search_url);
                     $("#product_info_container").html(no_product);
                 }
+                hidePreloader();
             }
         });
 
@@ -608,7 +612,11 @@
                 '               style="padding: 5px 10px;font-size: 12px;border-radius: 2px">\n' +
                 '               <i class="fa fa-plus-square"></i>\n' +
                 '        </button>\n' +
-                '        <p style="text-align: center;font-size: 15px;margin: 5px 5px 5px 0" class="product_qty">1</p>\n' +
+                '        <button class="btn btn-sm"\n' +
+                '                style="padding: 5px 10px;font-size: 12px;border-radius: 2px;background: white">\n' +
+                '                <span style="text-align: center;font-size: 15px;margin: 0px"\n' +
+                '                      class="product_qty">1</span>\n' +
+                '        </button>\n' +
                 '        <input type="hidden" class="form-control" placeholder="Product Qty" required\n' +
                 '                                               name="product_qty[]" id="qty_' + product_code + '">\n' +
                 '        <button id="decrement_btn_' + product_code + '" class="outline_btn btn btn-sm btn-outline-danger shadow-sm"\n' +
@@ -631,14 +639,14 @@
 
         function addMoreAndCheckoutButton(more_product_url) {
             return '<div class="row" style="margin-top: 20px">\n' +
-                '         <div class="col-6 col-sm-6" style="margin-bottom: 20px;">\n' +
-                '              <a href="' + more_product_url + '" style="border-radius: 50px;"\n' +
+                '         <div class="col-12 col-sm-6 text-center text-sm-left" style="margin-bottom: 20px;">\n' +
+                '              <a href="' + more_product_url + '" style="border-radius: 50px;min-width: 170px"\n' +
                 '                  class="btn btn-outline-primary outline_btn">\n' +
                 '                  <i class="fa fa-shopping-cart"></i> More Products\n' +
                 '              </a>\n' +
                 '         </div>\n' +
-                '         <div class="col-6 col-sm-6 text-right" style="margin-bottom: 20px;">\n' +
-                '              <button id="checkout_btn" style="border-radius: 50px;"\n' +
+                '         <div class="col-12 col-sm-6 text-center text-sm-right" style="margin-bottom: 20px;">\n' +
+                '              <button id="checkout_btn" style="border-radius: 50px;min-width: 170px"\n' +
                 '                    class="btn btn-outline-success outline_btn">\n' +
                 '                     <i class="fa fa-check-circle"></i> Checkout\n' +
                 '               </button>\n' +
