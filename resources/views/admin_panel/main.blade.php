@@ -151,7 +151,6 @@
                             <i class="fe-airplay"></i>
                             <span> dashboard </span>
                         </a>
-
                     </li>
 
                     <li>
@@ -161,7 +160,7 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="page-starter.html">Add User</a></li>
+                            <li><a href="{{route('user.add.view')}}">Add User</a></li>
                             <li><a href="page-login.html">Manage User</a></li>
                         </ul>
                     </li>
