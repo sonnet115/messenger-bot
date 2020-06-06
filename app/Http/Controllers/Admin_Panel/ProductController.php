@@ -26,19 +26,20 @@ class ProductController extends Controller
             'stock' => 'required|string|max:50',
             'uom' => 'required|string|max:50',
             'price' => 'required|string|max:50',
-            'filenames' => 'required',
+            //'filenames' => 'required',
             'filenames.*' => 'mimes:jpeg,png,jpg',
         ]);
 
-        if(sizeof($request->filenames)>1){
-            Session::flash('error_image_count', 'This is a message!');
-            return redirect()->back()->withErrors($validator)->withInput();
+        if($request->has('filenames')){
+            if(sizeof($request->filenames)>2){
+                Session::flash('error_image_count', 'Do not select more then 5 images');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
         }
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
 
         //product save
         $product = new Product();
@@ -47,8 +48,7 @@ class ProductController extends Controller
         $product->stock = $request->stock;
         $product->uom = $request->uom;
         $product->price = $request->price;
-       // $code = $request->code;
-       // dd($code);
+
         $product->save();
         $product_id=$product->id;
 
