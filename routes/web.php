@@ -47,12 +47,14 @@ Route::group(['prefix' => 'bot'], function () {
 Route::group(['prefix' => 'admin'], function () {
     //Route::get("add-product", "Admin_Panel\ProductController@addProduct")->name("product.add");
     Route::get("dashboard", "Admin_Panel\DashboardController@showDashboard")->name("dashboard.show");
-    Route::get("view-add-product-form", "Admin_Panel\ProductController@viewAddProductForm")->name("product.add.view");
-    Route::post("store-product", "Admin_Panel\ProductController@storeProduct")->name("product.store");
 
-    Route::get("view-update-product-page", "Admin_Panel\ProductController@viewUpdateProduct")->name("product.updateDelete");
-    Route::get("get-products", "Admin_Panel\ProductController@getProduct")->name("product.get");
-
+    //Routes for Products
+    Route::group(['prefix' => 'product'], function () {
+        Route::get("add-form", "Admin_Panel\ProductController@viewAddProductForm")->name("product.add.view");
+        Route::post("store-product", "Admin_Panel\ProductController@storeProduct")->name("product.store");
+        Route::get("manage-form", "Admin_Panel\ProductController@viewUpdateProduct")->name("product.manage.view");
+        Route::get("get-products", "Admin_Panel\ProductController@getProduct")->name("product.get");
+    });
 
 
     /*add user*/

@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function showDashboard(){
-        return view('admin_panel.dashboard');
+    public function showDashboard()
+    {
+        return view('admin_panel.dashboard')->with('title', "CBB | Dashboard");
     }
 }

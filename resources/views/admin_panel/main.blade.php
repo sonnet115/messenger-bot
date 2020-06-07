@@ -1,280 +1,264 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-    <meta charset="utf-8"/>
-    <title>Dashboard 1 | Adminox - Responsive Bootstrap 4 Admin Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
-    <meta content="Coderthemes" name="author"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/admin/images/favicon.ico">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>{{$title}}</title>
+    <meta name="description" content="A responsive bootstrap 4 admin dashboard template by hencework"/>
 
-    <!-- C3 Chart css -->
-    <link href="{{asset('assets/admin/libs/c3/c3.min.css')}}" rel="stylesheet" type="text/css"/>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{asset("assets/admin_panel/dist/img/favicon.ico")}}">
+    <link rel="icon" href="{{asset("assets/admin_panel/dist/img/favicon.ico")}}" type="image/x-icon">
 
-    <!-- App css -->
-    <link href="{{asset('assets/admin/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"
-          id="bootstrap-stylesheet"/>
-    <link href="{{asset('assets/admin/css/icons.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{asset('assets/admin/css/app.min.css')}}" rel="stylesheet" type="text/css" id="app-stylesheet"/>
+    <!-- vector map CSS -->
+    <link href={{asset("assets/admin_panel/vendors/vectormap/jquery-jvectormap-2.0.3.css")}} rel="stylesheet"
+          type="text/css"/>
 
-    <!-- third party css for data table-->
-    <link href="{{asset('assets/admin/libs/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/admin/libs/datatables/buttons.bootstrap4.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/admin/libs/datatables/responsive.bootstrap4.css')}}" rel="stylesheet" type="text/css" />
+    <link href={{asset("assets/admin_panel/vendors/apexcharts/dist/apexcharts.html")}} rel="stylesheet"
+          type="text/css"/>
+
+    <!-- Toggles CSS -->
+    <link href={{asset("assets/admin_panel/vendors/jquery-toggles/css/toggles.css")}} rel="stylesheet"
+          type="text/css">
+
+    <!-- Toaster CSS -->
+    <link
+        href={{asset("assets/admin_panel/vendors/jquery-toast-plugin/dist/jquery.toast.min.css")}} rel="stylesheet"
+        type="text/css">
+
+    <link href={{asset("assets/admin_panel/vendors/bootstrap/dist/css/bootstrap.min.css")}} rel="stylesheet"
+          type="text/css">
+    <link
+        href={{asset("assets/admin_panel/vendors/owl.carousel/dist/assets/owl.carousel.min.css")}} rel="stylesheet"
+        type="text/css">
+    <link
+        href={{asset("assets/admin_panel/vendors/owl.carousel/dist/assets/owl.theme.default.min.css")}} rel="stylesheet"
+        type="text/css">
+
+    <link href={{asset("assets/admin_panel/vendors/datatables.net-dt/css/jquery.dataTables.min.css")}} rel="stylesheet"
+          type="text/css"/>
+    <link
+        href={{asset("assets/admin_panel/vendors/datatables.net-responsive-dt/css/responsive.dataTables.min.css")}} rel="stylesheet"
+        type="text/css"/>
+
+    <!-- Custom CSS -->
+    <link href={{asset("assets/admin_panel/dist/css/style.css")}} rel="stylesheet" type="text/css">
+
+    @yield("custom_css")
+
 </head>
 
 <body>
+<!-- Preloader-->
+<div class="preloader-it">
+    <div class="loader-pendulums"></div>
+</div>
+<!-- /Preloader -->
 
-<!-- Begin page -->
-<div id="wrapper">
-
-
-    <!-- Top bar Start -->
-    <div class="navbar-custom">
-        <ul class="list-unstyled topnav-menu float-right mb-0">
-
-            <li class="dropdown notification-list dropdown d-none d-lg-inline-block ml-2">
-
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <img href="{{asset('assets/admin/images/flags/germany.jpg')}}" alt="lang-image" class="mr-1"
-                             height="12"> <span
-                            class="align-middle">German</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <img href="{{asset('assets/admin/images/flags/italy.jpg')}}" alt="lang-image" class="mr-1"
-                             height="12"> <span
-                            class="align-middle">Italian</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <img href="{{asset('assets/admin/images/flags/spain.jpg')}}" alt="lang-image" class="mr-1"
-                             height="12"> <span
-                            class="align-middle">Spanish</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <img href="{{asset('assets/admin/images/flags/russia.jpg')}}" alt="lang-image" class="mr-1"
-                             height="12"> <span
-                            class="align-middle">Russian</span>
-                    </a>
-
-                </div>
-            </li>
-
-
-
-            <li class="dropdown notification-list">
-                <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown"
-                   href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="{{asset('assets/admin/images/users/avatar-1.jpg')}}" alt="user-image"
-                         class="rounded-circle">
-                    <span class="pro-user-name ml-1">
-                                Maxine K  <i class="mdi mdi-chevron-down"></i>
-                            </span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                    <!-- item-->
-                    <div class="dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">Welcome !</h6>
+<!-- HK Wrapper -->
+<div class="hk-wrapper hk-vertical-nav">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-xl navbar-dark fixed-top hk-navbar">
+        <a id="navbar_toggle_btn" class="navbar-toggle-btn nav-link-hover" href="javascript:void(0);">
+            <span class="feather-icon"><i data-feather="menu"></i></span>
+        </a>
+        <a class="navbar-brand font-weight-900 text-white" style="font-size: 30px !important;"
+           href="{{route("dashboard.show")}}">Gift Tracking
+        </a>
+        <ul class="navbar-nav hk-navbar-content">
+            <li class="nav-item dropdown dropdown-authentication">
+                <a class="nav-link dropdown-toggle no-caret" href="#" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <div class="media">
+                        <div class="media-img-wrap">
+                            <div class="avatar">
+                                <img src={{asset("assets/admin_panel/dist/img/avatar12.jpg")}} alt="user"
+                                     class="avatar-img rounded-circle">
+                            </div>
+                            <span class="badge badge-success badge-indicator"></span>
+                        </div>
+                        <div class="media-body">
+                            <span>Sayla Zahan Surovi<i
+                                    class="zmdi zmdi-chevron-down"></i></span>
+                        </div>
                     </div>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <i class="fe-user"></i>
-                        <span>Profile</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="flipInX" data-dropdown-out="flipOutX">
+                    <a class="dropdown-item" href="#">
+                        <i class="dropdown-icon zmdi zmdi-portable-wifi-changes"></i>
+                        <span>Change Password</span>
                     </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <i class="fe-settings"></i>
-                        <span>Settings</span>
-                    </a>
-
-                    <!-- item-->
                     <div class="dropdown-divider"></div>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <i class="fe-log-out"></i>
-                        <span>Logout</span>
-                    </a>
-
+                    <a class="dropdown-item" href="#">
+                        <i class="dropdown-icon zmdi zmdi-power"></i>
+                        <span>Log out</span></a>
                 </div>
             </li>
         </ul>
+    </nav>
+    <!-- /Top Navbar -->
 
-        <!-- LOGO -->
-        <div class="logo-box">
-            <a href="index.html" class="logo text-center">
-                        <span class="logo-lg">
-                            <img src="{{asset('assets/admin/images/logo-light.png')}}" alt="" height="25">
-                            <!-- <span class="logo-lg-text-light">UBold</span> -->
-                        </span>
-                        <span class="logo-sm">
-                            <!-- <span class="logo-sm-text-dark">U</span> -->
-                            <img src="{{asset('assets/admin/images/logo-sm.png')}}" alt="" height="28">
-                        </span>
-            </a>
-        </div>
-
-        <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
-            <li>
-                <button class="button-menu-mobile waves-effect waves-light">
-                    <i class="fe-menu"></i>
-                </button>
-            </li>
-
-
-        </ul>
-    </div>
-    <!-- end Top bar -->
-
-
-    <!-- ========== Left Sidebar Start ========== -->
-    <div class="left-side-menu">
-
-        <div class="slimscroll-menu">
-
-            <!--- Side menu -->
-            <div id="sidebar-menu">
-
-                <ul class="metismenu" id="side-menu">
-
-                    <li class="menu-title">Navigation</li>
-
-                    <li>
-                        <a href="{{route('dashboard.show')}}">
-                            <i class="fe-airplay"></i>
-                            <span> dashboard </span>
+    <!-- Vertical Nav -->
+    <nav class="hk-nav hk-nav-dark">
+        <a href="javascript:void(0);" id="hk_nav_close" class="hk-nav-close"><span class="feather-icon"><i
+                    data-feather="x"></i></span></a>
+        <div class="nicescroll-bar">
+            <div class="navbar-nav-wrap">
+                <ul class="navbar-nav flex-column">
+                    <li class="nav-item {{\Request::route()->getName() == "dashboard.show" ? "active" : ""}}">
+                        <a class="nav-link" href="{{route('dashboard.show')}}">
+                            <span class="feather-icon"><i data-feather="activity"></i></span>
+                            <span class="nav-link-text">Dashboard</span>
                         </a>
                     </li>
 
-                    <li>
-                        <a href="javascript: void(0);">
-                            <i class="fe-user"></i>
-                            <span> User </span>
-                            <span class="menu-arrow"></span>
+                    <hr class="nav-separator">
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#product_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage Products </span>
                         </a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="{{route('user.add.view')}}">Add User</a></li>
-                            <li><a href="page-login.html">Manage User</a></li>
+                        <ul id="product_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "product" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link {{\Request::route()->getName() == "product.add.view" ? "active" : ""}}"
+                                           href="{{route('product.add.view')}}"><i
+                                                class="fa fa-user-plus"></i>Add Product</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}"
+                                           href="{{route('product.manage.view')}}"><i class="fa fa-list-ul"></i>Product
+                                            Lists</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
 
-                    <li>
-                        <a href="javascript: void(0);">
-                            <i class="fe-user-plus"></i>
-                            <span> Role </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="page-starter.html">Add Role</a></li>
-                            <li><a href="page-login.html">Manage Role</a></li>
-                        </ul>
-                    </li>
+                    <hr class="nav-separator">
 
-                    <li>
-                        <a href="javascript: void(0);">
-                            <i class="fe-shopping-bag"></i>.
-                            <span> Product </span>
-                            <span class="menu-arrow"></span>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-upload"></i></span>
+                            <span class="nav-link-text">Upload Location</span>
                         </a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="{{route('product.add.view')}}">Add Product</a></li>
-                            <li><a href="{{route('product.updateDelete')}}">Update product</a></li>
-                            <li><a href="page-login.html">Delete product</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="javascript: void(0);">
-                            <i class="fe-shopping-cart"></i>
-                            <span>Manage Orders </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="page-starter.html"></a></li>
-                            <li><a href="page-login.html">Process order</a></li>
-                            <li><a href="page-login.html">Cancel order</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="javascript: void(0);">
-                            <i class="mdi mdi-briefcase-upload-outline"></i>
-                            <span>Pre-orders </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a href="page-starter.html"></a></li>
-                            <li><a href="page-login.html">Add pre-order</a></li>
-                            <li><a href="page-login.html">Manage Pre-order</a></li>
-                        </ul>
                     </li>
                 </ul>
-
             </div>
-            <!-- End menu -->
-
-            <div class="clearfix"></div>
-
         </div>
-        <!-- Sidebar -left -->
+    </nav>
+    <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
+    <!-- /Vertical Nav -->
 
-    </div>
-    <!-- Left Sidebar End -->
-
-    <!-- ============================================================== -->
-    <!-- Start Page Content here -->
-    <!-- ============================================================== -->
-
-    <div class="content-page">
-        @yield('body-content')
-
-        <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
+    <!-- Main Content -->
+    <div class="hk-pg-wrapper">
+    @yield("main_content")
+    <!-- Footer -->
+        <div class="hk-footer-wrap container">
+            <footer class="footer">
                 <div class="row">
-                    <div class="col-md-12">
-                        2017 - 2019 &copy; Adminox theme by <a href="#">Coderthemes</a>
+                    <div class="col-md-6 col-sm-12">
+                        <p>Pampered by<a href="https://hencework.com/" class="text-dark"
+                                         target="_blank">Hencework</a> ©
+                            2019</p>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <p class="d-inline-block">Follow us</p>
+                        <a href="#"
+                           class="d-inline-block btn btn-icon btn-icon-only btn-indigo btn-icon-style-4"><span
+                                class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
+                        <a href="#"
+                           class="d-inline-block btn btn-icon btn-icon-only btn-indigo btn-icon-style-4"><span
+                                class="btn-icon-wrap"><i class="fa fa-twitter"></i></span></a>
+                        <a href="#"
+                           class="d-inline-block btn btn-icon btn-icon-only btn-indigo btn-icon-style-4"><span
+                                class="btn-icon-wrap"><i class="fa fa-google-plus"></i></span></a>
                     </div>
                 </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
-
+            </footer>
+        </div>
+        <!-- /Footer -->
     </div>
-
-    <!-- ============================================================== -->
-    <!-- End Page content -->
-    <!-- ============================================================== -->
+    <!-- /Main Content -->
 
 </div>
+<!-- /HK Wrapper -->
 
-<!-- Vendor js -->
-<script src="{{asset('assets/admin/js/vendor.min.js')}}"></script>
+<!-- jQuery -->
+<script src={{asset("assets/admin_panel/vendors/jquery/dist/jquery.min.js")}}></script>
 
-<!--C3 Chart-->
-<script src="{{asset('assets/admin/libs/d3/d3.min.js')}}"></script>
-<script src="{{asset('assets/admin/libs/c3/c3.min.js')}}"></script>
-<script src="{{asset('assets/admin/libs/echarts/echarts.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/pages/dashboard.init.js')}}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/popper.js/dist/umd/popper.min.js")}}></script>
+<script src={{asset("assets/admin_panel/vendors/bootstrap/dist/js/bootstrap.min.js")}}></script>
 
-<!-- App js -->
-<script src="{{asset('assets/admin/js/app.min.js')}}"></script>
+<!-- Slimscroll JavaScript -->
+<script src={{asset("assets/admin_panel/dist/js/jquery.slimscroll.js")}}></script>
 
-@yield('product-js')
-@yield('update-product-js')
+<!-- Fancy Dropdown JS -->
+<script src={{asset("assets/admin_panel/dist/js/dropdown-bootstrap-extended.js")}}></script>
 
+<!-- FeatherIcons JavaScript -->
+<script src={{asset("assets/admin_panel/dist/js/feather.min.js")}}></script>
+
+<!-- Toggles JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/jquery-toggles/toggles.min.js")}}></script>
+<script src={{asset("assets/admin_panel/dist/js/toggle-data.js")}}></script>
+
+<!-- Counter Animation JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/waypoints/lib/jquery.waypoints.min.js")}}></script>
+<script src={{asset("assets/admin_panel/vendors/jquery.counterup/jquery.counterup.min.js")}}></script>
+
+<!-- Morris Charts JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/raphael/raphael.min.js")}}></script>
+<script src={{asset("assets/admin_panel/vendors/morris.js/morris.min.js")}}"../"></script>
+
+<!-- EChartJS JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/echarts/dist/echarts-en.min.js")}}></script>
+
+<!-- Sparkline JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/jquery.sparkline/dist/jquery.sparkline.min.js")}}></script>
+
+<!-- Vector Maps JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/vectormap/jquery-jvectormap-2.0.3.min.js")}}></script>
+<script src={{asset("assets/admin_panel/vendors/vectormap/jquery-jvectormap-world-mill-en.js")}}></script>
+<script src={{asset("assets/admin_panel/dist/js/vectormap-data.js")}}></script>
+
+<!-- Owl JavaScript -->
+<script src={{asset("assets/admin_panel/vendors/owl.carousel/dist/owl.carousel.min.js")}}></script>
+
+<!-- Toaster JS -->
+<script src={{asset("assets/admin_panel/vendors/jquery-toast-plugin/dist/jquery.toast.min.js")}}></script>
+
+<!-- Init JavaScript -->
+<script src={{asset("assets/admin_panel/dist/js/init.js")}}></script>
+<script src={{asset("assets/admin_panel/dist/js/dashboard-data.js")}}></script>
+
+{{--<script>--}}
+{{--    let time = new Date().getTime();--}}
+{{--    $(document.body).bind("mousemove keypress", function (e) {--}}
+{{--        time = new Date().getTime();--}}
+{{--    });--}}
+
+{{--    function refresh() {--}}
+{{--        if (new Date().getTime() - time >= 300000)--}}
+{{--            window.location.reload(true);--}}
+{{--        else--}}
+{{--            setTimeout(refresh, 1000);--}}
+{{--    }--}}
+
+{{--    setTimeout(refresh, 1000);--}}
+{{--</script>--}}
+
+<!-- Data tables -->
+@yield("data-table-js")
+
+<!-- ADD PO -->
+@yield("product-js")
 </body>
-
 </html>
