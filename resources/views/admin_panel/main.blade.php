@@ -19,6 +19,11 @@
           id="bootstrap-stylesheet"/>
     <link href="{{asset('assets/admin/css/icons.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{asset('assets/admin/css/app.min.css')}}" rel="stylesheet" type="text/css" id="app-stylesheet"/>
+
+    <!-- third party css for data table-->
+    <link href="{{asset('assets/admin/libs/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/admin/libs/datatables/buttons.bootstrap4.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/admin/libs/datatables/responsive.bootstrap4.css')}}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -185,7 +190,7 @@
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
                             <li><a href="{{route('product.add.view')}}">Add Product</a></li>
-                            <li><a href="page-login.html">Update product</a></li>
+                            <li><a href="{{route('product.updateDelete')}}">Update product</a></li>
                             <li><a href="page-login.html">Delete product</a></li>
                         </ul>
                     </li>
@@ -268,6 +273,7 @@
 <script src="{{asset('assets/admin/js/app.min.js')}}"></script>
 
 @yield('product-js')
+@yield('update-product-js')
 
 </body>
 

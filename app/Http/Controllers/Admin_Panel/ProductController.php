@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin_Panel;
 
 use App\Http\Controllers\Controller;
-use App\ProductImage;
 use App\Product;
+use App\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +14,7 @@ class ProductController extends Controller
     /*add product*/
     public function viewAddProductForm()
     {
-        return view('admin_panel.addProductForm');
+        return view('admin_panel.product.addProductForm');
     }
 
     public function storeProduct(Request $request)
@@ -30,8 +30,8 @@ class ProductController extends Controller
             'filenames.*' => 'mimes:jpeg,png,jpg',
         ]);
 
-        if($request->has('filenames')){
-            if(sizeof($request->filenames)>2){
+        if ($request->has('filenames')) {
+            if (sizeof($request->filenames) > 2) {
                 Session::flash('error_image_count', 'Do not select more then 5 images');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
@@ -50,7 +50,7 @@ class ProductController extends Controller
         $product->price = $request->price;
 
         $product->save();
-        $product_id=$product->id;
+        $product_id = $product->id;
 
         //product image save
         if ($request->hasfile('filenames')) {
@@ -66,4 +66,16 @@ class ProductController extends Controller
         }
         return redirect(route('product.add.view'));
     }
+
+    public function viewUpdateProduct()
+    {
+        return view("admin_panel.product.updateProductPage");
+    }
+
+    public function getProduct()
+    {
+        return datatables(Product::all())->toJson();
+    }
+
+
 }
