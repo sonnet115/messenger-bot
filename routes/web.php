@@ -57,5 +57,6 @@ Route::group(['prefix' => 'admin'], function () {
 
     /*add user*/
     Route::get("view-add-user-form", "Admin_Panel\UserController@viewUserForm")->name("user.add.view");
+    Route::post("store-user", "Admin_Panel\UserController@storeUser")->name("user.store");
 
 });

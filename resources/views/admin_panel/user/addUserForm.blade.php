@@ -21,29 +21,50 @@
             <h4 class="header-title">Add New User</h4>
             <br>
 
-            <form method="post" action="{{route('product.store')}}" class="parsley-examples"
+            <form method="post" action="{{route('user.store')}}"
                   enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label for="userName">Name<span class="text-danger">*</span></label>
-                    <input type="text" name="name" parsley-trigger="change"
+                    <label>Name<span class="text-danger">*</span></label>
+                    <input type="text" name="name"
                            placeholder="Enter user name" class="form-control" id="userName">
+                    @if($errors->has('name'))
+                        <p class="text-danger">{{ $errors->first('name') }}</p>
+                    @endif
                 </div>
                 <div class="form-group">
-                    <label for="emailAddress">Username<span class="text-danger">*</span></label>
-                    <input type="text" name="code" parsley-trigger="change"
+                    <label>Username<span class="text-danger">*</span></label>
+                    <input type="text" name="username"
                            placeholder="Enter product code" class="form-control">
+                    @if($errors->has('username'))
+                        <p class="text-danger">{{ $errors->first('username') }}</p>
+                    @endif
                 </div>
+
+                <div class="form-group">
+                    <label for="pass1">Select Role<span class="text-danger">*</span></label>
+                    <select name="roles" class="form-control" data-toggle="select2">
+                        <option value="" selected>Select role</option>
+                        <option value="manager">Manager</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    @if($errors->has('roles'))
+                        <p class="text-danger">{{ $errors->first('roles') }}</p>
+                    @endif
+                </div>
+
+
                 <div class="form-group">
                     <label for="pass1">Password<span class="text-danger">*</span></label>
-                    <input id="pass1" name="uom" type="text" placeholder="Enter unit of measurement"
+                    <input id="pass1" name="password" type="text" placeholder="Enter unit of measurement"
                            class="form-control">
+                    @if($errors->has('password'))
+                        <p class="text-danger">{{ $errors->first('password') }}</p>
+                    @endif
                 </div>
-                <div class="form-group">
-                    <label for="passWord2">Role<span class="text-danger">*</span></label>
-                    <input type="text"
-                           placeholder="enter price" name="price" class="form-control">
-                </div>
+
+
                 <button class="btn btn-primary">Add product</button>
             </form>
         </div>
