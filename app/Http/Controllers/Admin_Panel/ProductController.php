@@ -11,28 +11,26 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    /*add product*/
     public function viewAddProductForm()
     {
-        return view('admin_panel.product.addProductForm');
+        return view('admin_panel.product.add_product_form')->with("title", "CBB | Add Product");
     }
 
     public function storeProduct(Request $request)
     {
         //product validation
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:products',
-            'code' => 'required|unique:products',
-            'stock' => 'required|string|max:50',
-            'uom' => 'required|string|max:50',
-            'price' => 'required|string|max:50',
-            //'filenames' => 'required',
-            'filenames.*' => 'mimes:jpeg,png,jpg',
+            'product_name' => 'required|unique:products,name',
+            'product_code' => 'required|unique:products,code',
+            'product_stock' => 'required|string|max:50',
+            'product_uom' => 'required|string|max:50',
+            'product_price' => 'required|string|max:50',
+            'product_images.*' => 'mimes:jpeg,png,jpg',
         ]);
 
-        if ($request->has('filenames')) {
-            if (sizeof($request->filenames) > 2) {
-                Session::flash('error_image_count', 'Do not select more then 5 images');
+        if ($request->hasfile('product_images')) {
+            if (sizeof($request->product_images) > 5) {
+                Session::flash('error_image_count', 'Maximum 5 Images');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
         }
@@ -43,18 +41,17 @@ class ProductController extends Controller
 
         //product save
         $product = new Product();
-        $product->name = $request->name;
-        $product->code = $request->code;
-        $product->stock = $request->stock;
-        $product->uom = $request->uom;
-        $product->price = $request->price;
-
+        $product->name = $request->product_name;
+        $product->code = $request->product_code;
+        $product->stock = $request->product_stock;
+        $product->uom = $request->product_uom;
+        $product->price = $request->product_price;
         $product->save();
         $product_id = $product->id;
 
         //product image save
-        if ($request->hasfile('filenames')) {
-            foreach ($request->filenames as $file) {
+        if ($request->hasfile('product_images')) {
+            foreach ($request->product_images as $file) {
                 $name = time() . '.' . $file->extension();
                 $file->move(public_path() . '/site_images/product_images/', $name);
 
@@ -69,12 +66,12 @@ class ProductController extends Controller
 
     public function viewUpdateProduct()
     {
-        return view("admin_panel.product.updateProductPage");
+        return view("admin_panel.product.manage_product")->with("title", "CBB | Manage Product");;
     }
 
     public function getProduct()
     {
-        return datatables(Product::all())->toJson();
+       return datatables(Product::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc')->with("images"))->toJson();
     }
 
 
