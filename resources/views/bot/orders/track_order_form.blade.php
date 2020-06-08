@@ -59,6 +59,8 @@
 @section('track-order-js')
     <script>
         $(document).ready(function () {
+            let base_url = '{{env("APP_URL")}}';
+
             let preloaderFadeOutTime = 1000;
 
             function hidePreloader() {
@@ -77,7 +79,7 @@
 
                 if ($("#order_status_container_" + order_code).children().length <= 0) {
                     $.ajax({
-                        url: '/bot/get-order-status',
+                        url: base_url + 'bot/get-order-status',
                         type: "GET",
                         data: {
                             'order_code': order_code,

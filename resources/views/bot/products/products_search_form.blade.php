@@ -88,8 +88,8 @@
 
 @section('product-search-js')
     <script>
-
         $(document).ready(function () {
+            let base_url = '{{env("APP_URL")}}';
             let preloaderFadeOutTime = 500;
 
             function hidePreloader() {
@@ -101,7 +101,8 @@
 
             $("#search").on('click', function () {
                 let product_code = $("input[name='product_code']").val();
-                const cart_url = '{{env("APP_URL")."bot/cart/"}}' + $("#customer_id").val();
+                const cart_url = base_url + "bot/cart/" + $("#customer_id").val();
+
                 let search_btn = $(this);
                 let product_container = $("#product_container");
 
@@ -111,7 +112,7 @@
                     search_btn.html("Searching <i class='fas fa-spinner fa-pulse'></i>");
                     $("#searched_product_code").html(product_code);
                     $.ajax({
-                        url: '/bot/get-product',
+                        url: base_url + 'bot/get-product',
                         type: "GET",
                         data: {
                             'product_code': product_code,
@@ -135,7 +136,7 @@
                                         button.html("Processing...")
 
                                         $.ajax({
-                                            url: '/bot/pre-order',
+                                            url: base_url + 'bot/pre-order',
                                             type: "GET",
                                             data: {
                                                 'pre_order_product_code': pre_order_product_code,
@@ -158,7 +159,7 @@
                                         add_to_cart_button.html("Adding...");
 
                                         $.ajax({
-                                            url: '/bot/add-to-cart',
+                                            url: base_url + 'bot/add-to-cart',
                                             type: "GET",
                                             data: {
                                                 'cart_product_code': cart_product_code,
@@ -219,7 +220,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: '/bot/pre-order',
+                                        url: base_url + 'bot/pre-order',
                                         type: "GET",
                                         data: {
                                             'pre_order_product_code': pre_order_product_code,
@@ -240,7 +241,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: '/bot/add-to-cart',
+                                        url: base_url + 'bot/add-to-cart',
                                         type: "GET",
                                         data: {
                                             'cart_product_code': cart_product_code,
@@ -295,7 +296,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: '/bot/pre-order',
+                                        url: base_url + 'bot/pre-order',
                                         type: "GET",
                                         data: {
                                             'pre_order_product_code': pre_order_product_code,
@@ -316,7 +317,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: '/bot/add-to-cart',
+                                        url: base_url + 'bot/add-to-cart',
                                         type: "GET",
                                         data: {
                                             'cart_product_code': cart_product_code,
