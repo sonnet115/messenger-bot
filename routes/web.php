@@ -56,9 +56,13 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get("get-products", "Admin_Panel\ProductController@getProduct")->name("product.get");
     });
 
+    //Routes for Users
+    Route::group(['prefix' => 'user'], function () {
+        Route::get("add-form", "Admin_Panel\UserController@viewAddUserForm")->name("user.add.view");
+        Route::post("store-user", "Admin_Panel\UserController@storeUser")->name("user.store");
+        Route::get("manage-form", "Admin_Panel\UserController@viewUpdateUser")->name("user.manage.view");
+        Route::get("get-user", "Admin_Panel\UserController@getUser")->name("user.get");
+    });
 
-    /*add user*/
-    Route::get("view-add-user-form", "Admin_Panel\UserController@viewUserForm")->name("user.add.view");
-    Route::post("store-user", "Admin_Panel\UserController@storeUser")->name("user.store");
 
 });

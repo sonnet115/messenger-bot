@@ -19,7 +19,7 @@
                             <form action="{{route('product.store')}}" method="post" novalidate enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Product Name</label>
+                                    <label class="control-label mb-10">Product List</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-user"></i></span>

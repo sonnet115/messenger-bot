@@ -4,37 +4,55 @@ namespace App\Http\Controllers\Admin_Panel;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\UserRoleMapping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-     public function viewUserForm(){
-         return view("admin_panel.user.addUserForm");
-     }
+    public function viewAddUserForm()
+    {
+        return view("admin_panel.user.add_user_form")->with("title", "CBB | Add User");
+    }
 
-     public function storeUser(Request $request){
+    public function storeUser(Request $request)
+    {
          $validator = Validator::make($request->all(), [
-             'name' => 'required|unique:users',
-             'username' => 'required|unique:users',
-             'roles' => 'required',
-             'password' => 'required|string|max:50',
+             'user_name' => 'required|unique:users,name',
+             'user_username' => 'required|unique:users,username',
+             'user_roles' => 'required',
+             'user_password' => 'required|string|max:50',
 
          ]);
-
-//         dd($validator);
 
          if ($validator->fails()) {
              return redirect()->back()->withErrors($validator)->withInput();
          }
-         $user= new User();
-         $user->name=$request->name;
-         $user->username=$request->username;
-         $user->password=$request->password;
-         $user->role_id=$request->roles;
+        $user = new User();
+
+        $user->name = $request->user_name;
+        $user->username = $request->user_username;
+        $user->password = $request->user_password;
         $user->save();
+
+        $user_id = $user->id;
+        $user_roles = $request->user_roles;
+
+        foreach ($user_roles as $roles){
+            $userRoleMapping= new UserRoleMapping();
+            $userRoleMapping->user_id=$user_id;
+            $userRoleMapping->role_id=$roles;
+            $userRoleMapping->save();
+        }
         return redirect(route('user.add.view'));
+    }
 
-     }
+    public function viewUpdateUser(){
+        return view("admin_panel.user.manage_user")->with("title", "CBB | Add User");
+    }
 
+    public function getUser()
+    {
+        return datatables(User::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc'))->toJson();
+    }
 }

@@ -47,6 +47,7 @@
     <link href={{asset("assets/admin_panel/dist/css/style.css")}} rel="stylesheet" type="text/css">
 
     @yield("custom_css")
+    @yield("user-css")
 
 </head>
 
@@ -115,7 +116,6 @@
                     </li>
 
                     <hr class="nav-separator">
-
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#product_manager">
@@ -126,13 +126,13 @@
                             class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "product" ? "show" : "" }}">
                             <li class="nav-item">
                                 <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link {{\Request::route()->getName() == "product.add.view" ? "active" : ""}}"
+                                    <li class="nav-item {{\Request::route()->getName() == "product.add.view" ? "active" : ""}}">
+                                        <a class="nav-link"
                                            href="{{route('product.add.view')}}"><i
                                                 class="fa fa-user-plus"></i>Add Product</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}"
+                                    <li class="nav-item {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
                                            href="{{route('product.manage.view')}}"><i class="fa fa-list-ul"></i>Product
                                             Lists</a>
                                     </li>
@@ -141,14 +141,34 @@
                         </ul>
                     </li>
 
+                    {{-- manage users--}}
                     <hr class="nav-separator">
-
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-upload"></i></span>
-                            <span class="nav-link-text">Upload Location</span>
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#user_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage Users </span>
                         </a>
+                        <ul id="user_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "user" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "user.add.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('user.add.view')}}"><i
+                                                class="fa fa-user-plus"></i>Add User</a>
+                                    </li>
+                                    <li class="nav-item {{\Request::route()->getName() == "user.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('user.manage.view')}}"><i class="fa fa-list-ul"></i>Product
+                                            Lists</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </li>
+
+                    <hr class="nav-separator">
                 </ul>
             </div>
         </div>
@@ -238,7 +258,6 @@
 <!-- Init JavaScript -->
 <script src={{asset("assets/admin_panel/dist/js/init.js")}}></script>
 <script src={{asset("assets/admin_panel/dist/js/dashboard-data.js")}}></script>
-
 {{--<script>--}}
 {{--    let time = new Date().getTime();--}}
 {{--    $(document.body).bind("mousemove keypress", function (e) {--}}
@@ -255,10 +274,9 @@
 {{--    setTimeout(refresh, 1000);--}}
 {{--</script>--}}
 
-<!-- Data tables -->
-@yield("data-table-js")
-
 <!-- ADD PO -->
 @yield("product-js")
+@yield('user-js')
+
 </body>
 </html>
