@@ -4,10 +4,9 @@
     <div class="container mt-xl-20 mt-sm-30 mt-15">
         <!-- Title -->
         <div class="hk-pg-header align-items-top">
-            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h2>
+            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> User List</i></h2>
         </div>
         <!-- /Title -->
-
         <!-- Row -->
         <div class="row">
             <div class="col-xl-12">
@@ -22,10 +21,7 @@
                                     <thead class="btn-gradient-info">
                                     <tr>
                                         <th class="text-center text-white">Name</th>
-                                        <th class="text-center text-white">Code</th>
-                                        <th class="text-center text-white">Stock</th>
-                                        <th class="text-center text-white">UoM</th>
-                                        <th class="text-center text-white">Price</th>
+                                        <th class="text-center text-white">Username</th>
                                         <th class="text-center text-white">Action</th>
                                     </tr>
                                     </thead>
@@ -78,23 +74,20 @@
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1]
                         }
                     },
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('product.get') }}',
+                ajax: '{{ route('user.get') }}',
 
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"}
                 ],
                 columns: [
                     {data: 'name', name: 'name'},
-                    {data: 'code', name: 'code'},
-                    {data: 'stock', name: 'stock'},
-                    {data: 'uom', name: 'uom'},
-                    {data: 'price', name: 'price'},
+                    {data: 'username', name: 'username'},
                     {
                         'render': function (data, type, row) {
                             let select_active = "", select_inactive = "";
