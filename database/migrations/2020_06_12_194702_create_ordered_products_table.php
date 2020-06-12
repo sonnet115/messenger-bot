@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserRoleMappingsTable extends Migration
+class CreateOrderedProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateUserRoleMappingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_role_mappings', function (Blueprint $table) {
+        Schema::create('ordered_products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->bigInteger('role_id');
+            $table->bigInteger('oid');
+            $table->integer('pid');
+            $table->smallInteger('quantity');
+            $table->integer('price');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateUserRoleMappingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_role_mappings');
+        Schema::dropIfExists('ordered_products');
     }
 }

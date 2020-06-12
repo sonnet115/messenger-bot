@@ -15,14 +15,13 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('order_code');
-            $table->bigInteger('pid');
-            $table->string('customer_id');
-            $table->double('product_qty');
-            $table->double('product_price');
-            $table->double('subtotal');
-            $table->smallInteger('order_status')->default(0);
-            $table->integer('discount_amount')->default(0);
+            $table->string('code', 100);
+            $table->bigInteger('customer_id');
+            $table->string('billing_address');
+            $table->string('shipping_address');
+            $table->tinyInteger('order_status')->default(0);
+            $table->float('discount_amount')->default(0);
+            $table->smallInteger('shop_id');
             $table->timestamps();
         });
     }
