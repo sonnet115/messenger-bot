@@ -28,8 +28,8 @@ class UserController extends Controller
          if ($validator->fails()) {
              return redirect()->back()->withErrors($validator)->withInput();
          }
-        $user = new User();
 
+        $user = new User();
         $user->name = $request->user_name;
         $user->username = $request->user_username;
         $user->password = $request->user_password;

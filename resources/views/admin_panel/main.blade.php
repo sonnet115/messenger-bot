@@ -48,6 +48,7 @@
 
     @yield("custom_css")
     @yield("user-css")
+    @yield("discount-css")
 
 </head>
 
@@ -196,6 +197,33 @@
                         </ul>
                     </li>
 
+                    {{-- manage discounts--}}
+                    <hr class="nav-separator">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#discount_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage discounts</span>
+                        </a>
+                        <ul id="discount_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "discount" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "discount.add.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('discount.add.view')}}"><i
+                                                class="fa fa-user-plus"></i>Add Discount</a>
+                                    </li>
+                                    <li class="nav-item {{\Request::route()->getName() == "discount.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('discount.manage.view')}}"><i class="fa fa-list-ul"></i>Discount
+                                            Lists</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
                     <hr class="nav-separator">
                 </ul>
             </div>
@@ -305,6 +333,7 @@
 <!-- ADD PO -->
 @yield("product-js")
 @yield('user-js')
+@yield('discount-js')
 
 </body>
 </html>
