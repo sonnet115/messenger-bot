@@ -13,7 +13,13 @@ class ProductController extends Controller
 {
     public function viewAddProductForm()
     {
-        return view('admin_panel.product.add_product_form')->with("title", "CBB | Add Product");
+        if (request()->get('mode')) {
+            $pid = request()->get('pid');
+            $product_details = Product::where('id', $pid)->with('images')->first();
+        } else {
+            $product_details = null;
+        }
+        return view('admin_panel.product.add_product_form')->with("title", "CBB | Add Product")->with('product_details', $product_details);
     }
 
     public function storeProduct(Request $request)
@@ -71,7 +77,7 @@ class ProductController extends Controller
 
     public function getProduct()
     {
-       return datatables(Product::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc')->with("images"))->toJson();
+        return datatables(Product::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc')->with("images"))->toJson();
     }
 
 

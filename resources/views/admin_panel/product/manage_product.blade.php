@@ -7,7 +7,6 @@
             <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h2>
         </div>
         <!-- /Title -->
-
         <!-- Row -->
         <div class="row">
             <div class="col-xl-12">
@@ -97,40 +96,9 @@
                     {data: 'price', name: 'price'},
                     {
                         'render': function (data, type, row) {
-                            let select_active = "", select_inactive = "";
-                            select_active = "selected";
-                            return '<button type="button" class="btn btn-gradient-info" data-toggle="modal" data-target="#user' + row.id + '">\n' +
-                                '            Edit\n' +
-                                '        </button>\n' +
-                                '        <!-- The Modal -->\n' +
-                                '        <div class="modal fade" id="user' + row.id + '">\n' +
-                                '            <div class="modal-dialog">\n' +
-                                '                <div class="modal-content">\n' +
-                                '                    <!-- Modal Header -->\n' +
-                                '                    <div class="modal-header">\n' +
-                                '                        <h4 class="modal-title">Update User</h4>\n' +
-                                '                        <button type="button" class="close" data-dismiss="modal">&times;</button>\n' +
-                                '                    </div>\n' +
-                                '                    <!-- Modal body -->\n' +
-                                '                    <div class="modal-body text-left">\n' +
-                                '                        <form action="/admin/bp/update/' + row.id + '" method="post">\n' +
-                                '                             @csrf' +
-                                '                            <div class="form-group">\n' +
-                                '                                <label>Status:</label>\n' +
-                                '                                <select class="form-control" name="active">\n' +
-                                '                                    <option value="1" ' + select_active + '> Active </option>\n' +
-                                '                                    <option value="0" ' + select_inactive + '>Inactive</option>\n' +
-                                '                                </select>\n' +
-                                '                            </div>\n' +
-                                '                            <div class="modal-footer text-right" style="padding:10px 0px">\n' +
-                                '                                <button type="submit" class="btn btn-sm btn-indigo">Update</button>\n' +
-                                '                                <a href="javascript:void(0)" type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>\n' +
-                                '                            </div>\n' +
-                                '                        </form>\n' +
-                                '                    </div>\n' +
-                                '                </div>\n' +
-                                '            </div>\n' +
-                                '        </div>';
+                            return '<a class="btn btn-sm btn-gradient-ashes" ' +
+                                '   href="/admin/product/add-form?mode=update&pid=' + row.id + '">' +
+                                '   Update</a>';
                         },
                     },
                 ],

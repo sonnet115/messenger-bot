@@ -5,7 +5,8 @@
     <div class="container mt-xl-30 mt-sm-30 mt-15">
         <!-- Title -->
         <div class="hk-pg-header align-items-top">
-            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-plus"> Add New Product</i>
+            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-plus">
+                    {{$product_details !== null ? "Update" : "Add New" }} Product</i>
             </h2>
         </div>
         <!-- /Title -->
@@ -16,7 +17,8 @@
                 <section class="hk-sec-wrapper" style="padding-bottom: 0px">
                     <div class="row">
                         <div class="col-sm">
-                            <form action="{{route('product.store')}}" method="post" novalidate enctype="multipart/form-data">
+                            <form action="{{route('product.store')}}" method="post" novalidate
+                                  enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label mb-10">Product List</label>
@@ -25,7 +27,9 @@
                                             <span class="input-group-text"><i class="icon-user"></i></span>
                                         </div>
                                         <input type="text" name="product_name" placeholder="Enter Product Name"
-                                               class="form-control" value="{{old('product_name')}}" required>
+                                               class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->name : old('product_name')}}"
+                                               required>
                                     </div>
                                     <p class="text-danger" id="product_name_error_message"></p>
                                     @if($errors->has('product_name'))
@@ -40,7 +44,9 @@
                                             <span class="input-group-text"><i class="icon-present"></i></span>
                                         </div>
                                         <input type="text" name="product_code" placeholder="Enter Product Code"
-                                               class="form-control" value="{{old('product_code')}}" required>
+                                               class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->code : old('product_code')}}"
+                                               required>
                                     </div>
                                     <p class="text-danger" id="product_code_error_message"></p>
                                     @if($errors->has('product_code'))
@@ -55,7 +61,9 @@
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
                                         <input type="text" name="product_stock" placeholder="Enter Product Stock Amount"
-                                               class="form-control" value="{{old('product_stock')}}" required>
+                                               class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->stock : old('product_stock')}}"
+                                               required>
                                     </div>
                                     <p class="text-danger" id="product_stock_error_message"></p>
                                     @if($errors->has('product_stock'))
@@ -70,7 +78,9 @@
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
                                         <input type="text" name="product_uom" placeholder="Enter Product UoM"
-                                               class="form-control" value="{{old('product_uom')}}" required>
+                                               class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->uom : old('product_uom')}}"
+                                               required>
                                     </div>
                                     <p class="text-danger" id="product_uom_error_message"></p>
                                     @if($errors->has('product_uom'))
@@ -85,7 +95,9 @@
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
                                         <input type="text" name="product_price" placeholder="Enter Product Price"
-                                               class="form-control" value="{{old('product_price')}}" required>
+                                               class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->price : old('product_price')}}"
+                                               required>
                                     </div>
                                     <p class="text-danger" id="product_price_error_message"></p>
                                     @if($errors->has('product_price'))
@@ -93,25 +105,36 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="control-label mb-10">Product Images</label>
-                                    <div class="row">
-                                        <div class="col-sm-8">
-                                            <input type="file" name="product_images[]" id="input-file-now" class="dropify" multiple/>
-                                        </div>
-                                    </div>
-                                    <p class="text-danger">
-                                        {{Session::get('error_image_count')}}
-                                    </p>
 
-                                    @if($errors->has('product_images'))
-                                        <p class="text-danger">{{ $errors->first('product_images') }}</p>
-                                    @endif
-                                </div>
+                                    <label class="control-label mb-10">Product Images</label>
+
+                                    @for ($i = 0; $i < 2; $i++)
+                                        <div class="row">
+                                            <div class="col-sm-7">
+                                                <input type="file" name="product_images_{{$i}}" id="input-file-now"
+                                                       multiple/>
+                                                @if($errors->has('product_images_'.$i))
+                                                    <p class="text-danger">{{ $errors->first('product_images'.$i) }}</p>
+                                                @endif
+                                            </div>
+
+                                            <div class="col-sm-5 text-left">
+                                                <img
+                                                    src="{{$product_details !== null ? asset("images/products")."/".$product_details->images[$i]->image_url : asset("images/products/no.png")}}"
+                                                    id="profile-img-tag"
+                                                    height="100" width="100" alt="N/A">
+                                                <a href="javascript:void(0)" class="btn-xs btn-danger"
+                                                   style="display: block;width: 100px;margin: 0 auto">Delete</a>
+                                            </div>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    @endfor
 
                                 <div class="form-group text-right">
                                     <button type="submit" class="btn btn-primary mr-10">
-                                        <i class="fa fa-plus-circle"></i> Add Product
+                                        <i class="fa fa-plus-circle"></i> {{ $product_details !== null ? "Update" : "Add" }}
+                                        Product
                                     </button>
                                 </div>
                             </form>
