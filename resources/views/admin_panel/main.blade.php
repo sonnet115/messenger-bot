@@ -143,6 +143,7 @@
 
                     {{-- manage users--}}
                     <hr class="nav-separator">
+
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#user_manager">
@@ -161,6 +162,33 @@
                                     <li class="nav-item {{\Request::route()->getName() == "user.manage.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('user.manage.view')}}"><i class="fa fa-list-ul"></i>Product
+                                            Lists</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- manage roles--}}
+                    <hr class="nav-separator">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#role_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage Roles</span>
+                        </a>
+                        <ul id="role_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "role" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "role.add.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('role.add.view')}}"><i
+                                                class="fa fa-user-plus"></i>Add Role</a>
+                                    </li>
+                                    <li class="nav-item {{\Request::route()->getName() == "role.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('role.manage.view')}}"><i class="fa fa-list-ul"></i>Role
                                             Lists</a>
                                     </li>
                                 </ul>
