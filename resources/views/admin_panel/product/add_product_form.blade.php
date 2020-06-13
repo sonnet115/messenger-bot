@@ -17,8 +17,9 @@
                 <section class="hk-sec-wrapper" style="padding-bottom: 0px">
                     <div class="row">
                         <div class="col-sm">
-                            <form action="{{route('product.store')}}" method="post" novalidate
-                                  enctype="multipart/form-data" id="order_form">
+                            <form
+                                action="{{$product_details !== null ? route('product.update') : route('product.store')}}"
+                                method="post" novalidate enctype="multipart/form-data" id="order_form">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label mb-10">Product Name<span
@@ -151,6 +152,18 @@
                                     </div>
                                 </div>
 
+
+                                <input type="hidden" name="product_id"
+                                       value="{{$product_details !== null ? $product_details->id : ""}}">
+
+                                <input type="hidden" name="old_product_code"
+                                       value="{{$product_details !== null ? $product_details->code : ""}}">
+
+                                <input type="hidden" name="image_1_id"
+                                       value="{{$product_details !== null ? $product_details->images[0]->id : ""}}">
+
+                                <input type="hidden" name="image_2_id"
+                                       value="{{$product_details !== null ? $product_details->images[1]->id : ""}}">
                                 <hr>
                                 <div class="form-group text-right">
                                     <button type="submit" class="btn btn-primary">

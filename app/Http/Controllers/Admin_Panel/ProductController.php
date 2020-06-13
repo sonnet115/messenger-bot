@@ -56,8 +56,8 @@ class ProductController extends Controller
             $product_id = $product->id;
 
             //product image save
-            $this->storeProductImage($request, $product_id, 'product_image_1');
-            $this->storeProductImage($request, $product_id, 'product_image_2');
+            $this->storeProductImage($request, $product_id, 'product_image_1', 1);
+            $this->storeProductImage($request, $product_id, 'product_image_2', 2);
 
             DB::commit();
 
@@ -79,11 +79,64 @@ class ProductController extends Controller
         return datatables(Product::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc')->with("images"))->toJson();
     }
 
-    public function storeProductImage($request, $product_id, $image)
+    public function updateProduct(Request $request)
+    {
+        $rules = array(
+            'product_name' => 'required|max:30',
+            'product_stock' => 'required|integer|max:100000',
+            'product_uom' => 'required|string|max:10',
+            'product_price' => 'required|numeric|between:0,500000',
+            'product_image_1' => 'file|max:1024',
+            'product_image_1.*' => 'mimes:jpeg,png,jpg',
+            'product_image_2' => 'file|max:1024',
+            'product_image_2.*' => 'mimes:jpeg,png,jpg',
+        );
+        if ($request->product_code !== $request->old_product_code) {
+            $rules['product_code'] = 'required|unique:products,code|max:15';
+        } else {
+            $rules['product_code'] = 'required|max:15';
+        }
+        //product validation
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        DB::beginTransaction();
+        try {
+            //product save
+            $product = Product::find($request->product_id);
+            $product->code = $request->product_code;
+            $product->name = $request->product_name;
+            $product->stock = $request->product_stock;
+            $product->uom = $request->product_uom;
+            $product->price = $request->product_price;
+            $product->save();
+
+            //product image save
+            if ($request->hasfile('product_image_1')) {
+                $this->updateProductImage($request, 'product_image_1', 1);
+            }
+            if ($request->hasfile('product_image_2')) {
+                $this->updateProductImage($request, 'product_image_2', 2);
+            }
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Session::flash('error_message', 'Something went wrong! Please Try again');
+        }
+
+        return redirect(route('product.manage.view'));
+    }
+
+    public function storeProductImage($request, $product_id, $image, $image_no)
     {
         if ($request->hasfile($image)) {
             $file = $request->file($image);
-            $image_name = $request->product_code . '_1.' . $file->extension();
+            $image_name = $request->product_code . '_' . $image_no . '.' . $file->extension();
             $shop_name = 'shop_1';
             $file->move(public_path() . '/images/products/' . $shop_name . '/', $image_name);
 
@@ -92,6 +145,26 @@ class ProductController extends Controller
             $productImage->image_url = $shop_name . '/' . $image_name;
             $productImage->save();
         }
+    }
+
+    public function updateProductImage($request, $image, $image_no)
+    {
+        $file = $request->file($image);
+        $image_name = $request->product_code . '_' . $image_no . '.' . $file->extension();
+        $shop_name = 'shop_1';
+        $file->move(public_path() . '/images/products/' . $shop_name . '/', $image_name);
+
+        $image_id = 0;
+        if ($image_no === 1) {
+            $image_id = $request->image_1_id;
+        } else {
+            $image_id = $request->image_2_id;
+        }
+
+        $productImage = ProductImage::where('id', $image_id)->first();
+        $productImage->image_url = $shop_name . '/' . $image_name;
+        $productImage->save();
+
     }
 
 }

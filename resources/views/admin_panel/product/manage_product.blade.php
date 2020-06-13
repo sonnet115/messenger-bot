@@ -86,7 +86,7 @@
                 ajax: '{{ route('product.get') }}',
 
                 "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"}
+                    {"className": "dt-center", "targets": [2, 3, 4, 5]}
                 ],
                 columns: [
                     {data: 'name', name: 'name'},
