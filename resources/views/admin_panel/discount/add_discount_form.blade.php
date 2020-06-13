@@ -27,14 +27,15 @@
                                   enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Discount name</label>
+                                    <label class="control-label mb-10">Discount name<span style="font-size: 12px"> [Max 50 characters]</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-user"></i></span>
                                         </div>
-                                        <input type="text" name="discount_name" placeholder="Enter Discount Name" class="form-control" value="" required>
+                                        <input type="text" id="discount_name" name="discount_name"
+                                               placeholder="Enter Discount Name" class="form-control" value="" required>
                                     </div>
-                                    <p class="text-danger" id="product_name_error_message"></p>
+                                    <label for="discount_name" class="error text-danger"></label>
                                     @if($errors->has('discount_name'))
                                         <p class="text-danger">{{ $errors->first('discount_name') }}</p>
                                     @endif
@@ -90,12 +91,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Discounts Percentages</label>
+                                    <label class="control-label mb-10">Discounts Percentages<span
+                                            style="font-size: 12px"> [Range 1% to 100%]</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <input type="text" name="discount_percentage" placeholder="Enter Product Discount Percentage" class="form-control"
+                                        <input type="text" name="discount_percentage"
+                                               placeholder="Enter Product Discount Percentage" class="form-control"
                                                value="" required>
                                     </div>
                                     <p class="text-danger" id="product_price_error_message"></p>
@@ -110,7 +113,9 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <input type="text" name="max_customer" placeholder="Enter Product Discount Percentage" class="form-control" value=""
+                                        <input type="text" name="max_customer"
+                                               placeholder="Enter Product Discount Percentage" class="form-control"
+                                               value=""
                                                required>
                                     </div>
                                     <p class="text-danger" id="product_price_error_message"></p>
@@ -158,6 +163,26 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
+        });
+
+        jQuery.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+
+        $("#discount_name").validate({
+            rules: {
+                product_name: {
+                    required: true,
+                    maxlength: 4
+                }
+            },
+            messages: {
+                product_name: {
+                    required: "Name is required",
+                    maxlength: "Max {0} Characters"
+                }
+            }
         });
 
     </script>

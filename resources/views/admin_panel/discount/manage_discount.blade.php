@@ -20,11 +20,11 @@
                                 <table id="user_list_table" class="table table-bordered w-100 display">
                                     <thead class="btn-gradient-info">
                                     <tr>
-                                        <th class="text-center text-white">Name</th>
-                                        <th class="text-center text-white">Code</th>
-                                        <th class="text-center text-white">Stock</th>
-                                        <th class="text-center text-white">UoM</th>
-                                        <th class="text-center text-white">Price</th>
+                                        <th class="text-center text-white">Discount Name</th>
+                                        <th class="text-center text-white">Discount From</th>
+                                        <th class="text-center text-white">Discount To</th>
+                                        <th class="text-center text-white">Discount Percentage</th>
+                                        <th class="text-center text-white">Maximum customers</th>
                                         <th class="text-center text-white">Action</th>
                                     </tr>
                                     </thead>
