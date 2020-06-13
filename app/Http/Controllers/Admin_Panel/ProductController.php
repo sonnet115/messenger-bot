@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Product;
 use App\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,47 +27,45 @@ class ProductController extends Controller
     {
         //product validation
         $validator = Validator::make($request->all(), [
-            'product_name' => 'required|unique:products,name',
-            'product_code' => 'required|unique:products,code',
-            'product_stock' => 'required|string|max:50',
-            'product_uom' => 'required|string|max:50',
-            'product_price' => 'required|string|max:50',
-            'product_images.*' => 'mimes:jpeg,png,jpg',
+            'product_name' => 'required|max:30',
+            'product_code' => 'required|unique:products,code|max:15',
+            'product_stock' => 'required|integer|max:100000',
+            'product_uom' => 'required|string|max:10',
+            'product_price' => 'required|numeric|between:0,500000',
+            'product_image_1' => 'required|file|max:1024',
+            'product_image_1.*' => 'mimes:jpeg,png,jpg',
+            'product_image_2' => 'file|max:1024',
+            'product_image_2.*' => 'mimes:jpeg,png,jpg',
         ]);
-
-        if ($request->hasfile('product_images')) {
-            if (sizeof($request->product_images) > 5) {
-                Session::flash('error_image_count', 'Maximum 5 Images');
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-        }
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        //product save
-        $product = new Product();
-        $product->name = $request->product_name;
-        $product->code = $request->product_code;
-        $product->stock = $request->product_stock;
-        $product->uom = $request->product_uom;
-        $product->price = $request->product_price;
-        $product->save();
-        $product_id = $product->id;
+        DB::beginTransaction();
+        try {
+            //product save
+            $product = new Product();
+            $product->name = $request->product_name;
+            $product->code = $request->product_code;
+            $product->stock = $request->product_stock;
+            $product->uom = $request->product_uom;
+            $product->price = $request->product_price;
+            $product->shop_id = 1;
+            $product->save();
+            $product_id = $product->id;
 
-        //product image save
-        if ($request->hasfile('product_images')) {
-            foreach ($request->product_images as $file) {
-                $name = time() . '.' . $file->extension();
-                $file->move(public_path() . '/site_images/product_images/', $name);
+            //product image save
+            $this->storeProductImage($request, $product_id, 'product_image_1');
+            $this->storeProductImage($request, $product_id, 'product_image_2');
 
-                $productImage = new ProductImage();
-                $productImage->pid = $product_id;
-                $productImage->image_url = $name;
-                $productImage->save();
-            }
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Session::flash('error_message', 'Something went wrong! Please Try again');
         }
+
         return redirect(route('product.add.view'));
     }
 
@@ -80,5 +79,19 @@ class ProductController extends Controller
         return datatables(Product::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc')->with("images"))->toJson();
     }
 
+    public function storeProductImage($request, $product_id, $image)
+    {
+        if ($request->hasfile($image)) {
+            $file = $request->file($image);
+            $image_name = $request->product_code . '_1.' . $file->extension();
+            $shop_name = 'shop_1';
+            $file->move(public_path() . '/images/products/' . $shop_name . '/', $image_name);
+
+            $productImage = new ProductImage();
+            $productImage->pid = $product_id;
+            $productImage->image_url = $shop_name . '/' . $image_name;
+            $productImage->save();
+        }
+    }
 
 }

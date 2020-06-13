@@ -18,121 +18,142 @@
                     <div class="row">
                         <div class="col-sm">
                             <form action="{{route('product.store')}}" method="post" novalidate
-                                  enctype="multipart/form-data">
+                                  enctype="multipart/form-data" id="order_form">
                                 @csrf
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Product List</label>
+                                    <label class="control-label mb-10">Product Name<span
+                                            class="text-danger font-16">*</span></label>
+                                    <span class="text-muted font-12">[Max 30 Characters]</span>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-user"></i></span>
                                         </div>
-                                        <input type="text" name="product_name" placeholder="Enter Product Name"
-                                               class="form-control"
-                                               value="{{ $product_details !== null ? $product_details->name : old('product_name')}}"
-                                               required>
+
+                                        <input type="text" id="product_name" name="product_name"
+                                               placeholder="Enter Product Name" class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->name : old('product_name')}}">
                                     </div>
-                                    <p class="text-danger" id="product_name_error_message"></p>
+                                    <label for="product_name" class="error text-danger"></label>
                                     @if($errors->has('product_name'))
-                                        <p class="text-danger">{{ $errors->first('product_name') }}</p>
+                                        <p class="text-danger font-14">{{ $errors->first('product_name') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Product Code</label>
+                                    <label class="control-label mb-10">Product Code<span
+                                            class="text-danger font-16">*</span></label>
+                                    <span class="text-muted font-12">[Max 15 Characters]</span>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-present"></i></span>
                                         </div>
-                                        <input type="text" name="product_code" placeholder="Enter Product Code"
-                                               class="form-control"
-                                               value="{{ $product_details !== null ? $product_details->code : old('product_code')}}"
-                                               required>
+                                        <input type="text" id="product_code" name="product_code"
+                                               placeholder="Enter Product Code" class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->code : old('product_code')}}">
                                     </div>
-                                    <p class="text-danger" id="product_code_error_message"></p>
+                                    <label for="product_code" class="error text-danger"></label>
                                     @if($errors->has('product_code'))
-                                        <p class="text-danger">{{ $errors->first('product_code') }}</p>
+                                        <p class="text-danger font-14">{{ $errors->first('product_code') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label mb-10">Stock Amount</label>
+                                    <span class="text-muted font-12">[Max 1,000,00]</span>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <input type="text" name="product_stock" placeholder="Enter Product Stock Amount"
-                                               class="form-control"
-                                               value="{{ $product_details !== null ? $product_details->stock : old('product_stock')}}"
-                                               required>
+                                        <input type="text" id="product_stock" name="product_stock"
+                                               placeholder="Enter Product Stock Amount" class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->stock : old('product_stock')}}">
                                     </div>
-                                    <p class="text-danger" id="product_stock_error_message"></p>
+                                    <label for="product_stock" class="error text-danger"></label>
                                     @if($errors->has('product_stock'))
-                                        <p class="text-danger">{{ $errors->first('product_stock') }}</p>
+                                        <p class="text-danger font-14">{{ $errors->first('product_stock') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Unit of Measurement (UoM)</label>
+                                    <label class="control-label mb-10">Unit of Measurement (UoM)<span
+                                            class="text-danger font-16">*</span></label>
+                                    <span class="text-muted font-12">[Max 10 Characters]</span>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <input type="text" name="product_uom" placeholder="Enter Product UoM"
-                                               class="form-control"
-                                               value="{{ $product_details !== null ? $product_details->uom : old('product_uom')}}"
-                                               required>
+                                        <input type="text" id="product_uom" name="product_uom"
+                                               placeholder="Enter Product UoM" class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->uom : old('product_uom')}}">
                                     </div>
-                                    <p class="text-danger" id="product_uom_error_message"></p>
+                                    <label for="product_uom" class="error text-danger"></label>
                                     @if($errors->has('product_uom'))
-                                        <p class="text-danger">{{ $errors->first('product_uom') }}</p>
+                                        <p class="text-danger font-14">{{ $errors->first('product_uom') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label mb-10">Product Price</label>
+                                    <label class="control-label mb-10">Product Price<span
+                                            class="text-danger font-16">*</span></label>
+                                    <span class="text-muted font-12">[Max 5,000,00]</span>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <input type="text" name="product_price" placeholder="Enter Product Price"
-                                               class="form-control"
-                                               value="{{ $product_details !== null ? $product_details->price : old('product_price')}}"
-                                               required>
+                                        <input type="text" id="product_price" name="product_price"
+                                               placeholder="Enter Product Price" class="form-control"
+                                               value="{{ $product_details !== null ? $product_details->price : old('product_price')}}">
                                     </div>
-                                    <p class="text-danger" id="product_price_error_message"></p>
+                                    <label for="product_price" class="error text-danger"></label>
                                     @if($errors->has('product_price'))
-                                        <p class="text-danger">{{ $errors->first('product_price') }}</p>
+                                        <p class="text-danger font-14">{{ $errors->first('product_price') }}</p>
                                     @endif
                                 </div>
 
-
-                                    <label class="control-label mb-10">Product Images</label>
-
-                                    @for ($i = 0; $i < 2; $i++)
-                                        <div class="row">
-                                            <div class="col-sm-7">
-                                                <input type="file" name="product_images_{{$i}}" id="input-file-now"
-                                                       multiple/>
-                                                @if($errors->has('product_images_'.$i))
-                                                    <p class="text-danger">{{ $errors->first('product_images'.$i) }}</p>
-                                                @endif
-                                            </div>
-
-                                            <div class="col-sm-5 text-left">
-                                                <img
-                                                    src="{{$product_details !== null ? asset("images/products")."/".$product_details->images[$i]->image_url : asset("images/products/no.png")}}"
-                                                    id="profile-img-tag"
-                                                    height="100" width="100" alt="N/A">
-                                                <a href="javascript:void(0)" class="btn-xs btn-danger"
-                                                   style="display: block;width: 100px;margin: 0 auto">Delete</a>
-                                            </div>
-                                            <br>
-                                            <br>
+                                <label class="control-label mb-10">Product Images<span
+                                        class="text-danger font-16">*</span></label>
+                                <span class="text-muted font-12">[Max 1 MB | Upload at least 1 image]</span>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <img
+                                                src="{{$product_details !== null ? asset("images/products")."/".$product_details->images[0]->image_url : asset("images/products/no.png")}}"
+                                                height="200" width="200" alt="N/A"
+                                                style="float: left" class="mb-2 product_images">
+                                            <a href="javascript:void(0)" class="btn-xs btn-danger remove_image_btn"
+                                               style="float:left;margin: 5px 0 0 -25px;display: none;padding: 1px 7px">X</a>
                                         </div>
-                                    @endfor
 
+                                        <input type="file" name="product_image_1" class="image_files"/>
+
+                                        <p class="text-danger font-14 image_error_message mb-3"></p>
+                                        @if($errors->has('product_image_1'))
+                                            <p class="text-danger font-14 mb-3">{{ $errors->first('product_image_1') }}</p>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <img
+                                                src="{{$product_details !== null ? asset("images/products")."/".$product_details->images[1]->image_url : asset("images/products/no.png")}}"
+                                                height="200" width="200" alt="N/A"
+                                                style="float: left" class="mb-2 product_images">
+                                            <a href="javascript:void(0)" class="btn-xs btn-danger remove_image_btn"
+                                               style="float:left;margin: 5px 0 0 -25px;display: none;padding: 1px 7px">X</a>
+                                        </div>
+
+                                        <input type="file" name="product_image_2" class="image_files"/>
+
+                                        <p class="text-danger font-14 image_error_message mb-3"></p>
+                                        @if($errors->has('product_image_2'))
+                                            <p class="text-danger font-14 mb-3">{{ $errors->first('product_image_2') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <hr>
                                 <div class="form-group text-right">
-                                    <button type="submit" class="btn btn-primary mr-10">
+                                    <button type="submit" class="btn btn-primary">
                                         <i class="fa fa-plus-circle"></i> {{ $product_details !== null ? "Update" : "Add" }}
                                         Product
                                     </button>
@@ -149,81 +170,94 @@
 @endsection
 
 @section('product-js')
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#stock_id").on("keyup", function () {
-                let stock = $('input[name=product_stock]').val();
-                if (isNaN(stock)) {
-                    $("#product_stock_error_message").html("The stock must be number");
-                }
-            });
-            $("#price_id").on("keyup", function () {
-                let price = $('input[name=product_price]').val();
-                if (isNaN(price)) {
-                    $("#product_price_error_message").html("The price field must be a number");
-                }
-
+            jQuery.validator.setDefaults({
+                debug: true,
+                success: "valid"
             });
 
-            $("form").submit(function () {
-                let name = $('input[name=product_name]').val();
-                let code = $('input[name=product_code]').val();
-                let stock = $('input[name=product_stock]').val();
-                let price = $('input[name=product_price]').val();
-                let uom = $('input[name=product_uom]').val();
-
-                let name_error_message = $("#product_name_error_message");
-                let code_error_message = $("#product_code_error_message");
-                let uom_error_message = $("#product_uom_error_message");
-                let price_error_message = $("#product_price_error_message");
-                let stock_error_message = $("#product_stock_error_message");
-
-                name_error_message.html("");
-                code_error_message.html("");
-                uom_error_message.html("");
-                price_error_message.html("");
-                stock_error_message.html("");
-
-                let error_count = 0;
-
-                if (name === "") {
-                    name_error_message.html('name field is required');
-                    error_count++;
-                }
-                if (code === "") {
-                    code_error_message.html('code field is required');
-                    error_count++;
-                }
-
-                if (uom === "") {
-                    uom_error_message.html('uom field is required');
-                    error_count++;
-                }
-
-                if (price === "") {
-                    price_error_message.html('price field is required');
-                    error_count++;
-                }
-                if (stock === "") {
-                    stock_error_message.html('stock field is required');
-                    error_count++;
-                }
-
-                if (isNaN(price)) {
-                    price_error_message.html("The price must be a number");
-                    error_count++;
-                }
-
-                if (isNaN(stock)) {
-                    stock_error_message.html("The stock must be a number");
-                    error_count++;
-                }
-
-                if (error_count > 0) {
-                    return false;
-                }
-
+            $("#order_form").validate({
+                rules: {
+                    product_name: {
+                        required: true,
+                        maxlength: 30
+                    },
+                    product_code: {
+                        required: true,
+                        maxlength: 15
+                    },
+                    product_stock: {
+                        max: 100000,
+                        digits: true
+                    },
+                    product_uom: {
+                        required: true,
+                        maxlength: 10
+                    },
+                    product_price: {
+                        required: true,
+                        max: 500000,
+                        number: true
+                    },
+                },
+                messages: {
+                    product_name: {
+                        required: "Name is required",
+                        maxlength: "Max {0} Characters"
+                    },
+                    product_code: {
+                        required: "Code is required",
+                        maxlength: "Max {0} Characters"
+                    },
+                    product_stock: {
+                        maxlength: "Max value {0}"
+                    },
+                    product_uom: {
+                        required: "UoM is required",
+                        maxlength: "Max {0} Characters"
+                    },
+                    product_price: {
+                        required: "Price is required",
+                        maxlength: "Max value {0}"
+                    },
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
             });
+
+            $(".image_files").on('change', function () {
+                displayImage($(this));
+            });
+
+            $(".remove_image_btn").on("click", function () {
+                $(this).parent().find('.product_images').attr('src', '{{asset("images/products/no.png")}}');
+                $(this).parent().parent().find('.image_files').val('');
+                $(this).parent().parent().find('.image_error_message').html('');
+                $(this).hide();
+            });
+
+            function displayImage(input_object) {
+                let input_field = input_object[0];
+                let image_file = input_field.files[0];
+                let file_type = image_file["type"];
+                let valid_image_types = ["image/jpg", "image/jpeg", "image/png"];
+
+                if (input_field.files && image_file && $.inArray(file_type, valid_image_types) > 0) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        input_object.parent().find('.product_images').attr('src', e.target.result);
+                        input_object.parent().find('.remove_image_btn').show();
+                        input_object.parent().find('.image_error_message').html('');
+                    };
+                    reader.readAsDataURL(input_field.files[0]); // convert to base64 string
+                } else {
+                    input_object.parent().find('.image_error_message').html('Invalid Image! Only png, jpg, jpeg allowed');
+                }
+            }
         });
     </script>
 @endsection
