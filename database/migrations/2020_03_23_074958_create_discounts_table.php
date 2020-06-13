@@ -15,13 +15,14 @@ class CreateDiscountsTable extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name','50');
+            $table->string('name','20');
             $table->date('dis_from');
             $table->date('dis_to');
             $table->integer('pid');
             $table->float('dis_percentage')->default(0);
             $table->smallInteger('max_customers')->nullable();
             $table->smallInteger('shop_id');
+            $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
     }

@@ -27,9 +27,9 @@ class ProductController extends Controller
     {
         //product validation
         $validator = Validator::make($request->all(), [
-            'product_name' => 'required|max:50',
-            'product_code' => 'required|unique:products,code|max:20',
-            'product_stock' => 'required|integer|max:500000',
+            'product_name' => 'required|max:30',
+            'product_code' => 'required|unique:products,code|max:15',
+            'product_stock' => 'required|integer|max:100000',
             'product_uom' => 'required|string|max:10',
             'product_price' => 'required|numeric|between:0,500000',
             'product_image_1' => 'required|file|max:1024',

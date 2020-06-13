@@ -15,12 +15,12 @@ class CreateShopsTable extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->string('name','50');
-            $table->string('address','100');
-            $table->text('web_link');
-            $table->string('owner_name','50');
-            $table->string('owner_contact','20');
-            $table->string('shop_contact','20');
+            $table->string('shop_name', '50');
+            $table->string('shop_contact', '15');
+            $table->string('shop_address', '100');
+            $table->text('shop_web_link');
+            $table->string('owner_name', '30');
+            $table->string('owner_contact', '15');
             $table->timestamps();
         });
     }
