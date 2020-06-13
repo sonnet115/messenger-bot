@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get("add-form", "Admin_Panel\ProductController@viewAddProductForm")->name("product.add.view");
         Route::post("store-product", "Admin_Panel\ProductController@storeProduct")->name("product.store");
         Route::get("manage-form", "Admin_Panel\ProductController@viewUpdateProduct")->name("product.manage.view");
+        Route::post("update-product", "Admin_Panel\ProductController@updateProduct")->name("product.update");
         Route::get("get-products", "Admin_Panel\ProductController@getProduct")->name("product.get");
     });
 
@@ -67,7 +68,7 @@ Route::group(['prefix' => 'admin'], function () {
     //Routes for roles
     Route::group(['prefix' => 'role'], function () {
         Route::get("add-form", "Admin_Panel\RoleController@viewAddRoleForm")->name("role.add.view");
-       // Route::post("store-user", "Admin_Panel\UserController@storeUser")->name("user.store");
+        // Route::post("store-user", "Admin_Panel\UserController@storeUser")->name("user.store");
         Route::get("manage-form", "Admin_Panel\RoleController@viewUpdateRole")->name("role.manage.view");
         //Route::get("get-user", "Admin_Panel\UserController@getUser")->name("user.get");
     });
