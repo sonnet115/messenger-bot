@@ -47,6 +47,7 @@
     <link href={{asset("assets/admin_panel/dist/css/style.css")}} rel="stylesheet" type="text/css">
 
     @yield("custom_css")
+    @yield("product-css")
     @yield("user-css")
     @yield("discount-css")
 

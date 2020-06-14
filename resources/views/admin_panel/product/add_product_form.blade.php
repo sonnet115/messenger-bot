@@ -1,4 +1,17 @@
 @extends("admin_panel.main")
+@section("product-css")
+    <link href="{{asset("assets/admin_panel/vendors/select2/dist/css/select2.min.css")}}" rel="stylesheet"
+          type="text/css"/>
+    <style>
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+        }
+
+        .select2-selection__arrow {
+            top: 6px !important;
+        }
+    </style>
+@endsection
 
 @section("main_content")
     <!-- Container -->
@@ -136,7 +149,7 @@
                                     <div class="col-sm-6">
                                         <div>
                                             <img
-                                                src="{{$product_details !== null ? asset("images/products")."/".$product_details->images[1]->image_url : asset("images/products/no.png")}}"
+                                                src="{{$product_details !== null ? count($product_details->images) > 1 ? asset("images/products")."/".$product_details->images[1]->image_url : asset("images/products/no.png") : asset("images/products/no.png")}}"
                                                 height="200" width="200" alt="N/A"
                                                 style="float: left" class="mb-2 product_images">
                                             <a href="javascript:void(0)" class="btn-xs btn-danger remove_image_btn"
@@ -152,6 +165,26 @@
                                     </div>
                                 </div>
 
+                                @if ($product_details !== null)
+                                    <div class="form-group">
+                                        <label class="control-label mb-10">Product State</label>
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="icon-magnet"></i></span>
+                                            </div>
+                                            <select id="product_state" name="product_state">
+                                                <option
+                                                    value="0" {{$product_details->state === 0 ? "selected" : ""}}>
+                                                    Inactive
+                                                </option>
+                                                <option
+                                                    value="1" {{$product_details->state === 1 ? "selected" : ""}}>
+                                                    Active
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
 
                                 <input type="hidden" name="product_id"
                                        value="{{$product_details !== null ? $product_details->id : ""}}">
@@ -163,7 +196,7 @@
                                        value="{{$product_details !== null ? $product_details->images[0]->id : ""}}">
 
                                 <input type="hidden" name="image_2_id"
-                                       value="{{$product_details !== null ? $product_details->images[1]->id : ""}}">
+                                       value="{{$product_details !== null ? count($product_details->images) > 1 ? $product_details->images[1]->id : "" : ""}}">
                                 <hr>
                                 <div class="form-group text-right">
                                     <button type="submit" class="btn btn-primary">
@@ -183,10 +216,15 @@
 @endsection
 
 @section('product-js')
+    {{--Select 2--}}
+    <script src="{{asset("assets/admin_panel/vendors/select2/dist/js/select2.full.min.js")}}"></script>
+
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
         $(document).ready(function () {
+            $('#product_state').select2();
+
             jQuery.validator.setDefaults({
                 debug: true,
                 success: "valid"

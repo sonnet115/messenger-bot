@@ -1,4 +1,11 @@
 @extends("admin_panel.main")
+@section("product-css")
+    <style>
+        .pagination{
+            display: block !important;
+        }
+    </style>
+@endsection
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
@@ -20,12 +27,13 @@
                                 <table id="user_list_table" class="table table-bordered w-100 display">
                                     <thead class="btn-gradient-info">
                                     <tr>
-                                        <th class="text-center text-white">Name</th>
+                                        <th class="text-center text-white" data-priority="1">Name</th>
                                         <th class="text-center text-white">Code</th>
-                                        <th class="text-center text-white">Stock</th>
+                                        <th class="text-center text-white" data-priority="1">Stock</th>
                                         <th class="text-center text-white">UoM</th>
                                         <th class="text-center text-white">Price</th>
-                                        <th class="text-center text-white">Action</th>
+                                        <th class="text-center text-white">State</th>
+                                        <th class="text-center text-white" data-priority="1">Action</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -64,7 +72,6 @@
                 language: {
                     search: "",
                     searchPlaceholder: "Search",
-                    sLengthMenu: "_MENU_items"
                 },
                 "language": {
                     "processing": "Loading. Please wait..."
@@ -86,7 +93,14 @@
                 ajax: '{{ route('product.get') }}',
 
                 "columnDefs": [
-                    {"className": "dt-center", "targets": [2, 3, 4, 5]}
+                    {
+                        "targets": -1,
+                        "className": 'all',
+                    },
+                    {
+                        "className": "dt-center",
+                        "targets": [2, 3, 4, 5, 6]
+                    }
                 ],
                 columns: [
                     {data: 'name', name: 'name'},
@@ -96,7 +110,14 @@
                     {data: 'price', name: 'price'},
                     {
                         'render': function (data, type, row) {
-                            return '<a class="btn btn-sm btn-gradient-ashes" ' +
+                            let color = row.state === 1 ? "success" : "danger";
+                            let text = row.state === 1 ? "Active" : "Inactive";
+                            return '<span class="badge badge-pill badge-' + color + '">' + text + '</span>';
+                        },
+                    },
+                    {
+                        'render': function (data, type, row) {
+                            return '<a class="btn btn-sm btn-gradient-secondary" ' +
                                 '   href="/admin/product/add-form?mode=update&pid=' + row.id + '">' +
                                 '   Update</a>';
                         },

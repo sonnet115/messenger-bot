@@ -112,6 +112,7 @@ class ProductController extends Controller
             $product->stock = $request->product_stock;
             $product->uom = $request->product_uom;
             $product->price = $request->product_price;
+            $product->state = $request->product_state;
             $product->save();
 
             //product image save
@@ -162,8 +163,15 @@ class ProductController extends Controller
         }
 
         $productImage = ProductImage::where('id', $image_id)->first();
-        $productImage->image_url = $shop_name . '/' . $image_name;
-        $productImage->save();
+        if ($productImage) {
+            $productImage->image_url = $shop_name . '/' . $image_name;
+            $productImage->save();
+        }else{
+            $productImage = new ProductImage();
+            $productImage->pid = $request->product_id;
+            $productImage->image_url = $shop_name . '/' . $image_name;
+            $productImage->save();
+        }
 
     }
 
