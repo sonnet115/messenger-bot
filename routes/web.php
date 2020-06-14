@@ -76,9 +76,10 @@ Route::group(['prefix' => 'admin'], function () {
     //Routes for discount
     Route::group(['prefix' => 'discount'], function () {
         Route::get("add-form", "Admin_Panel\DiscountController@viewAddDiscountForm")->name("discount.add.view");
-         Route::post("store-discount", "Admin_Panel\DiscountController@storeDiscount")->name("discount.store");
+        Route::post("store-discount", "Admin_Panel\DiscountController@storeDiscount")->name("discount.store");
         Route::get("manage-form", "Admin_Panel\DiscountController@viewUpdateDiscount")->name("discount.manage.view");
-        //Route::get("get-user", "Admin_Panel\UserController@getUser")->name("user.get");
+        Route::post("update-discount", "Admin_Panel\DiscountController@updateDiscount")->name("discount.update");
+        Route::get("get-discount", "Admin_Panel\DiscountController@getDiscount")->name("discount.get");
     });
 
 

@@ -77,27 +77,27 @@
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5]
                         }
                     },
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('product.get') }}',
+                ajax: '{{ route('discount.get') }}',
 
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"}
                 ],
                 columns: [
-                    {data: 'name', name: 'name'},
-                    {data: 'code', name: 'code'},
-                    {data: 'stock', name: 'stock'},
-                    {data: 'uom', name: 'uom'},
-                    {data: 'price', name: 'price'},
+                    {data: 'name'},
+                    {data: 'dis_from'},
+                    {data: 'dis_to', name: 'uom'},
+                    {data: 'dis_percentage', name: 'price'},
+                    {data: 'max_customers', name: 'price'},
                     {
                         'render': function (data, type, row) {
                             return '<a class="btn btn-sm btn-gradient-ashes" ' +
-                                '   href="/admin/product/add-form?mode=update&pid=' + row.id + '">' +
+                                '   href="/admin/discount/add-form?p_name=update&did=' + row.id + '">' +
                                 '   Update</a>';
                         },
                     },

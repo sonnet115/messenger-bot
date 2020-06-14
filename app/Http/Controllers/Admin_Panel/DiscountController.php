@@ -11,7 +11,14 @@ class DiscountController extends Controller
 {
     public function viewAddDiscountForm()
     {
-        return view("admin_panel.discount.add_discount_form")->with("title", "CBB | Add Discount");
+        if (request()->get('did')) {
+            $did = request()->get('did');
+             $discount_details = Discount::where('id', $did)->first();
+        } else {
+            $discount_details = null;
+        }
+
+        return view("admin_panel.discount.add_discount_form")->with("title", "CBB | Add Discount")->with('discount_details', $discount_details);
     }
 
     public function viewUpdateDiscount()
@@ -34,7 +41,6 @@ class DiscountController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $shop_id = 1;
-        $state=1;
         $discount = new Discount();
         $discount->name = $request->discount_name;
         $discount->dis_from = $request->discount_from;
@@ -43,9 +49,28 @@ class DiscountController extends Controller
         $discount->dis_percentage = $request->discount_percentage;
         $discount->max_customers = $request->max_customer;
         $discount->shop_id = $shop_id;
-        $discount->state = $state;
         $discount->save();
         return redirect(route('discount.add.view'));
 
     }
+
+    public function getDiscount(){
+        return datatables(Discount::selectRaw("id,name,dis_from,dis_to,dis_percentage,max_customers")->whereRaw(1)->orderBy('id', 'asc'))->toJson();
+    }
+
+    public function updateDiscount(Request $request){
+        $discount = Discount::find($request->discount_id);
+        $discount->name=$request->discount_name;
+        $discount->dis_from=$request->discount_from;
+        $discount->dis_to=$request->discount_to;
+        $discount->pid=$request->product_id;
+        $discount->dis_percentage=$request->discount_percentage;
+        $discount->max_customers=$request->max_customer;
+        $discount->shop_id=1;
+        $discount->save();
+
+
+    }
+
+
 }
