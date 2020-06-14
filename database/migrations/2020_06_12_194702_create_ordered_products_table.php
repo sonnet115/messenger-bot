@@ -19,6 +19,8 @@ class CreateOrderedProductsTable extends Migration
             $table->integer('pid');
             $table->smallInteger('quantity');
             $table->integer('price');
+            $table->string('additional_product_details', 100);
+            $table->tinyInteger('product_status');
             $table->timestamps();
         });
     }

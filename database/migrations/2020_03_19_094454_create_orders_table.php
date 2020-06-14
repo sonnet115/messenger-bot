@@ -20,7 +20,9 @@ class CreateOrdersTable extends Migration
             $table->string('billing_address', 150);
             $table->string('shipping_address', 150);
             $table->tinyInteger('order_status')->default(0);
+            $table->integer('status_updated_by')->nullable();
             $table->float('discount_amount')->default(0);
+            $table->string('additional_order_details', 100);
             $table->smallInteger('shop_id');
             $table->timestamps();
         });
