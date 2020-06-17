@@ -8,13 +8,9 @@ class Order extends Model
 {
     protected $fillable = ['pid', 'customer_id', 'product_qty', 'subtotal'];
 
-    public function products()
+    public function ordered_products()
     {
-        return $this->hasOne(Product::class, 'id', 'pid');
-    }
-
-    public function customers()
-    {
-        return $this->hasOne(Customer::class, 'id', 'customer_id');
+        return $this->belongsToMany(Product::class, OrderedProducts::class, 'oid', 'pid')
+               ->withPivot('quantity', 'price', 'discount', 'product_status');
     }
 }

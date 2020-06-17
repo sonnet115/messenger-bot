@@ -23,28 +23,24 @@
                                     $duplicate_order_code = "";
                                     ?>
                                     @foreach($orders as $order)
-                                        @if($duplicate_order_code !== $order->order_code)
-                                            <div class="card shadow">
-                                                <div class="card-header">
-                                                    <a class="text-muted text-center card-link code_container"
-                                                       href="#order_{{$order->order_code}}">
-                                                        ORDER CODE: <span
-                                                            class="text-dark code">{{$order->order_code}}</span>
-                                                    </a>
-                                                </div>
-                                                <div id="order_{{$order->order_code}}"
-                                                     class="collapse"
-                                                     data-parent="#accordion">
-                                                    <div class="card-body"
-                                                         id="order_status_container_{{$order->order_code}}">
-                                                    </div>
+
+                                        <div class="card shadow">
+                                            <div class="card-header">
+                                                <a class="text-muted text-center card-link code_container"
+                                                   href="#order_{{$order->code}}">
+                                                    ORDER CODE: <span
+                                                        class="text-dark code">{{$order->code}}</span>
+                                                </a>
+                                            </div>
+                                            <div id="order_{{$order->code}}"
+                                                 class="collapse"
+                                                 data-parent="#accordion">
+                                                <div class="card-body"
+                                                     id="order_status_container_{{$order->code}}">
                                                 </div>
                                             </div>
-                                            <br>
-                                            <?php
-                                            $duplicate_order_code = $order->order_code
-                                            ?>
-                                        @endif
+                                        </div>
+                                        <br>
                                     @endforeach
                                 </div>
                             </div>
@@ -85,13 +81,13 @@
                             'order_code': order_code,
                         },
                         success: function (result) {
-                            console.log(result);
+                            console.log(result.ordered_products);
                             $("#order_status_container_" + order_code).html("");
-                            if (result.length > 0) {
-                                let products = productDetails(result);
+                            if (result.ordered_products.length > 0) {
+                                let products = productDetails(result.ordered_products);
                                 $("#order_status_container_" + order_code).append(products);
                             } else {
-                                $("#order_status_container_" + order_code).append('<p class="text-danger text-center">No order found</p>');
+                                $("#order_status_container_" + order_code).append('<p class="text-danger text-center">No Products found</p>');
                             }
                             $('#order_' + order_code).collapse('toggle');
                             code_container.html("ORDER CODE: <span class='text-dark code'>" + order_code + "</span>");
@@ -132,9 +128,9 @@
             for (let i = 0; i < products.length; i++) {
                 product += '<div class="row" style="padding: 10px">\n' +
                     '        <div class="col-sm-12 card shadow" style="padding: 10px">\n' +
-                    '             <p class="product_details"><b>Product Name:</b>' + products[i].products.name + '</span></p>\n' +
-                    '             <p class="product_details"><b>Product Qty: </b> <span class="badge badge-pill badge-dark">' + products[i].product_qty + '</span></p>\n' +
-                    '' + orderStatus(products[i].order_status) +
+                    '             <p class="product_details"><b>Product Name:</b>' + products[i].name + '</span></p>\n' +
+                    '             <p class="product_details"><b>Product Qty: </b> <span class="badge badge-pill badge-dark">' + products[i].pivot.quantity + '</span></p>\n' +
+                    '' + orderStatus(products[i].pivot.product_status) +
                     '        </div>\n' +
                     '  </div>';
             }

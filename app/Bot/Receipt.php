@@ -26,12 +26,12 @@ class Receipt
                     "type" => "template",
                     "payload" => [
                         "template_type" => "receipt",
-                        "recipient_name" => $this->placed_order_data[0]->customers->first_name . " " . $this->placed_order_data[0]->customers->last_name . ", Mobile: " . $this->placed_order_data[0]->customers->contact,
-                        "order_number" => $this->placed_order_data[0]->order_code,
+                        "recipient_name" => $this->placed_order_data->customer_name . ", Mobile: " . $this->placed_order_data->contact,
+                        "order_number" => $this->placed_order_data->code,
                         "currency" => "BDT",
                         "payment_method" => "Cash on Delivery",
                         "order_url" => "http://petersapparel.parseapp.com/order?order_id=123456",
-                        "timestamp" => strtotime($this->placed_order_data[0]->created_at),
+                        "timestamp" => strtotime($this->placed_order_data->created_at),
                         "address" => $this->address(),
                         "summary" => $this->summary(),
                         "adjustments" => $this->discount(),
@@ -45,7 +45,7 @@ class Receipt
     public function address()
     {
         return [
-            "street_1" => $this->placed_order_data[0]->customers->shipping_address,
+            "street_1" => $this->placed_order_data->shipping_address,
             "street_2" => "",
             "city" => "Dhaka",
             "postal_code" => "1207",
@@ -59,9 +59,9 @@ class Receipt
         $subtotal = 0;
         $this->total_discount = 0;
 
-        foreach ($this->placed_order_data as $d) {
-            $subtotal = $subtotal + $d->subtotal;
-            $this->total_discount = $this->total_discount + $d->discount_amount;
+        foreach ($this->placed_order_data->ordered_products as $product) {
+            $subtotal = $subtotal + ($product->pivot->quantity * $product->pivot->price);
+            $this->total_discount = $this->total_discount + $product->pivot->discount;
         }
         return [
             "subtotal" => $subtotal,
@@ -88,13 +88,12 @@ class Receipt
     public function products()
     {
         $products = array();
-
-        foreach ($this->placed_order_data as $d) {
+        foreach ($this->placed_order_data->ordered_products as $product) {
             array_push($products, [
-                "title" => $d->products->name,
-                "subtitle" => "Product_Code:" . $d->products->code,
-                "quantity" => $d->product_qty,
-                "price" => $d->product_price,
+                "title" => $product->name,
+                "subtitle" => "Product_Code:" . $product->code,
+                "quantity" => $product->pivot->quantity,
+                "price" => $product->pivot->price,
                 "currency" => "BDT",
                 "image_url" => "https://i.picsum.photos/id/1021/2048/1206.jpg"
             ]);

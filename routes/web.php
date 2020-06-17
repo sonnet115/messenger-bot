@@ -13,13 +13,13 @@
 
 use App\Http\Middleware\VerifyShopID;
 
+//Route for verification
+Route::get("bot/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
+//where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
+Route::post("bot/verify-web-hook", "Bot\BotController@verifyWebhook");
+
 Route::group(['middleware' => 'verify.shop.id'], function () {
     Route::group(['prefix' => 'bot'], function () {
-        //Route for verification
-        Route::get("/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
-
-        //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
-        Route::post("/verify-web-hook", "Bot\BotController@verifyWebhook");
 
         //Routes for place orders
         Route::get("cart/{id}", "Bot\OrderController@viewOrderForm")->name("cart.show");
@@ -42,9 +42,6 @@ Route::group(['middleware' => 'verify.shop.id'], function () {
         //Route for product enquiry
         Route::get("product-search-form/{id}", "Bot\ProductController@viewProductSearchForm")->name("product.search.form");
         Route::get("get-product", "Bot\ProductController@getProduct")->name("product.get");
-
-        //test route
-        Route::get("get-test-data", "OrderController@getTestData")->name('order.details');
     });
 
 
