@@ -110,44 +110,39 @@
         <div class="nicescroll-bar">
             <div class="navbar-nav-wrap">
                 <ul class="navbar-nav flex-column">
-                    @foreach($menus as $menu)
-                        @if ($menu->prefix == null && $menu->route_name != null)
-                            <li class="nav-item {{\Request::route()->getName() == $menu->route_name ? "active" : ""}}">
-                                <a class="nav-link" href="{{route($menu->route_name)}}">
-                                    <span class="feather-icon"><i data-feather="activity"></i></span>
-                                    <span class="nav-link-text">Dashboard</span>
-                                </a>
-                            </li>
-                            <hr class="nav-separator">
-                        @endif
 
-                        @if ($menu->prefix == null && $menu->route_name != null && $menu->parent_id == null)
+                    <li class="nav-item {{\Request::route()->getName() == $menu->route_name ? "active" : ""}}">
+                        <a class="nav-link" href="{{route($menu->route_name)}}">
+                            <span class="feather-icon"><i data-feather="activity"></i></span>
+                            <span class="nav-link-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <hr class="nav-separator">
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#product_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage Products </span>
+                        </a>
+                        <ul id="product_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "product" ? "show" : "" }}">
                             <li class="nav-item">
-                                <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
-                                   data-target="#product_manager">
-                                    <i class="fa fa-users"></i></span>
-                                    <span class="nav-link-text">Manage Products </span>
-                                </a>
-                                <ul id="product_manager"
-                                    class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "product" ? "show" : "" }}">
-                                    <li class="nav-item">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item {{\Request::route()->getName() == "product.add.view" ? "active" : ""}}">
-                                                <a class="nav-link"
-                                                   href="{{route('product.add.view')}}"><i class="fa fa-user-plus"></i>Add
-                                                    Product</a>
-                                            </li>
-                                            <li class="nav-item {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}">
-                                                <a class="nav-link"
-                                                   href="{{route('product.manage.view')}}"><i class="fa fa-list-ul"></i>Product
-                                                    Lists</a>
-                                            </li>
-                                        </ul>
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "product.add.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('product.add.view')}}"><i class="fa fa-user-plus"></i>Add
+                                            Product</a>
+                                    </li>
+                                    <li class="nav-item {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('product.manage.view')}}"><i class="fa fa-list-ul"></i>Product
+                                            Lists</a>
                                     </li>
                                 </ul>
                             </li>
-                        @endif
-                    @endforeach
+                        </ul>
+                    </li>
 
                     {{-- manage users--}}
                     <hr class="nav-separator">

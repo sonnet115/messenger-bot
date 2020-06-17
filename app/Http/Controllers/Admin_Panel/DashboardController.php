@@ -12,9 +12,6 @@ class DashboardController extends Controller
 {
     public function showDashboard()
     {
-        $role = Role::where('id', 1)->with('menus')->get();
-        $menus = Menu::where('id', 2)->with('subMenus')->first();
-        dd($role);
-        return view('admin_panel.dashboard')->with('title', "CBB | Dashboard")->with('menus', $role->menus);
+        return view('admin_panel.dashboard')->with('title', "CBB | Dashboard");
     }
 }
