@@ -2,6 +2,48 @@
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
+        <!-- filter stast-->
+        <h4>Filter Products</h4>
+        <br>
+        <div class="row">
+            <!--date filter starts-->
+            <div class="form-group col-md-3">
+                <h5 style="font-size: 16px">Start Date:<span class="text-danger"></span></h5>
+                <div class="controls">
+                    <input type="date" name="start_date" id="start_date" class="form-control datepicker-autoclose"
+                           placeholder="Please select start date">
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <h5 style="font-size: 16px">End Date:<span class="text-danger"></span></h5>
+                <div class="controls">
+                    <input type="date" name="end_date" id="end_date" class="form-control datepicker-autoclose"
+                           placeholder="Please select end date">
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <!--date filter ends-->
+            <!--product filter box start-->
+            <div class="form-group col-md-3">
+                <h5 style="font-size: 16px">Choose product:<span class="text-danger"></span></h5>
+                <div class="controls">
+                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+                        <option value="" selected>choose product</option>
+                        @foreach($product_name as $products)
+                            <option value="{{$products->id}}">{{$products->name}}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="text-left col-md-2" style="margin-left: 15px">
+                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info">Filter</button>
+            </div>
+            <!-- product filter box ends-->
+        </div>
+        <!-- filter ends-->
+
         <!-- Title -->
         <div class="hk-pg-header align-items-top">
             <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h2>
@@ -56,6 +98,17 @@
         src={{asset("assets/admin_panel/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")}}></script>
     <script src={{asset("assets/admin_panel/dist/js/dataTables-data.js")}}></script>
 
+    //select two CDN
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
+
+
     <script>
         $(document).ready(function () {
             $('#user_list_table').DataTable({
@@ -77,27 +130,33 @@
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5]
                         }
                     },
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('product.get') }}',
+                ajax: {
+                    url: "{{ route('discount.get') }}",
+                    data: function (d) {
+                        d.start_date = $('#start_date').val();
+                        d.end_date = $('#end_date').val();
+                    }
+                    },
 
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"}
                 ],
                 columns: [
                     {data: 'name', name: 'name'},
-                    {data: 'code', name: 'code'},
-                    {data: 'stock', name: 'stock'},
-                    {data: 'uom', name: 'uom'},
-                    {data: 'price', name: 'price'},
+                    {data: 'dis_from', name: 'dis_from'},
+                    {data: 'dis_to', name: 'dis_to'},
+                    {data: 'dis_percentage', name: 'dis_percentage'},
+                    {data: 'max_customers', name: 'max_customers'},
                     {
                         'render': function (data, type, row) {
                             return '<a class="btn btn-sm btn-gradient-ashes" ' +
-                                '   href="/admin/product/add-form?mode=update&pid=' + row.id + '">' +
+                                '   href="/admin/discount/add-form?p_name=update&did=' + row.id + '">' +
                                 '   Update</a>';
                         },
                     },
@@ -107,6 +166,12 @@
                 },
             });
         });
+
+
+        $('#btnFiterSubmitSearch').click(function(){
+            $('#user_list_table').DataTable().draw(true);
+        });
+
     </script>
 @endsection
 @section("custom_css")

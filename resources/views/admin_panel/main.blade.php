@@ -226,6 +226,33 @@
                         </ul>
                     </li>
 
+                    {{-- manage pre orders--}}
+                    <hr class="nav-separator">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#preorder_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage discounts</span>
+                        </a>
+                        <ul id="preorder_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "preorder" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "preorder.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('preorder.manage.view')}}"><i
+                                                class="fa fa-user-plus"></i>Pre-Order List</a>
+                                    </li>
+{{--                                    <li class="nav-item {{\Request::route()->getName() == "discount.manage.view" ? "active" : ""}}">--}}
+{{--                                        <a class="nav-link"--}}
+{{--                                           href="{{route('discount.manage.view')}}"><i class="fa fa-list-ul"></i>Discount--}}
+{{--                                            Lists</a>--}}
+{{--                                    </li>--}}
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
                     <hr class="nav-separator">
                 </ul>
             </div>
