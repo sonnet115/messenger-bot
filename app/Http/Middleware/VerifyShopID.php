@@ -15,7 +15,7 @@ class VerifyShopID
      */
     public function handle($request, Closure $next)
     {
-        if ($request->segment(1) !== 'dm-1001') {
+        if (env('SHOP_UNIQUE_ID') !== 'dm-1001') {
             return redirect('/');
         }
         return $next($request);

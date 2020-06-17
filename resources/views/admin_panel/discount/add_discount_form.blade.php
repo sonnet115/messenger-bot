@@ -1,17 +1,20 @@
 @extends("admin_panel.main")
 
 @section('discount-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+    <link href="{{asset("assets/admin_panel/vendors/select2/dist/css/select2.min.css")}}" rel="stylesheet"
+          type="text/css"/>
     <link href={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.css")}} rel="stylesheet"
           type="text/css"/>
     <style>
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            top:9px;
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
         }
 
-        /*.select2-selection .select2-selection--single{*/
-        /*    height: 42px !important;*/
-        /*}*/
+        .select2-selection__arrow {
+            top: 6px !important;
+        }
     </style>
 @endsection
 
@@ -97,7 +100,7 @@
 
                                         @if($discount_details===null)
                                             <select class="js-example-basic-multiple" name="product_id" id="product_id">
-                                                <option value="" selected>choose product</option>
+                                                <option value="" selected disabled>Choose product</option>
                                                 @foreach($product_names as $names)
                                                     <option value="{{$names->id}}">{{$names->name}}</option>
                                                 @endforeach

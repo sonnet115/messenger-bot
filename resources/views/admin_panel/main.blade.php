@@ -111,8 +111,8 @@
             <div class="navbar-nav-wrap">
                 <ul class="navbar-nav flex-column">
 
-                    <li class="nav-item {{\Request::route()->getName() == $menu->route_name ? "active" : ""}}">
-                        <a class="nav-link" href="{{route($menu->route_name)}}">
+                    <li class="nav-item {{\Request::route()->getName() == 'dashboard.show' ? "active" : ""}}">
+                        <a class="nav-link" href="{{route('dashboard.show')}}">
                             <span class="feather-icon"><i data-feather="activity"></i></span>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
@@ -137,61 +137,6 @@
                                     <li class="nav-item {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('product.manage.view')}}"><i class="fa fa-list-ul"></i>Product
-                                            Lists</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-
-                    {{-- manage users--}}
-                    <hr class="nav-separator">
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
-                           data-target="#user_manager">
-                            <i class="fa fa-users"></i></span>
-                            <span class="nav-link-text">Manage Users </span>
-                        </a>
-                        <ul id="user_manager"
-                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "user" ? "show" : "" }}">
-                            <li class="nav-item">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item {{\Request::route()->getName() == "user.add.view" ? "active" : ""}}">
-                                        <a class="nav-link"
-                                           href="{{route('user.add.view')}}"><i
-                                                class="fa fa-user-plus"></i>Add User</a>
-                                    </li>
-                                    <li class="nav-item {{\Request::route()->getName() == "user.manage.view" ? "active" : ""}}">
-                                        <a class="nav-link"
-                                           href="{{route('user.manage.view')}}"><i class="fa fa-list-ul"></i>Product
-                                            Lists</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-
-                    {{-- manage roles--}}
-                    <hr class="nav-separator">
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
-                           data-target="#role_manager">
-                            <i class="fa fa-users"></i></span>
-                            <span class="nav-link-text">Manage Roles</span>
-                        </a>
-                        <ul id="role_manager"
-                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "role" ? "show" : "" }}">
-                            <li class="nav-item">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item {{\Request::route()->getName() == "role.add.view" ? "active" : ""}}">
-                                        <a class="nav-link"
-                                           href="{{route('role.add.view')}}"><i
-                                                class="fa fa-user-plus"></i>Add Role</a>
-                                    </li>
-                                    <li class="nav-item {{\Request::route()->getName() == "role.manage.view" ? "active" : ""}}">
-                                        <a class="nav-link"
-                                           href="{{route('role.manage.view')}}"><i class="fa fa-list-ul"></i>Role
                                             Lists</a>
                                     </li>
                                 </ul>
@@ -225,35 +170,6 @@
                             </li>
                         </ul>
                     </li>
-
-                    {{-- manage pre orders--}}
-                    <hr class="nav-separator">
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
-                           data-target="#preorder_manager">
-                            <i class="fa fa-users"></i></span>
-                            <span class="nav-link-text">Manage discounts</span>
-                        </a>
-                        <ul id="preorder_manager"
-                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "preorder" ? "show" : "" }}">
-                            <li class="nav-item">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item {{\Request::route()->getName() == "preorder.manage.view" ? "active" : ""}}">
-                                        <a class="nav-link"
-                                           href="{{route('preorder.manage.view')}}"><i
-                                                class="fa fa-user-plus"></i>Pre-Order List</a>
-                                    </li>
-{{--                                    <li class="nav-item {{\Request::route()->getName() == "discount.manage.view" ? "active" : ""}}">--}}
-{{--                                        <a class="nav-link"--}}
-{{--                                           href="{{route('discount.manage.view')}}"><i class="fa fa-list-ul"></i>Discount--}}
-{{--                                            Lists</a>--}}
-{{--                                    </li>--}}
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <hr class="nav-separator">
                 </ul>
             </div>
         </div>

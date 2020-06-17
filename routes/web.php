@@ -14,7 +14,7 @@
 use App\Http\Middleware\VerifyShopID;
 
 Route::group(['middleware' => 'verify.shop.id'], function () {
-    Route::group(['prefix' => '{shop}/bot'], function () {
+    Route::group(['prefix' => 'bot'], function () {
         //Route for verification
         Route::get("/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
 
