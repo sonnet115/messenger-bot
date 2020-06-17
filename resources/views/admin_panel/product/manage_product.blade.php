@@ -9,12 +9,41 @@
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
-        <!-- Title -->
-        <div class="hk-pg-header align-items-top">
-            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h2>
+        <!-- filter stast-->
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-filter">&nbsp;Filter Products</i>
+        </h4>
+        <p style="font-size: 20px">Stock</p>
+        <div class="row">
+            <!--stock filter starts-->
+
+            <div class="form-group col-md-2">
+                <div class="controls">
+                    <input class="form-control discount_date" type="text" name="start_date" id="start_date" value=""/>
+                </div>
+            </div>
+            <div class="form-group col-md-1">
+              <p class="text-center font-15">To</p>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div class="controls">
+                    <input class="form-control discount_date" type="text" name="end_date" id="end_date" value=""/>
+                </div>
+            </div>
+            <!--stock filter ends-->
+
+            <!--button-->
+            <div class="text-left col-md-2" style="margin-left: 15px">
+                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top: 19px"><i
+                        class="fa fa-search">&nbsp;</i>Filter
+                </button>
+            </div>
+            <!--button ends-->
         </div>
-        <!-- /Title -->
-        <!-- Row -->
+        <!-- filter ends-->
+
+        <!-- Product List starts -->
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted" ><i class="fa fa-list-alt"> Product List</i></h4>
         <div class="row">
             <div class="col-xl-12">
                 <section class="hk-sec-wrapper">

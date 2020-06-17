@@ -1,55 +1,60 @@
 @extends("admin_panel.main")
+@section('discount-css')
+
+    <link href={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.css")}} rel="stylesheet"
+          type="text/css"/>
+@endsection
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
         <!-- filter stast-->
-        <h4>Filter Products</h4>
-        <br>
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-filter">&nbsp;Filter Discounts</i>
+        </h4>
         <div class="row">
-            <!--date filter starts-->
-            <div class="form-group col-md-3">
-                <h5 style="font-size: 16px">Start Date:<span class="text-danger"></span></h5>
+            <!--start date filter starts-->
+            <div class="form-group col-md-2">
+                <h5 style="font-size: 16px;color: #708090">Start Date:<span class="text-danger"></span></h5>
                 <div class="controls">
-                    <input type="date" name="start_date" id="start_date" class="form-control datepicker-autoclose"
-                           placeholder="Please select start date">
-                    <div class="help-block"></div>
+                    <input class="form-control discount_date" type="text" name="start_date" id="start_date" value=""/>
                 </div>
             </div>
-            <div class="form-group col-md-3">
-                <h5 style="font-size: 16px">End Date:<span class="text-danger"></span></h5>
+            <!--start date filter starts-->
+
+            <!--end date filter starts-->
+            <div class="form-group col-md-2">
+                <h5 style="font-size: 16px;color: #708090">End Date:<span class="text-danger"></span></h5>
                 <div class="controls">
-                    <input type="date" name="end_date" id="end_date" class="form-control datepicker-autoclose"
-                           placeholder="Please select end date">
-                    <div class="help-block"></div>
+                    <input class="form-control discount_date" type="text" name="end_date" id="end_date" value=""/>
                 </div>
             </div>
-            <!--date filter ends-->
+            <!--end date filter ends-->
+
             <!--product filter box start-->
-            <div class="form-group col-md-3">
-                <h5 style="font-size: 16px">Choose product:<span class="text-danger"></span></h5>
+            <div class="form-group col-md-5">
+                <h5 style="font-size: 16px;color: #708090">Choose product:<span class="text-danger"></span></h5>
                 <div class="controls">
-                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                        <option value="" selected>choose product</option>
-                        @foreach($product_name as $products)
-                            <option value="{{$products->id}}">{{$products->name}}</option>
+                    <select class="js-example-basic-multiple" name="product_id[]" id="product_id" multiple="multiple">
+                        @foreach($products as $product)
+                            <option value="{{$product->id}}">{{$product->name}}</option>
                         @endforeach
                     </select>
                     <div class="help-block"></div>
                 </div>
             </div>
-            <div class="text-left col-md-2" style="margin-left: 15px">
-                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info">Filter</button>
-            </div>
             <!-- product filter box ends-->
+
+            <!--button-->
+            <div class="text-left col-md-2" style="margin-left: 15px">
+                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top: 19px"><i
+                        class="fa fa-search">&nbsp;</i>Filter
+                </button>
+            </div>
+            <!--button ends-->
         </div>
         <!-- filter ends-->
 
-        <!-- Title -->
-        <div class="hk-pg-header align-items-top">
-            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h2>
-        </div>
-        <!-- /Title -->
-        <!-- Row -->
+        <!--product list starts -->
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted" style="margin-top: 10px"><i class="fa fa-list-alt">&nbsp;Discounts Lists</i></h4>
         <div class="row">
             <div class="col-xl-12">
                 <section class="hk-sec-wrapper">
@@ -63,10 +68,11 @@
                                     <thead class="btn-gradient-info">
                                     <tr>
                                         <th class="text-center text-white">Discount Name</th>
+                                        <th class="text-center text-white">Product Name</th>
                                         <th class="text-center text-white">Discount From</th>
                                         <th class="text-center text-white">Discount To</th>
-                                        <th class="text-center text-white">Discount Percentage</th>
-                                        <th class="text-center text-white">Maximum customers</th>
+                                        <th class="text-center text-white">Discount %</th>
+                                        <th class="text-center text-white">Max customers</th>
                                         <th class="text-center text-white">Action</th>
                                     </tr>
                                     </thead>
@@ -77,11 +83,11 @@
                 </section>
             </div>
         </div>
-        <!-- /Row -->
+        <!--product list ends -->
     </div>
     <!-- /Container -->
 @endsection
-@section("product-js")
+@section("manageDiscount-js")
     <script src={{asset("assets/admin_panel/vendors/datatables.net/js/jquery.dataTables.min.js")}}></script>
     <script src={{asset("assets/admin_panel/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js")}}></script>
     <script src={{asset("assets/admin_panel/vendors/datatables.net-dt/js/dataTables.dataTables.min.js")}}></script>
@@ -99,15 +105,43 @@
     <script src={{asset("assets/admin_panel/dist/js/dataTables-data.js")}}></script>
 
     //select two CDN
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
+    <!-- Daterangepicker JavaScript -->
+    <script src={{asset("assets/admin_panel/vendors/moment/min/moment.min.js")}}></script>
+    <script src={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.js")}}></script>
+    <script src={{asset("assets/admin_panel/dist/js/daterangepicker-data.js")}}></script>
+
     <script>
-        $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
+        $(document).ready(function () {
+            $('.discount_date').daterangepicker({
+                autoUpdateInput: false,
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('#start_date').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+
+            $('#end_date').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
         });
     </script>
 
+    <!-- select two script-->
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
+    <!-- select two script ends-->
 
     <script>
         $(document).ready(function () {
@@ -130,7 +164,7 @@
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3, 4, 5, 6]
                         }
                     },
                 ],
@@ -141,18 +175,26 @@
                     data: function (d) {
                         d.start_date = $('#start_date').val();
                         d.end_date = $('#end_date').val();
+                        d.pid = $('#product_id').val();
                     }
-                    },
+                },
 
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"}
                 ],
                 columns: [
                     {data: 'name', name: 'name'},
+                    {
+                        'render': function (data, type, row) {
+
+                            return "<b class='text-muted'>" + row.product.name + " </b>";
+                        }
+                    },
                     {data: 'dis_from', name: 'dis_from'},
                     {data: 'dis_to', name: 'dis_to'},
                     {data: 'dis_percentage', name: 'dis_percentage'},
                     {data: 'max_customers', name: 'max_customers'},
+
                     {
                         'render': function (data, type, row) {
                             return '<a class="btn btn-sm btn-gradient-ashes" ' +
@@ -168,11 +210,13 @@
         });
 
 
-        $('#btnFiterSubmitSearch').click(function(){
+        $('#btnFiterSubmitSearch').click(function () {
             $('#user_list_table').DataTable().draw(true);
         });
 
     </script>
+
+
 @endsection
 @section("custom_css")
     <style>

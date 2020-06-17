@@ -15,6 +15,9 @@
         .select2-selection__arrow {
             top: 6px !important;
         }
+        .select2-selection__choice__display{
+            color: #f40600 !important;
+        }
     </style>
 @endsection
 
