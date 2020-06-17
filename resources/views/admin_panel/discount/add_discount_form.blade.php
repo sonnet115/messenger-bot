@@ -4,7 +4,15 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     <link href={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.css")}} rel="stylesheet"
           type="text/css"/>
+    <style>
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top:9px;
+        }
 
+        /*.select2-selection .select2-selection--single{*/
+        /*    height: 42px !important;*/
+        /*}*/
+    </style>
 @endsection
 
 @section("main_content")
@@ -12,7 +20,7 @@
     <div class="container mt-xl-30 mt-sm-30 mt-15">
         <!-- Title -->
         <div class="hk-pg-header align-items-top">
-            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-plus">Add Discount</i>
+            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-plus">{{$discount_details!==null?"Update Discount":"Add Discount"}}</i>
             </h2>
         </div>
         <!-- /Title -->
@@ -23,7 +31,8 @@
                 <section class="hk-sec-wrapper" style="padding-bottom: 0px">
                     <div class="row">
                         <div class="col-sm">
-                            <form action="{{$discount_details!==null?route('discount.update'):route('discount.store')}}" method="post" id="discount_form">
+                            <form action="{{$discount_details!==null?route('discount.update'):route('discount.store')}}"
+                                  method="post" id="discount_form">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label mb-10">Discount name<span
@@ -35,7 +44,8 @@
                                         </div>
                                         <input type="text" id="discount_name" name="discount_name"
                                                placeholder="Enter Discount Name" class="form-control"
-                                               value="{{$discount_details!==null?$discount_details->name:old('name')}}" required>
+                                               value="{{$discount_details!==null?$discount_details->name:old('name')}}"
+                                               required>
                                     </div>
                                     <label for="discount_name" class="error text-danger"></label>
                                     @if($errors->has('discount_name'))
@@ -68,7 +78,8 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <input class="form-control discount_date" type="text" name="discount_to" id="discount_to"
+                                        <input class="form-control discount_date" type="text" name="discount_to"
+                                               id="discount_to"
                                                value="{{$discount_details!==null?$discount_details->dis_to:old('discount_to')}}"/>
                                     </div>
                                     <label class="error text-danger" for="discount_to"></label>
@@ -83,20 +94,32 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-magnet"></i></span>
                                         </div>
-                                        <select class="js-example-basic-multiple" name="product_id" id="product_id">
-                                            <option value="{{$discount_details!=null?$discount_details->pid:""}}" selected>choose product</option>
-                                            <option value="0">product1</option>
-                                            <option value="1">user 2</option>
-                                            <option value="2">watch</option>
-                                            <option value="3">three piece</option>
-                                        </select>
+
+                                        @if($discount_details===null)
+                                            <select class="js-example-basic-multiple" name="product_id" id="product_id">
+                                                <option value="" selected>choose product</option>
+                                                @foreach($product_names as $names)
+                                                    <option value="{{$names->id}}">{{$names->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+
+                                        @if($discount_details!==null)
+                                            <select class="js-example-basic-multiple" name="product_id" id="product_id">
+                                                <option value="" selected>choose product</option>
+                                                @foreach($product_names as $names)
+                                                    <option
+                                                        value="{{$names->id}}" {{$names->id == $discount_details->pid ? "selected": ""}}>{{$names->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
                                     </div>
                                     <label class="error text-danger" for="product_id"></label>
                                     @if($errors->has('product_id'))
                                         <p class="text-danger">{{ $errors->first('product_id') }}</p>
                                     @endif
-
                                 </div>
+
 
                                 <div class="form-group">
                                     <label class="control-label mb-10">Discounts Percentages<span
@@ -137,7 +160,7 @@
 
                                 <div class="form-group text-right">
                                     <button type="submit" class="btn btn-primary mr-10">
-                                        store discounts
+                                        {{$discount_details!==null?"Update":"Store Discount"}}
                                     </button>
                                 </div>
                             </form>
@@ -189,7 +212,7 @@
                 rules: {
                     discount_name: {
                         required: true,
-                        maxlength: 4
+                        maxlength: 50
                     },
 
                     discount_from: {
@@ -205,8 +228,8 @@
                     },
                     discount_percentage: {
                         required: true,
-                        min:1,
-                        max:100
+                        min: 1,
+                        max: 100
                     }
                 },
                 messages: {
@@ -225,8 +248,8 @@
                     },
                     discount_percentage: {
                         required: "Discount percentage is required",
-                        min:"minimum 1% is required",
-                        max:"minimum 100% is required"
+                        min: "minimum 1% is required",
+                        max: "minimum 100% is required"
 
                     },
                 },

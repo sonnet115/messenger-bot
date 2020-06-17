@@ -82,5 +82,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get("get-discount", "Admin_Panel\DiscountController@getDiscount")->name("discount.get");
     });
 
+    //Routes for pre-order
+    Route::group(['prefix' => 'preorder'], function () {
+        //Route::get("add-form", "Admin_Panel\DiscountController@viewAddDiscountForm")->name("discount.add.view");
+        //Route::post("store-discount", "Admin_Panel\DiscountController@storeDiscount")->name("discount.store");
+        Route::get("manage-form", "Admin_Panel\PreorderController@viewPreorderProduct")->name("preorder.manage.view");
+        //Route::post("update-discount", "Admin_Panel\DiscountController@updateDiscount")->name("discount.update");
+        //Route::get("get-discount", "Admin_Panel\DiscountController@getDiscount")->name("discount.get");
+    });
+
 
 });
