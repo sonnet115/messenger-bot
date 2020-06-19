@@ -13,28 +13,36 @@
         <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-filter">&nbsp;Filter Products</i>
         </h4>
         <p style="font-size: 20px">Stock</p>
-        <div class="row">
+        <div class="d-flex flex-wrap">
             <!--stock filter starts-->
-
-            <div class="form-group col-md-2">
+            <div class="form-group p2">
                 <div class="controls">
-                    <input class="form-control discount_date" type="text" name="start_date" id="start_date" value=""/>
+                    <input class="form-control" type="text" name="stock_from"  value=""/>
                 </div>
             </div>
-            <div class="form-group col-md-1">
+            <div class="form-group p-2">
               <p class="text-center font-15">To</p>
             </div>
-
-            <div class="form-group col-md-2">
+            <div class="form-group p2">
                 <div class="controls">
-                    <input class="form-control discount_date" type="text" name="end_date" id="end_date" value=""/>
+                    <input class="form-control" type="text" name="stock_to" id="stock_to" value=""/>
                 </div>
             </div>
             <!--stock filter ends-->
 
+            <!-- state starts-->
+            <div class="form-group pl-2">
+                <select class="form-control"  name="status">
+                        <option value="" selected>Select a status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                </select>
+            </div>
+            <!--state ends-->
+
             <!--button-->
-            <div class="text-left col-md-2" style="margin-left: 15px">
-                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top: 19px"><i
+            <div class="text-left pl-4">
+                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" ><i
                         class="fa fa-search">&nbsp;</i>Filter
                 </button>
             </div>
@@ -93,6 +101,7 @@
         src={{asset("assets/admin_panel/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")}}></script>
     <script src={{asset("assets/admin_panel/dist/js/dataTables-data.js")}}></script>
 
+    <!-- data table-->
     <script>
         $(document).ready(function () {
             $('#user_list_table').DataTable({
@@ -119,7 +128,15 @@
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('product.get') }}',
+                ajax: {
+                    url: "{{ route('product.get') }}",
+                    data:function(d) {
+                        d.stock_from = $("input[name=stock_from]").val();
+                        d.stock_to = $("input[name=stock_to]").val();
+                        d.status = $('select[name=status] option:selected').val();
+
+                    }
+                },
 
                 "columnDefs": [
                     {
@@ -156,6 +173,9 @@
                     $('.dt-buttons > .btn').addClass('btn-outline-light btn-sm');
                 },
             });
+        });
+        $('#btnFiterSubmitSearch').click(function () {
+            $('#user_list_table').DataTable().draw(true);
         });
     </script>
 @endsection
