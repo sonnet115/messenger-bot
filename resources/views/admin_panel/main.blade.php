@@ -170,6 +170,29 @@
                             </li>
                         </ul>
                     </li>
+
+                    {{-- manage discounts--}}
+                    <hr class="nav-separator">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#order_manager">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Manage Orders</span>
+                        </a>
+                        <ul id="order_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "order" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "order.manage.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('order.manage.view')}}"><i
+                                                class="fa fa-user-plus"></i>Order list</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
