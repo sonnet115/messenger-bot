@@ -279,6 +279,7 @@
 @yield("product-js")
 @yield('user-js')
 @yield('discount-js')
+@yield('manageDiscount-js')
 
 </body>
 </html>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin_Panel;
 use App\Discount;
 use App\Http\Controllers\Controller;
 use App\Product;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,9 +24,9 @@ class DiscountController extends Controller
 
     public function viewUpdateDiscount()
     {
-        $data=Product::get('name','id');
+        $products = Product::selectRaw('id, name')->get();
 
-        return view("admin_panel.discount.manage_discount")->with("title", "CBB | manage Discount")->with('product_name',$data);
+        return view("admin_panel.discount.manage_discount")->with("title", "CBB | manage Discount")->with('products', $products);
     }
 
     public function storeDiscount(Request $request)
@@ -60,29 +59,28 @@ class DiscountController extends Controller
 
     public function getDiscount(Request $request)
     {
+        $start_date = "";
+        $end_date = "";
+        $date_range = "";
+        $pid = "";
 
-        //if(request()->has('start_date') && request('start_date') !== "")
-        if(!$request->start_date){
-            return datatables(Discount::selectRaw("id,name,dis_from,dis_to,dis_percentage,max_customers")->whereRaw(1)->orderBy('id', 'asc'))->toJson();
-        }
-        else{
-            $postsQuery = Discount::query();
-            $start_date = (!empty($_GET["start_date"])) ? ($_GET["start_date"]) : ('');
-            $end_date = (!empty($_GET["end_date"])) ? ($_GET["end_date"]) : ('');
-
-            if ($start_date && $end_date) {
-
-                $start_date = date('Y-m-d', strtotime($start_date));
-                $end_date = date('Y-m-d', strtotime($end_date));
-
-                $postsQuery->whereRaw("date(discounts.dis_from) >= '" . $start_date . "' AND date(discounts.dis_to) <= '" . $end_date . "'");
-            }
-            $posts = $postsQuery->select('*');
-            return datatables()->of($posts)
-                ->make(true);
+        if (request()->has('start_date') && request('start_date') != null && request('end_date')==null) {
+            $start_date = " AND dis_from = '" . request('start_date') . "'";
         }
 
+        if (request()->has('end_date') && request('end_date') != null && request('start_date')==null) {
+            $end_date = " AND dis_to = '" . request('end_date') . "'";
+        }
 
+        if (request()->has('start_date') && request()->has('end_date') && request('start_date') != null && request('end_date') != null) {
+            $date_range = " AND dis_from >= '" . request('start_date') . "' AND dis_to <= '" . request('end_date') . "'";
+        }
+
+        if (request()->has('pid') && request('pid') != "") {
+            $pid = " and pid IN(" . implode(',', request('pid')) . ")";
+        }
+
+        return datatables(Discount::selectRaw("*")->whereRaw(1 . $date_range . $pid . $start_date . $end_date )->orderBy('id', 'asc')->with('product'))->toJson();
     }
 
     public function updateDiscount(Request $request)

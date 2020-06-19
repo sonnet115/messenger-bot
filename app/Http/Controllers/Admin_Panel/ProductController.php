@@ -71,12 +71,28 @@ class ProductController extends Controller
 
     public function viewUpdateProduct()
     {
-        return view("admin_panel.product.manage_product")->with("title", "CBB | Manage Product");;
+        return view("admin_panel.product.manage_product")->with("title", "CBB | Manage Product");
     }
 
-    public function getProduct()
+    public function getProduct(Request $request)
     {
-        return datatables(Product::selectRaw(" * ")->whereRaw(1)->orderBy('id', 'asc')->with("images"))->toJson();
+        $stock = "";
+        $status= "";
+
+        //filter option for stock from stock to and status
+        if (request()->has('stock_from') && request()->has('stock_to') && request('stock_from') != null
+            && request('stock_to') != null)
+        {
+            $stock = " AND stock >= " . request('stock_from') . " AND stock <= " . request('stock_to');
+        }
+
+        if(request()->has('status') && request('status')!=null){
+            $status = " AND state = " . request('status');
+        }
+
+        return datatables(Product::selectRaw(" * ")->whereRaw(1 . $stock . $status )->orderBy('id', 'asc')->with("images"))->toJson();
+
+
     }
 
     public function updateProduct(Request $request)
@@ -166,7 +182,7 @@ class ProductController extends Controller
         if ($productImage) {
             $productImage->image_url = $shop_name . '/' . $image_name;
             $productImage->save();
-        }else{
+        } else {
             $productImage = new ProductImage();
             $productImage->pid = $request->product_id;
             $productImage->image_url = $shop_name . '/' . $image_name;
