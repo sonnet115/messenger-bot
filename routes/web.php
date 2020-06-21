@@ -14,12 +14,12 @@
 use App\Http\Middleware\VerifyShopID;
 
 //Route for verification
-Route::get("bot/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
+Route::get("bot/{app_id}/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
 //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
-Route::post("bot/verify-web-hook", "Bot\BotController@verifyWebhook");
+Route::post("bot/{app_id}/verify-web-hook", "Bot\BotController@verifyWebhook");
 
 Route::group(['middleware' => 'verify.shop.id'], function () {
-    Route::group(['prefix' => 'bot'], function () {
+    Route::group(['prefix' => 'bot/{app_id}'], function () {
 
         //Routes for place orders
         Route::get("cart/{id}", "Bot\OrderController@viewOrderForm")->name("cart.show");

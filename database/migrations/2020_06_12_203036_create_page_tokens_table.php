@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomersShopsTable extends Migration
+class CreatePageTokensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateCustomersShopsTable extends Migration
      */
     public function up()
     {
-        Schema::create('customers_shops', function (Blueprint $table) {
+        Schema::create('page_tokens', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('customer_id');
-            $table->smallInteger('shop_id');
+            $table->text('page_token');
+            $table->string('app_id', 100);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateCustomersShopsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers_shops');
+        Schema::dropIfExists('page_tokens');
     }
 }

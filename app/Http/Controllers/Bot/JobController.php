@@ -15,9 +15,9 @@ class JobController extends Controller
         dispatch(new OrderHandler($order_data))->delay(now()->addSeconds(1));
     }
 
-    public function sendReceiptJob($recipient_id, $placed_order_data)
+    public function sendReceiptJob($recipient_id, $placed_order_data, $app_id)
     {
-        dispatch(new ReceiptHandler($recipient_id, $placed_order_data))->delay(now()->addSeconds(1));
+        dispatch(new ReceiptHandler($recipient_id, $placed_order_data, $app_id))->delay(now()->addSeconds(1));
     }
 
     public function storePreOrderJob($order_data)

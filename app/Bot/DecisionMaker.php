@@ -9,13 +9,17 @@ class DecisionMaker
     private $common;
     private $handover;
     private $text_message;
+    private $app_id;
+    private $page_token;
 
-    public function __construct($user_response, $recipientId)
+    public function __construct($user_response, $recipientId, $app_id, $page_token)
     {
         $this->user_response = $user_response;
         $this->recipientId = $recipientId;
+        $this->page_token = $page_token;
+        $this->app_id = $app_id;
 
-        $this->common = new Common();
+        $this->common = new Common($this->page_token);
         $this->handover = new Handover($recipientId);
         $this->text_message = new TextMessages($recipientId);
     }
@@ -67,7 +71,7 @@ class DecisionMaker
 
     private function sendTemplate($template_type)
     {
-        $form_template = new Template($this->recipientId);
+        $form_template = new Template($this->recipientId, $this->app_id);
 
         if ($template_type == "VIEW_CART") {
             $messageData = $form_template->viewCartTemplate();

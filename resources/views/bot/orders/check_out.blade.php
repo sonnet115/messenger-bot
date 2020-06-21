@@ -103,6 +103,7 @@
         </div>
     </div>
     <!-- The Notification Modal Ends-->
+    <input type="hidden" value="{{$app_id}}" id="app_id">
 @endsection
 
 @section('check-out-js')
@@ -110,11 +111,11 @@
         $(document).ready(function () {
             let customer_fb_id = $("input[name=customer_fb_id]").val();
             let base_url = '{{env("APP_URL")}}';
-            let product_search_url = base_url + "bot/product-search-form/" + customer_fb_id;
+            let product_search_url = base_url + "bot/" + $("#app_id").val() + "/product-search-form/" + customer_fb_id;
             let product_info_container = $("#product_info_container");
 
             $.ajax({
-                url: base_url + 'bot/get-cart-products',
+                url: base_url + 'bot/' + $("#app_id").val() + '/get-cart-products',
                 type: "GET",
                 data: {
                     "customer_fb_id": customer_fb_id
@@ -144,7 +145,7 @@
                                 let delete_btn = $(this);
                                 delete_btn.html("<i class='fas fa-sync fa-spin'></i>");
                                 $.ajax({
-                                    url: base_url + 'bot/remove-cart-product',
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/remove-cart-product',
                                     type: "GET",
                                     data: {
                                         "product_code": result[i].products.code,
@@ -182,7 +183,7 @@
                                 let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
                                 let new_qty = parseInt(qty_container.text()) + 1;
                                 $.ajax({
-                                    url: base_url + 'bot/check-qty',
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/check-qty',
                                     type: "GET",
                                     data: {
                                         "product_code": result[i].products.code
@@ -220,7 +221,7 @@
                                 } else {
                                     decrement_btn.html("<i class='fas fa-spinner fa-spin'></i>");
                                     $.ajax({
-                                        url: base_url + 'bot/check-qty',
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/check-qty',
                                         type: "GET",
                                         data: {
                                             "product_code": result[i].products.code
@@ -287,7 +288,7 @@
                             }
 
                             $.ajax({
-                                url: base_url + 'bot/order-store',
+                                url: base_url + 'bot/' + $("#app_id").val() + '/order-store',
                                 type: "GET",
                                 data: {
                                     'first_name': first_name,

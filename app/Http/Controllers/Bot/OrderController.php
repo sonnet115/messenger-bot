@@ -22,18 +22,27 @@ class OrderController extends Controller
     private $text_message;
     private $template;
     private $job_controller;
+    private $customer_id_segment = 4;
+    private $app_id_segment = 2;
+    private $customer_id;
+    private $app_id;
+    private $shop_id;
 
     public function __construct()
     {
-        $this->common = new Common();
+        $this->customer_id = request()->segment($this->customer_id_segment);
+        $this->app_id = request()->segment($this->app_id_segment);
+        $shop = Shop::where('app_id', $this->app_id)->first();
+        $this->shop_id = $shop->id;
+
+        $this->common = new Common(request()->segment($this->app_id_segment));
         $this->job_controller = new JobController();
     }
 
     public function viewOrderForm(Request $request)
     {
-        $customer_id = $request->segment(3);
-        $get_customer_info = Customer::where('fb_id', $customer_id)->first();
-        return view("bot.orders.check_out")->with("customer_info", $get_customer_info);
+        $get_customer_info = Customer::where('fb_id', $this->customer_id)->first();
+        return view("bot.orders.check_out")->with("customer_info", $get_customer_info)->with('app_id', $this->app_id);
     }
 
     public function storeOrder(Request $request)
@@ -45,8 +54,7 @@ class OrderController extends Controller
     public function processOrder($data)
     {
         $this->text_message = new TextMessages($data['customer_fb_id']);
-        $this->template = new Template($data['customer_fb_id']);
-        $shop_id = Shop::where('shop_unique_id', env('SHOP_UNIQUE_ID'))->first();
+        $this->template = new Template($data['customer_fb_id'], $this->app_id);
 
         DB::beginTransaction();
         try {
@@ -71,7 +79,7 @@ class OrderController extends Controller
             $order->contact = $data['contact'];
             $order->shipping_address = $data['shipping_address'];
             $order->billing_address = $data['billing_address'];
-            $order->shop_id = $shop_id->id;
+            $order->shop_id = $this->shop_id;
             $order->save();
             $order_id = $order->id;
 
@@ -138,12 +146,12 @@ class OrderController extends Controller
     public function processReceipt($recipient_id, $order_code)
     {
         $placed_order_data = Order::where('code', $order_code)->with('ordered_products')->first();
-        $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data);
+        $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data, $this->app_id);
     }
 
     public function getProductCodeAndPrice($product_code)
     {
-        return Product::select('id', 'price', 'stock')->where('code', $product_code)->with('discounts')->first();
+        return Product::select('id', 'price', 'stock')->where('code', $product_code)->where('shop_id', $this->shop_id)->with('discounts')->first();
     }
 
     public function updateProductStock($product_id, $qty)
@@ -161,7 +169,7 @@ class OrderController extends Controller
 
     public function checkProductQty(Request $request)
     {
-        return Product::select('stock')->where('code', $request->product_code)->first();
+        return Product::select('stock')->where('code', $request->product_code)->where('shop_id', $this->shop_id)->first();
     }
 
     public function calculateDiscountAmount($product_price, $dis_percentage)
@@ -186,7 +194,7 @@ class OrderController extends Controller
     public function storePreOrder(Request $request)
     {
         $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
-        $product_id = Product::select('id')->where('code', $request->pre_order_product_code)->first();
+        $product_id = Product::select('id')->where('code', $request->pre_order_product_code)->where('shop_id', $this->shop_id)->first();
         $pre_order_exists = PreOrder::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
 
         if ($pre_order_exists) {
@@ -199,11 +207,10 @@ class OrderController extends Controller
 
     public function processPreOrder($data)
     {
-        $shop_id = Shop::where('shop_unique_id', env('SHOP_UNIQUE_ID'))->first();
         try {
             $this->text_message = new TextMessages($data['customer_fb_id']);
             $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
-            $product_id = Product::select('id')->where('code', $data['pre_order_product_code'])->first();
+            $product_id = Product::select('id')->where('code', $data['pre_order_product_code'])->where('shop_id', $this->shop_id)->first();
             $pre_order_exists = PreOrder::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
 
             if (!$pre_order_exists) {
@@ -211,7 +218,7 @@ class OrderController extends Controller
                 $pre_order->pid = $product_id->id;
                 $pre_order->customer_id = $customer_id->id;
                 $pre_order->customer_fb_id = $data['customer_fb_id'];
-                $pre_order->shop_id = $shop_id;
+                $pre_order->shop_id = $this->shop_id;
                 $pre_order->save();
             }
         } catch (\Exception $e) {
@@ -238,16 +245,15 @@ class OrderController extends Controller
         try {
             $this->text_message = new TextMessages($data['customer_fb_id']);
             $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
-            $product_id = Product::select('id')->where('code', $data['cart_product_code'])->first();
+            $product_id = Product::select('id')->where('code', $data['cart_product_code'])->where('shop_id', $this->shop_id)->first();
             $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
-            $shop_id = Shop::where('shop_unique_id', env('SHOP_UNIQUE_ID'))->first();
 
             if (!$product_exists_in_cart) {
                 $cart = new Cart();
                 $cart->pid = $product_id->id;
                 $cart->customer_id = $customer_id->id;
                 $cart->customer_fb_id = $data['customer_fb_id'];
-                $cart->shop_id = $shop_id->id;
+                $cart->shop_id = $this->shop_id;
                 $cart->save();
             }
         } catch (\Exception $e) {
@@ -272,7 +278,7 @@ class OrderController extends Controller
 
     public function processRemoveCartProducts($product_code, $customer_fb_id)
     {
-        $product_id = Product::select('id')->where('code', $product_code)->first();
+        $product_id = Product::select('id')->where('code', $product_code)->where('shop_id', $this->shop_id)->first();
         return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
     }
 

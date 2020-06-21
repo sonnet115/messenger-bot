@@ -5,10 +5,12 @@ namespace App\Bot;
 class Template
 {
     private $recipientId;
+    private $app_id;
 
-    public function __construct($recipientId)
+    public function __construct($recipientId, $app_id)
     {
         $this->recipientId = $recipientId;
+        $this->app_id = $app_id;
     }
 
     public function orderProductTemplate()
@@ -26,7 +28,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL") . "bot/product-search-form/" . $this->recipientId,
+                                "url" => env("APP_URL") . "bot/" . $this->app_id . "/product-search-form/" . $this->recipientId,
                                 "title" => "Order Product",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
@@ -53,7 +55,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL") . "bot/product-search-form/" . $this->recipientId,
+                                "url" => env("APP_URL") . "bot/" . $this->app_id . "/product-search-form/" . $this->recipientId,
                                 "title" => "Search Product",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
@@ -80,7 +82,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL") . "bot/cart/" . $this->recipientId,
+                                "url" => env("APP_URL") . "bot/" . $this->app_id . "/cart/" . $this->recipientId,
                                 "title" => "View Cart",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
@@ -107,7 +109,7 @@ class Template
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL") . "bot/track-order-form/" . $this->recipientId,
+                                "url" => env("APP_URL") . "bot/" . $this->app_id . "/track-order-form/" . $this->recipientId,
                                 "title" => "Track Order",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",

@@ -20,6 +20,8 @@ class CreateShopsTable extends Migration
             $table->string('shop_address', '100');
             $table->text('shop_web_link');
             $table->string('shop_unique_id', 50);
+            $table->text('page_token');
+            $table->string('app_id', 100);
             $table->string('owner_name', '30');
             $table->string('owner_contact', '15');
             $table->timestamps();

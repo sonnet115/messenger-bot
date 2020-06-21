@@ -20,10 +20,10 @@ class ReceiptHandler implements ShouldQueue
     private $text_message;
     private $order_data;
 
-    public function __construct($recipient_id, $placed_order_data)
+    public function __construct($recipient_id, $placed_order_data, $app_id)
     {
         $this->order_data = $placed_order_data;
-        $this->common = new Common();
+        $this->common = new Common($app_id);
         $this->receipt = new Receipt($recipient_id, $placed_order_data);
         $this->text_message = new TextMessages($recipient_id);
     }

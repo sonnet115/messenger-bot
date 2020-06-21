@@ -84,6 +84,7 @@
     <!-- The Notification Modal Ends-->
 
     <input type="hidden" value="{{$customer_id}}" id="customer_id">
+    <input type="hidden" value="{{$app_id}}" id="app_id">
 @endsection
 
 @section('product-search-js')
@@ -101,7 +102,7 @@
 
             $("#search").on('click', function () {
                 let product_code = $("input[name='product_code']").val();
-                const cart_url = base_url + "bot/cart/" + $("#customer_id").val();
+                const cart_url = base_url + "bot/" + $("#app_id").val() + "/cart/" + $("#customer_id").val();
 
                 let search_btn = $(this);
                 let product_container = $("#product_container");
@@ -112,7 +113,7 @@
                     search_btn.html("Searching <i class='fas fa-spinner fa-pulse'></i>");
                     $("#searched_product_code").html(product_code);
                     $.ajax({
-                        url: base_url + 'bot/get-product',
+                        url: base_url + 'bot/' + $("#app_id").val() + '/get-product',
                         type: "GET",
                         data: {
                             'product_code': product_code,
@@ -136,7 +137,7 @@
                                         button.html("Processing...")
 
                                         $.ajax({
-                                            url: base_url + 'bot/pre-order',
+                                            url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
                                             type: "GET",
                                             data: {
                                                 'pre_order_product_code': pre_order_product_code,
@@ -159,7 +160,7 @@
                                         add_to_cart_button.html("Adding...");
 
                                         $.ajax({
-                                            url: base_url + 'bot/add-to-cart',
+                                            url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
                                             type: "GET",
                                             data: {
                                                 'cart_product_code': cart_product_code,
@@ -220,7 +221,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: base_url + 'bot/pre-order',
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
                                         type: "GET",
                                         data: {
                                             'pre_order_product_code': pre_order_product_code,
@@ -241,7 +242,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: base_url + 'bot/add-to-cart',
+                                        url: base_url + 'bot/' + app_id + '/add-to-cart',
                                         type: "GET",
                                         data: {
                                             'cart_product_code': cart_product_code,
@@ -296,7 +297,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: base_url + 'bot/pre-order',
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
                                         type: "GET",
                                         data: {
                                             'pre_order_product_code': pre_order_product_code,
@@ -317,7 +318,7 @@
                                     let button = $(this);
 
                                     $.ajax({
-                                        url: base_url + 'bot/add-to-cart',
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
                                         type: "GET",
                                         data: {
                                             'cart_product_code': cart_product_code,
