@@ -379,14 +379,16 @@
 
         function productImage(all_images) {
             let image = '';
+            let image_base_path = "{{asset('images/products')."/"}}";
+            console.log(image_base_path);
             for (let i = 0; i < all_images.length; i++) {
                 if (i === 0) {
                     image += '<div class="carousel-item active">\n' +
-                        '         <img src="' + all_images[i].image_url + '" style="max-height: 170px;">' +
+                        '         <img src="' + image_base_path + all_images[i].image_url + '" style="max-height: 170px;">' +
                         '     </div>';
                 } else {
                     image += '<div class="carousel-item">\n' +
-                        '         <img src="' + all_images[i].image_url + '" style="max-height: 170px;">' +
+                        '         <img src="' + image_base_path + all_images[i].image_url + '" style="max-height: 170px;">' +
                         '     </div>';
                 }
             }

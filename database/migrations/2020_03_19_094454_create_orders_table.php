@@ -17,12 +17,13 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->string('code', 30);
             $table->bigInteger('customer_id');
-            $table->string('billing_address', 150);
-            $table->string('shipping_address', 150);
+            $table->bigInteger('customer_name');
+            $table->string('billing_address', 100);
+            $table->string('shipping_address', 100);
+            $table->string('contact', 15);
+            $table->string('additional_order_details', 255)->nullable();
             $table->tinyInteger('order_status')->default(0);
             $table->integer('status_updated_by')->nullable();
-            $table->float('discount_amount')->default(0);
-            $table->string('additional_order_details', 100);
             $table->smallInteger('shop_id');
             $table->timestamps();
         });

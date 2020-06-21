@@ -9,8 +9,10 @@ use App\Bot\TextMessages;
 use App\Cart;
 use App\Customer;
 use App\Order;
+use App\OrderedProducts;
 use App\PreOrder;
 use App\Product;
+use App\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,6 +46,7 @@ class OrderController extends Controller
     {
         $this->text_message = new TextMessages($data['customer_fb_id']);
         $this->template = new Template($data['customer_fb_id']);
+        $shop_id = Shop::where('shop_unique_id', env('SHOP_UNIQUE_ID'))->first();
 
         DB::beginTransaction();
         try {
@@ -61,10 +64,21 @@ class OrderController extends Controller
             $stock_out_product = array();
             $order_code = time() . "_" . mt_rand(1000, 100000);
 
+            $order = new Order();
+            $order->code = $order_code;
+            $order->customer_name = $data['first_name'] . " " . $data['last_name'];
+            $order->customer_id = $customer_details->id;
+            $order->contact = $data['contact'];
+            $order->shipping_address = $data['shipping_address'];
+            $order->billing_address = $data['billing_address'];
+            $order->shop_id = $shop_id->id;
+            $order->save();
+            $order_id = $order->id;
+
+
             for ($i = 0; $i < sizeof($product_codes); $i++) {
                 if ($product_codes[$i] != null) {
                     $product_details = $this->getProductCodeAndPrice($product_codes[$i]);
-
                     if ($product_qty[$i] == 0 || $product_qty[$i] == "") {
                         $qty = 1;
                     } else {
@@ -86,14 +100,12 @@ class OrderController extends Controller
                         continue;
                     }
 
-                    $order = new Order();
+                    $order = new OrderedProducts();
+                    $order->oid = $order_id;
                     $order->pid = $product_details->id;
-                    $order->order_code = $order_code;
-                    $order->customer_id = $customer_details->id;
-                    $order->product_qty = $qty;
-                    $order->product_price = $product_details->price;
-                    $order->subtotal = $qty * $product_details->price;
-                    $order->discount_amount = $qty * $discount_amount;
+                    $order->quantity = $qty;
+                    $order->price = $product_details->price;
+                    $order->discount = $qty * $discount_amount;
                     $order->save();
 
                     $this->updateProductStock($product_details->id, $qty);
@@ -119,13 +131,13 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
-            $this->common->sendAPIRequest($this->template->orderFormTemplate());
+            $this->common->sendAPIRequest($this->template->orderProductTemplate());
         }
     }
 
     public function processReceipt($recipient_id, $order_code)
     {
-        $placed_order_data = Order::where('order_code', $order_code)->with('products')->with('customers')->get();
+        $placed_order_data = Order::where('code', $order_code)->with('ordered_products')->first();
         $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data);
     }
 
@@ -161,13 +173,13 @@ class OrderController extends Controller
     {
         $customer_fb_id = $request->segment(3);
         $customer_id = Customer::select('id')->where('fb_id', $customer_fb_id)->first();
-        $order_status = Order::where('customer_id', $customer_id->id)->with('products')->get();
+        $order_status = Order::where('customer_id', $customer_id->id)->with('ordered_products')->get();
         return view("bot.orders.track_order_form")->with("orders", $order_status);
     }
 
     public function getOrderStatus(Request $request)
     {
-        $order_status = Order::where('order_code', $request->order_code)->with('products')->get();
+        $order_status = Order::where('code', $request->order_code)->with('ordered_products')->first();
         return response()->json($order_status);
     }
 
@@ -187,6 +199,7 @@ class OrderController extends Controller
 
     public function processPreOrder($data)
     {
+        $shop_id = Shop::where('shop_unique_id', env('SHOP_UNIQUE_ID'))->first();
         try {
             $this->text_message = new TextMessages($data['customer_fb_id']);
             $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
@@ -198,6 +211,7 @@ class OrderController extends Controller
                 $pre_order->pid = $product_id->id;
                 $pre_order->customer_id = $customer_id->id;
                 $pre_order->customer_fb_id = $data['customer_fb_id'];
+                $pre_order->shop_id = $shop_id;
                 $pre_order->save();
             }
         } catch (\Exception $e) {
@@ -226,12 +240,14 @@ class OrderController extends Controller
             $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
             $product_id = Product::select('id')->where('code', $data['cart_product_code'])->first();
             $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
+            $shop_id = Shop::where('shop_unique_id', env('SHOP_UNIQUE_ID'))->first();
 
             if (!$product_exists_in_cart) {
                 $cart = new Cart();
                 $cart->pid = $product_id->id;
                 $cart->customer_id = $customer_id->id;
                 $cart->customer_fb_id = $data['customer_fb_id'];
+                $cart->shop_id = $shop_id->id;
                 $cart->save();
             }
         } catch (\Exception $e) {
@@ -263,7 +279,7 @@ class OrderController extends Controller
     //test function
     public function getTestData()
     {
-        $dd = Order::where('order_code', '1590432293_84634')->with('products')->get();
+        $dd = Order::where('code', '1592421643_26395')->with('ordered_products')->get();
         dd($dd);
 
         $p = array();

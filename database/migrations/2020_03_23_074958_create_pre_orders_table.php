@@ -17,8 +17,8 @@ class CreatePreOrdersTable extends Migration
             $table->increments('id');
             $table->integer('pid');
             $table->bigInteger('customer_id');
-            $table->string('customer_fb_id','100');
-            $table->string('additional_product_details', 100);
+            $table->string('customer_fb_id', '100');
+            $table->string('additional_product_details', 100)->nullable();
             $table->smallInteger('shop_id');
             $table->timestamps();
         });
