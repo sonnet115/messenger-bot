@@ -22,26 +22,28 @@ class OrderController extends Controller
     private $text_message;
     private $template;
     private $job_controller;
-    private $customer_id_segment = 4;
+    private $customer_fb_id_segment = 4;
     private $app_id_segment = 2;
-    private $customer_id;
+    private $customer_fb_id;
     private $app_id;
     private $shop_id;
+    private $page_token;
 
     public function __construct()
     {
-        $this->customer_id = request()->segment($this->customer_id_segment);
+        $this->customer_fb_id = request()->segment($this->customer_fb_id_segment);
         $this->app_id = request()->segment($this->app_id_segment);
         $shop = Shop::where('app_id', $this->app_id)->first();
         $this->shop_id = $shop->id;
+        $this->page_token = $shop->page_token;
 
-        $this->common = new Common(request()->segment($this->app_id_segment));
+        $this->common = new Common($this->page_token);
         $this->job_controller = new JobController();
     }
 
     public function viewOrderForm(Request $request)
     {
-        $get_customer_info = Customer::where('fb_id', $this->customer_id)->first();
+        $get_customer_info = Customer::where('fb_id', $this->customer_fb_id)->first();
         return view("bot.orders.check_out")->with("customer_info", $get_customer_info)->with('app_id', $this->app_id);
     }
 
@@ -146,7 +148,7 @@ class OrderController extends Controller
     public function processReceipt($recipient_id, $order_code)
     {
         $placed_order_data = Order::where('code', $order_code)->with('ordered_products')->first();
-        $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data, $this->app_id);
+        $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data, $this->page_token);
     }
 
     public function getProductCodeAndPrice($product_code)
@@ -179,10 +181,9 @@ class OrderController extends Controller
 
     public function viewTrackOrderForm(Request $request)
     {
-        $customer_fb_id = $request->segment(3);
-        $customer_id = Customer::select('id')->where('fb_id', $customer_fb_id)->first();
+        $customer_id = Customer::select('id')->where('fb_id', $this->customer_fb_id)->first();
         $order_status = Order::where('customer_id', $customer_id->id)->with('ordered_products')->get();
-        return view("bot.orders.track_order_form")->with("orders", $order_status);
+        return view("bot.orders.track_order_form")->with("orders", $order_status)->with("app_id", $this->app_id);
     }
 
     public function getOrderStatus(Request $request)

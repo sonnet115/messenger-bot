@@ -19,11 +19,7 @@
 
                             <div class="row" style="margin:0 auto">
                                 <div id="accordion" style="padding: 10px">
-                                    <?php
-                                    $duplicate_order_code = "";
-                                    ?>
                                     @foreach($orders as $order)
-
                                         <div class="card shadow">
                                             <div class="card-header">
                                                 <a class="text-muted text-center card-link code_container"
@@ -50,6 +46,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" value="{{$app_id}}" id="app_id">
 @endsection
 
 @section('track-order-js')
@@ -75,13 +72,12 @@
 
                 if ($("#order_status_container_" + order_code).children().length <= 0) {
                     $.ajax({
-                        url: base_url + 'bot/get-order-status',
+                        url: base_url + 'bot/' + $("#app_id").val() + '/get-order-status',
                         type: "GET",
                         data: {
                             'order_code': order_code,
                         },
                         success: function (result) {
-                            console.log(result.ordered_products);
                             $("#order_status_container_" + order_code).html("");
                             if (result.ordered_products.length > 0) {
                                 let products = productDetails(result.ordered_products);
