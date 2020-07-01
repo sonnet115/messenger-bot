@@ -13,4 +13,6 @@ class Order extends Model
         return $this->belongsToMany(Product::class, OrderedProducts::class, 'oid', 'pid')
                ->withPivot('quantity', 'price', 'discount', 'product_status');
     }
+
+
 }
