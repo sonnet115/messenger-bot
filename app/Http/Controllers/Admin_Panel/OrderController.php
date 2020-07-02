@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderedProducts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -36,7 +37,8 @@ class OrderController extends Controller
             $order_id= $request->order_id;
             $order=OrderedProducts::where('oid',$order_id)->where('pid',$product_id)->update(['product_status' => $status]);
             if($order){
-                return response()->json($order);
+                $result = DB::table('ordered_products')->select('product_status')->where('oid', $order_id)->where('pid',$product_id)->first();
+                return response()->json($result);
             }
 
 

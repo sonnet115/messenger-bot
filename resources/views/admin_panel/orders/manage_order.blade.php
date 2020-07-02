@@ -274,8 +274,8 @@
         });
 
         //product status in modal
-        $(document).on("change", ".product_status", function () {
-            let product_status = $(this).val();
+        $(document).on("change", ".product_status_select", function () {
+            let product_status_select = $(this).val();
             let product_status_parent = $(this).parent().parent();
             let product_id = product_status_parent.find('.product_id').val();
             let order_id = product_status_parent.find('.order_id').val();
@@ -284,35 +284,61 @@
                 type: "GET",
                 url: "{{route('order.status.get')}}",
                 data: {
-                    product_status: product_status,
+                    product_status: product_status_select,
                     product_id: product_id,
                     order_id: order_id
                 },
                 success: function (response) {
-                    console.log(response);
+                    let product_status = product_status_parent.find('.product_status_td');
+                    if ((response.product_status) === 1) {
+
+                        product_status.html("<span class='badge badge-pill badge-danger'>Avaiable</span>");
+                    }
+                    if ((response.product_status) === 0) {
+                        product_status.html("<span class='badge badge-pill badge-danger'>Unavaiable</span>");
+                    }
+                    if ((response.product_status) === 2) {
+                        product_status.html("<span class='badge badge-pill badge-danger'>Cancelled</span>");
+                    }
+                    //console.log(response);
                 }
             });
         });
 
         //order details functions
         function myOrder(response, i) {
+            let product_status_show = "";
+            let product_status = response.ordered_products[i].pivot.product_status;
+            let selected = "selected";
+            if (product_status === 0) {
+                product_status_show = '<span class="badge badge-pill badge-danger">Unavailable</span>';
+            }
+            if (product_status === 1) {
+                product_status_show = '<span class="badge badge-pill badge-danger">Avaiable</span>';
+            }
+            if (product_status === 2) {
+                product_status_show = '<span class="badge badge-pill badge-danger">Cancelled</span>';
+            }
+
             let row = '<tr>\n' +
-                '                                        <td>' + response.ordered_products[i].name + '</td>\n' +
-                '                                        <td>' + response.ordered_products[i].price + '</td>\n' +
-                '                                        <td>' + response.ordered_products[i].pivot.quantity + '<span>Sets</span></td>\n' +
-                '                                        <td>' + response.ordered_products[i].pivot.discount + '</td>\n' +
-                '                                        <td>' + response.ordered_products[i].pivot.product_status + '</td>\n' +
-                '                                        <td>' +
-                '                                        <select name="cars" class="product_status">\n' +
-                '  <option value="1">Active</option>\n' +
-                '  <option value="2">Inactive</option>\n' +
-                '</select>' +
-                '<input type="text" class="product_id" value="' + response.ordered_products[i].id + '">' +
-                '<input type="text" class="order_id" value="' + response.id + '">' +
-                '</td>\n' +
-                '                                    </tr>';
+            '        <td>' + response.ordered_products[i].name + '</td>\n' +
+            '        <td>' + response.ordered_products[i].price + '</td>\n' +
+            '        <td>' + response.ordered_products[i].pivot.quantity + '<span>Sets</span></td>\n' +
+            '        <td>' + response.ordered_products[i].pivot.discount + '</td>\n' +
+            '        <td class="product_status_td">' + product_status_show + '</td>\n' +
+            '        <td>' +
+            '           <select name="cars" class="product_status_select">\n' +
+            '               <option value="1">Avaiable</option>\n' +
+            '               <option value="0">Unavaiable</option>\n' +
+            '               <option value="2">Cancelled</option>\n' +
+                '           </select>' +
+                '           <input type="hidden" class="product_id" value="' + response.ordered_products[i].id + '">' +
+                '           <input type="hidden" class="order_id" value="' + response.id + '">' +
+                '       </td>\n' +
+                '      </tr>';
             return row;
         }
+
         function myCustomers(response) {
             let customer = '<thead>\n' +
                 '                                        <tr>\n' +
@@ -358,6 +384,7 @@
 
 
         }
+
         function summaryDetails(response) {
             let total_price = 0;
             let total_discount = 0;
