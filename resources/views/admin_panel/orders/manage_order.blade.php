@@ -103,7 +103,7 @@
                                 </table>
                             </div>
                             <!--summary starts-->
-                            <div class="col-4" style="color: #2b383e">
+                            <div class="col-4" style="color: #2b383e" id="summary_details">
                                 {{--                                <div class="border-bottom">--}}
                                 {{--                                    <p style="text-decoration: underline">Summary:</p>--}}
                                 {{--                                    <p>Total Price: <span id="total_price"></span> <span>tk</span></p>--}}
@@ -247,7 +247,7 @@
                     },
 
                     success: function (response) {
-                        // console.log(response);
+                         //console.log(response.ordered_products.pivot.product_status);
                         //order details
                         for (var i = 0; i < response.ordered_products.length; i++) {
                             let row = myOrder(response, i);
@@ -261,13 +261,19 @@
 
                         //summary detsils
                         let summary = summaryDetails(response);
-                        let total_price = summary['total_price'];
+                        let subtotal = summary['total_price'];
                         let total_discount = summary['total_discount'];
-                        let delivery_charge = 60;
-                        let subtotal = (total_price - total_discount) + delivery_charge;
+                        let delivery_charge;
+                        if(subtotal){
+                            delivery_charge = 60;
+                        }else{
+                            delivery_charge = 0;
+                        }
+
+                        let  total_price= (subtotal - total_discount) + delivery_charge;
 
                         let summary_elem = summaryCalculation(subtotal, total_discount, delivery_charge, total_price);
-                        $('#product_table_data').append(summary_elem);
+                        $('#summary_details').html(summary_elem);
                     }
                 });
             })
@@ -289,17 +295,27 @@
                     order_id: order_id
                 },
                 success: function (response) {
+                    //console.log(response);
+
+
                     let product_status = product_status_parent.find('.product_status_td');
                     if ((response.product_status) === 1) {
 
                         product_status.html("<span class='badge badge-pill badge-danger'>Avaiable</span>");
+                        //adjustOnchangeTotalPrice(response);
                     }
                     if ((response.product_status) === 0) {
                         product_status.html("<span class='badge badge-pill badge-danger'>Unavaiable</span>");
+                        //adjustOnchangeTotalPrice(response);
                     }
                     if ((response.product_status) === 2) {
                         product_status.html("<span class='badge badge-pill badge-danger'>Cancelled</span>");
+                        //adjustOnchangeTotalPrice(response);
                     }
+                    adjustOnchangeTotalPrice(response);
+
+
+
                     //console.log(response);
                 }
             });
@@ -328,6 +344,7 @@
             '        <td class="product_status_td">' + product_status_show + '</td>\n' +
             '        <td>' +
             '           <select name="cars" class="product_status_select">\n' +
+            '               <option value="" selected="selected">select ption</option>\n' +
             '               <option value="1">Avaiable</option>\n' +
             '               <option value="0">Unavaiable</option>\n' +
             '               <option value="2">Cancelled</option>\n' +
@@ -368,9 +385,9 @@
             return '<tr>\n' +
                 '                                        <td> <div class="border-bottom">\n' +
                 '                                    <p style="text-decoration: underline">Summary:</p>\n' +
-                '                                    <p>Subtotal: <span>' + subtotal + '</span> <span>tk</span></p>\n' +
-                '                                    <p>Discounts: <span>-</span> <span>' + discount + '</span> <span>tk</span></p>\n' +
-                '                                    <p>Delivery charge: <span>' + delivery + '</span></p>\n' +
+                '                                    <p>Subtotal: <span id="subtotal_id">' + subtotal + '</span> <span>tk</span></p>\n' +
+                '                                    <p>Discounts: <span>-</span> <span id="discount_id">' + discount + '</span> <span>tk</span></p>\n' +
+                '                                    <p>Delivery charge: <span id="deliveryCharge_id">' + delivery + '</span></p>\n' +
                 '                                </div>\n' +
                 '                                <div>\n' +
                 '                                    <p>Total: <span>' + total + '</span></p>\n' +
@@ -389,13 +406,69 @@
             let total_price = 0;
             let total_discount = 0;
             for (var i = 0; i < response.ordered_products.length; i++) {
-                let quanitty = response.ordered_products[i].pivot.quantity;
-                let price = response.ordered_products[i].pivot.price;
-                let discount = response.ordered_products[i].pivot.discount;
-                total_discount = total_discount + discount;
-                total_price = total_price + price * quanitty;
+                if(response.ordered_products[i].pivot.product_status==1){
+                    let quanitty = response.ordered_products[i].pivot.quantity;
+                    let price = response.ordered_products[i].pivot.price;
+                    let discount = response.ordered_products[i].pivot.discount;
+                    total_discount = total_discount + discount;
+                    total_price = total_price + price * quanitty;
+                }
+
             }
             return {total_price: total_price, total_discount: total_discount};
+        }
+
+        function adjustOnchangeTotalPrice(response){
+            let adjust_subtotal,adjust_discount,new_discount;
+            let total;
+            var subtotal = document.getElementById("subtotal_id").innerText;
+            var discount = document.getElementById("discount_id").innerText;
+            var delivery = document.getElementById("deliveryCharge_id").innerText;
+
+
+            let chage_quantity=response.quantity;
+            let change_price=response.price;
+            let chnage_discount=response.discount;
+
+
+            let persed_quantity=parseFloat(chage_quantity);
+            let persed_price=parseFloat(change_price);
+            subtotal= parseFloat(subtotal);
+            let persed_discount=parseFloat(chnage_discount);
+            let persed_old_discount=parseFloat(discount);
+            let persed_delivery=parseFloat(delivery);
+           // console.log(typeof (subtotal));
+            //console.log(persed_quantity);
+            //console.log(persed_discount);
+
+            if(response.product_status===1){
+                adjust_subtotal=persed_quantity*persed_price;
+                adjust_discount=persed_quantity*persed_discount;
+                subtotal=subtotal+adjust_subtotal;
+                new_discount=persed_old_discount+adjust_discount;
+
+            }
+
+            if(response.product_status===0){
+                adjust_subtotal=persed_quantity*persed_price;
+                adjust_discount=persed_quantity*persed_discount;
+                subtotal=subtotal-adjust_subtotal;
+                new_discount=persed_old_discount-adjust_discount;
+               // console.log(new_discount);
+            }
+            if(response.product_status===2){
+                adjust_subtotal=persed_quantity*persed_price;
+                adjust_discount=persed_quantity*persed_discount;
+                subtotal=subtotal-adjust_subtotal;
+                new_discount=persed_old_discount-adjust_discount;
+                //console.log(subtotal);
+            }
+             if(persed_delivery===0){
+                 persed_delivery=60;
+             }
+             total= (subtotal - new_discount) + persed_delivery;
+             //console.log(total);
+            $('#summary_details').html(summaryCalculation(subtotal, new_discount, persed_delivery, total));
         }
 
         //for filtered datatable draw

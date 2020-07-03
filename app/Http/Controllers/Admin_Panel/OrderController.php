@@ -37,7 +37,8 @@ class OrderController extends Controller
             $order_id= $request->order_id;
             $order=OrderedProducts::where('oid',$order_id)->where('pid',$product_id)->update(['product_status' => $status]);
             if($order){
-                $result = DB::table('ordered_products')->select('product_status')->where('oid', $order_id)->where('pid',$product_id)->first();
+                $result = DB::table('ordered_products')->select('product_status','quantity','price','discount')
+                    ->where('oid', $order_id)->where('pid',$product_id)->first();
                 return response()->json($result);
             }
 
