@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Order extends Model
 {
@@ -14,5 +15,8 @@ class Order extends Model
                ->withPivot('quantity', 'price', 'discount', 'product_status');
     }
 
+    public function status_updated_by(){
+        return $this->hasOne(User::class ,'id','status_updated_by');
+    }
 
 }

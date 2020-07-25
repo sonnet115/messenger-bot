@@ -79,14 +79,15 @@ Route::group(['middleware' => 'verify.shop.id'], function () {
 
         //Routes for order
         Route::group(['prefix' => 'order'], function () {
-           // Route::get("add-form", "Admin_Panel\DiscountController@viewAddDiscountForm")->name("discount.add.view");
-           // Route::post("store-discount", "Admin_Panel\DiscountController@storeDiscount")->name("discount.store");
             Route::get("manage-form", "Admin_Panel\OrderController@viewUpdateOrder")->name("order.manage.view");
             //Route::post("update-discount", "Admin_Panel\DiscountController@updateDiscount")->name("discount.update");
             Route::get("get-order", "Admin_Panel\OrderController@getOrders")->name("order.get");
             Route::get("get-order-details", "Admin_Panel\OrderController@getOrdersDetails")->name("order.details.get");
             Route::get("get-order-status", "Admin_Panel\OrderController@getProductStatus")->name("order.status.get");
+            Route::get("get-click", "Admin_Panel\OrderController@realtion");
         });
 
     });
+
+
 });

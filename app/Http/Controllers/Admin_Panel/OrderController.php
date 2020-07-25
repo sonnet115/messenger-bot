@@ -7,6 +7,7 @@ use App\Order;
 use App\OrderedProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\User;
 
 class OrderController extends Controller
 {
@@ -15,10 +16,13 @@ class OrderController extends Controller
     }
 
     public function getOrders(){
-        return datatables(Order::selectRaw("*")->whereRaw(1)->orderBy('id', 'asc'))->toJson();
+//        $status_updated_by = User::find()->status_updated_by;
+//        dd($status_updated_by);
+        return datatables(Order::selectRaw("*")->whereRaw(1)->orderBy('id', 'asc')->with('status_updated_by'))->toJson();
 
     }
     public function getOrdersDetails(Request $request){
+
            // $order =new Order();
             //$data=Order::all();
             $order_id=$request->order_id;
@@ -43,5 +47,10 @@ class OrderController extends Controller
             }
 
 
+    }
+
+    public function realtion(){
+        $status_updated_by = Order::selectRaw("*")->whereRaw(1)->orderBy('id', 'asc')->with('status_updated_by')->get();
+        dd($status_updated_by);
     }
 }
