@@ -85,7 +85,6 @@ class OrderController extends Controller
             $order->save();
             $order_id = $order->id;
 
-
             for ($i = 0; $i < sizeof($product_codes); $i++) {
                 if ($product_codes[$i] != null) {
                     $product_details = $this->getProductCodeAndPrice($product_codes[$i]);
@@ -140,6 +139,7 @@ class OrderController extends Controller
             $this->processReceipt($data['customer_fb_id'], $order_code);
         } catch (\Exception $e) {
             DB::rollBack();
+//            dd($e);
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
             $this->common->sendAPIRequest($this->template->orderProductTemplate());
         }

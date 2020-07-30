@@ -55,11 +55,13 @@ class ProductController extends Controller
             $product->save();
             $product_id = $product->id;
 
+
             //product image save
             $this->storeProductImage($request, $product_id, 'product_image_1', 1);
             $this->storeProductImage($request, $product_id, 'product_image_2', 2);
 
             DB::commit();
+            Session::flash('success_message', 'Product added successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();

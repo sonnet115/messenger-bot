@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->string('code', 30);
             $table->bigInteger('customer_id');
-            $table->bigInteger('customer_name');
+            $table->string('customer_name', 50);
             $table->string('billing_address', 100);
             $table->string('shipping_address', 100);
             $table->string('contact', 15);

@@ -184,6 +184,7 @@
                                 search_btn.html('<i class="fa fa-search"></i> Search Product');
                             } else {
                                 showNotification("No Products Found", "text-danger", null);
+                                search_btn.html('<i class="fa fa-search"></i> Search Product');
                             }
 
                         }

@@ -21,9 +21,8 @@ class ProductController extends Controller
     {
         $shop = Shop::where('app_id', $request->segment(2))->first();
         $products = Product::where('code', $request->product_code)->where('shop_id', $shop->id)->where('state', 1)
-            ->orWhere('name', 'like', '%' . $request->product_code . '%')
-            ->where('shop_id', $shop->id)
-            ->where('state', 1)
+            ->orWhere('name', 'like', '%' . $request->product_code . '%')->where('shop_id', $shop->id)  ->where('state', 1)
+            ->orWhere('code', 'like', '%' . $request->product_code . '%')->where('shop_id', $shop->id)  ->where('state', 1)
             ->with('images')
             ->with('discounts')->paginate(10);
         return response()->json($products);
