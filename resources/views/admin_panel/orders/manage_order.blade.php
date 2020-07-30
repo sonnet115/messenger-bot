@@ -2,8 +2,9 @@
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
+        <a href="get-clcik"> click</a>
         <!-- Order List starts -->
-        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted" ><i class="fa fa-list-alt"> Product List</i></h4>
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h4>
         <div class="row">
             <div class="col-xl-12">
                 <section class="hk-sec-wrapper">
@@ -17,11 +18,10 @@
                                     <thead class="btn-gradient-info">
                                     <tr>
                                         <th class="text-center text-white" data-priority="1">Order Code</th>
-                                        <th class="text-center text-white">Customer Name</th>
-                                        <th class="text-center text-white">Contact number</th>
-                                        <th class="text-center text-white">Order Status</th>
+                                        <th class="text-center text-white">Ordered Date</th>
                                         <th class="text-center text-white">Status Updated By</th>
-                                        <th class="text-center text-white">View</th>
+                                        <th class="text-center text-white">Product Details</th>
+                                        <th class="text-center text-white">Order Status</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -34,7 +34,7 @@
         <!-- Order list ends -->
         <!-- modal body starts-->
         <div class="modal fade" id="myModal">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
 
                     <!-- Modal Header -->
@@ -44,45 +44,78 @@
                     </div>
 
                     <!-- Modal body -->
-                    <div class="modal-body">
+                    <div class="modal-body" style="overflow: auto">
                         <div class="row">
-                            <div class="col-sm-8">
+                            <div class="col-12 col-lg-8">
+                                <p style="color: #2b383e;font-size: 17px;text-decoration: underline">Ordered
+                                    Products:</p>
+                                <br>
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
+                                        <th class="font-weight-bold">Name</th>
+                                        <th class="font-weight-bold">Price</th>
+                                        <th class="font-weight-bold">Quantity</th>
+                                        <th class="font-weight-bold">Discounts</th>
+                                        <th class="font-weight-bold">Status</th>
+                                        <th class="font-weight-bold">Action</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                    </tr>
+                                    <tbody id="product_table_data">
+                                    {{--                                        <tr class="tt">--}}
+                                    {{--                                            <td>Pakisthani three piece</td>--}}
+                                    {{--                                            <td>2000 BDT</td>--}}
+                                    {{--                                            <td>2 <span>Sets</span></td>--}}
+                                    {{--                                            <td>100 BDT</td>--}}
+                                    {{--                                            <td>Pending</td>--}}
+                                    {{--                                            <td><button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button></td>--}}
+                                    {{--                                        </tr>--}}
+
+                                    {{--                                    <tr>--}}
+                                    {{--                                        <td>Pakisthani three piece</td>--}}
+                                    {{--                                        <td>2000 BDT</td>--}}
+                                    {{--                                        <td>2 <span>Sets</span></td>--}}
+                                    {{--                                        <td>100 BDT</td>--}}
+                                    {{--                                        <td>Pending</td>--}}
+                                    {{--                                        <td><button class="btn btn-xs btn-danger">Remove</button></td>--}}
+                                    {{--                                    </tr>--}}
+
                                     </tbody>
                                 </table>
+
                             </div>
-                            <div class="col-sm-4">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    </tbody>
+                            <div class="col-12 col-lg-4">
+                                <p style="color: #2b383e;font-size: 17px;text-decoration: underline">Customer
+                                    Details</p>
+                                <br>
+                                <table class="table table-bordered" style="padding-left: 10px" id="customer_table_data">
+                                    {{--                                    <thead>--}}
+                                    {{--                                        <tr>--}}
+                                    {{--                                            <th>Name</th>--}}
+                                    {{--                                            <th>Details</th>--}}
+                                    {{--                                        </tr>--}}
+                                    {{--                                    </thead>--}}
+                                    {{--                                    <tbody >--}}
+                                    {{--                                        <tr>--}}
+                                    {{--                                            <td>Mark</td>--}}
+                                    {{--                                            <td>Sayla</td>--}}
+                                    {{--                                        </tr>--}}
+                                    {{--                                    </tbody>--}}
                                 </table>
                             </div>
+                            <!--summary starts-->
+                            <div class="col-4" style="color: #2b383e" id="summary_details">
+                                {{--                                <div class="border-bottom">--}}
+                                {{--                                    <p style="text-decoration: underline">Summary:</p>--}}
+                                {{--                                    <p>Total Price: <span id="total_price"></span> <span>tk</span></p>--}}
+                                {{--                                    <p>Discounts: <span>-</span> <span id="total_discount"></span> <span>tk</span></p>--}}
+                                {{--                                    <p>Delivery charge: <span>60 tk</span></p>--}}
+                                {{--                                </div>--}}
+                                {{--                                <div>--}}
+                                {{--                                    <p>subtotal: <span id="subtotal"></span></p>--}}
+                                {{--                                </div>--}}
+                            </div>
+                            <!-- summary ends-->
                         </div>
                     </div>
 
@@ -136,7 +169,7 @@
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3, 4]
                         }
                     },
                 ],
@@ -144,11 +177,10 @@
                 serverSide: true,
                 ajax: {
                     url: "{{ route('order.get') }}",
-                    data:function(d) {
+                    data: function (d) {
                         //d.stock_from = $("input[name=stock_from]").val();
                         //d.stock_to = $("input[name=stock_to]").val();
                         //d.status = $('select[name=status] option:selected').val();
-
                     }
                 },
 
@@ -159,32 +191,296 @@
                     },
                     {
                         "className": "dt-center",
-                        "targets": [2, 3, 4, 5]
+                        "targets": [2, 3, 4]
                     }
                 ],
+
                 columns: [
                     {data: 'code', name: 'code'},
-                    {data: 'customer_name', name: 'customer_name'},
-                    {data: 'contact', name: 'contact'},
-                    {data: 'order_status', name: 'order_status'},
-                    {data: 'status_updated_by', name: 'status_updated_by'},
-
-
+                    {data: 'created_at', name: 'created_at'},
+                    {data: 'status_updated_by.name', name: 'status_updated_by'},
                     {
                         'render': function (data, type, row) {
-                            return ' <div class="text-center"><button type="button" class="btn btn-sm btn-outline-dark" style="border: 1px solid !important" data-toggle="modal" data-target="#myModal"> View\n' +
-                                '  </button></div>';
+                            let details_button = ' <div class="text-center">' +
+                                '<button type="button" class="btn btn-sm btn-outline-dark order_details" style="border: 1px solid !important" ' +
+                                '> View\n' +
+                                '  </button>' +
+                                '<input type="hidden" value="' + row.id + '" class="order_id">' +
+                                '</div>';
+
+                            return details_button;
                         },
                     },
+                    {
+                        'render': function (data, type, row) {
+                            let details_button = ' <div class="dropdown">' +
+                                '<select name="cars" id="cars">\n' +
+                                '  <option value="1">Pending</option>\n' +
+                                '  <option value="saab">Processing</option>\n' +
+                                '  <option value="mercedes">Dispatched</option>\n' +
+                                '  <option value="audi">Delivered</option>\n' +
+                                '  <option value="audi">Cancelled</option>\n' +
+                                '</select>' + '</div>';
+                            return details_button;
+                        },
+                    },
+                    // {data: 'order_status', name: 'order_status'},
                 ],
+
                 "drawCallback": function () {
                     $('.dt-buttons > .btn').addClass('btn-outline-light btn-sm');
                 },
             });
+
+            //order details modal informations
+            $(document).on("click", ".order_details", function () {
+                $('#product_table_data tr').remove();
+                $('#customer_table_data td').remove();
+                $('#total_price').html("");
+                $('#total_discount').html("");
+                let order_id = $(this).parent().find('.order_id').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('order.details.get')}}",
+                    data: {
+                        order_id: order_id
+                    },
+
+                    success: function (response) {
+                        //console.log(response.ordered_products.pivot.product_status);
+                        //order details
+                        for (var i = 0; i < response.ordered_products.length; i++) {
+                            let row = myOrder(response, i);
+                            $('#product_table_data').append(row);
+                        }
+
+                        //customer details
+                        let customer = myCustomers(response);
+                        $('#customer_table_data').append(customer);
+                        $('#myModal').modal('toggle');
+
+                        //summary detsils
+                        let summary = summaryDetails(response);
+                        let subtotal = summary['total_price'];
+                        let total_discount = summary['total_discount'];
+                        let delivery_charge;
+                        if (subtotal) {
+                            delivery_charge = 60;
+                        } else {
+                            delivery_charge = 0;
+                        }
+
+                        let total_price = (subtotal - total_discount) + delivery_charge;
+
+                        let summary_elem = summaryCalculation(subtotal, total_discount, delivery_charge, total_price);
+                        $('#summary_details').html(summary_elem);
+                    }
+                });
+            })
         });
-        $('#btnFiterSubmitSearch').click(function () {
+
+        //product status in modal
+        $(document).on("change", ".product_status_select", function () {
+            let new_product_status = $(this).val();
+            let product_status_parent = $(this).parent().parent();
+            let product_id = product_status_parent.find('.product_id').val();
+            let order_id = product_status_parent.find('.order_id').val();
+            let old_product_status = product_status_parent.find('.old_product_status').val();
+            //console.log(old_product_status);
+            product_status_parent.find('.old_product_status').val(new_product_status);
+            $.ajax({
+                type: "GET",
+                url: "{{route('order.status.get')}}",
+                data: {
+                    product_status: new_product_status,
+                    product_id: product_id,
+                    order_id: order_id
+                },
+                success: function (response) {
+                    //console.log(response);
+
+                    let product_status = product_status_parent.find('.product_status_td');
+                    if ((response.product_status) === 1) {
+
+                        product_status.html("<span class='badge badge-pill badge-danger'>Available</span>");
+                        //adjustOnchangeTotalPrice(response);
+                    }
+                    if ((response.product_status) === 0) {
+                        product_status.html("<span class='badge badge-pill badge-danger'>Unavailable</span>");
+                        //adjustOnchangeTotalPrice(response);
+                    }
+                    if ((response.product_status) === 2) {
+                        product_status.html("<span class='badge badge-pill badge-danger'>Cancelled</span>");
+                        //adjustOnchangeTotalPrice(response);
+                    }
+
+                    if (old_product_status !== new_product_status) {
+
+                        if (new_product_status === "1") {
+                            adjustOnchangeTotalPrice(response);
+                        }
+
+                        if (new_product_status === "0") {
+                            if (old_product_status !== "2") {
+                                adjustOnchangeTotalPrice(response);
+                            }
+                        }
+
+                        if (new_product_status === "2") {
+                            if (old_product_status !== "0") {
+                                adjustOnchangeTotalPrice(response);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        //order details functions
+        function myOrder(response, i) {
+            let product_status_show = "";
+            let product_status = response.ordered_products[i].pivot.product_status;
+            let selected = "selected";
+            if (product_status === 0) {
+                product_status_show = '<span class="badge badge-pill badge-danger">Unavailable</span>';
+            }
+            if (product_status === 1) {
+                product_status_show = '<span class="badge badge-pill badge-danger">Avaiable</span>';
+            }
+            if (product_status === 2) {
+                product_status_show = '<span class="badge badge-pill badge-danger">Cancelled</span>';
+            }
+
+            let row = '<tr>\n' +
+                '        <td>' + response.ordered_products[i].name + '</td>\n' +
+                '        <td>' + response.ordered_products[i].price + '</td>\n' +
+                '        <td>' + response.ordered_products[i].pivot.quantity + '<span>Sets</span></td>\n' +
+                '        <td>' + response.ordered_products[i].pivot.discount + '</td>\n' +
+                '        <td class="product_status_td">' + product_status_show + '</td>\n' +
+                '        <td>' +
+                '           <select name="cars" class="product_status_select">\n' +
+                '               <option value="" selected>Choose Status</option>\n' +
+                '               <option value="1">Available</option>\n' +
+                '               <option value="0">Unavailable</option>\n' +
+                '               <option value="2">Cancelled</option>\n' +
+                '           </select>' +
+                '           <input type="hidden" class="product_id" value="' + response.ordered_products[i].id + '">' +
+                '           <input type="hidden" class="order_id" value="' + response.id + '">' +
+                '           <input type="hidden" class="old_product_status" value="' + product_status + '">' +
+                '       </td>\n' +
+                '      </tr>';
+            return row;
+        }
+
+        function myCustomers(response) {
+            let customer = '<thead>\n' +
+                '                                        <tr>\n' +
+                '                                            <td>Name</td>\n' +
+                '                                            <td>' + response.customer_name + '</td>\n' +
+                '                                        </tr>\n' +
+                '                                    </thead>\n' +
+                '                                    <tbody id="customer_table_data">\n' +
+                '                                        <tr>\n' +
+                '                                            <td>Billing Address</td>\n' +
+                '                                            <td>' + response.billing_address + '</td>\n' +
+                '                                        </tr>\n' +
+                '                                        <tr>\n' +
+                '                                            <td>Shipping Address</td>\n' +
+                '                                            <td>' + response.shipping_address + '</td>\n' +
+                '                                        </tr>\n' +
+                '                                        <tr>\n' +
+                '                                            <td>Contact Number</td>\n' +
+                '                                            <td>' + response.contact + '</td>\n' +
+                '                                        </tr>\n' +
+                '                                    </tbody>';
+            return customer;
+        }
+
+        //summary details functions
+        function summaryCalculation(subtotal, discount, delivery, total) {
+            return '<div class="border-bottom">\n' +
+                '          <p style="text-decoration: underline">Summary:</p>\n' +
+                '                                    <p>Subtotal: <span id="subtotal_id">' + subtotal + '</span> <span>tk</span></p>\n' +
+                '                                    <p>Discounts: <span>-</span> <span id="discount_id">' + discount + '</span> <span>tk</span></p>\n' +
+                '                                    <p>Delivery charge: <span id="deliveryCharge_id">' + delivery + '</span></p>\n' +
+                '                                </div>\n' +
+                '                                <div>\n' +
+                '                                    <p>Total: <span>' + total + '</span></p>\n' +
+                '                                </div>';
+
+
+        }
+
+        function summaryDetails(response) {
+            let total_price = 0;
+            let total_discount = 0;
+            for (var i = 0; i < response.ordered_products.length; i++) {
+                if (response.ordered_products[i].pivot.product_status == 1) {
+                    let quanitty = response.ordered_products[i].pivot.quantity;
+                    let price = response.ordered_products[i].pivot.price;
+                    let discount = response.ordered_products[i].pivot.discount;
+                    total_discount = total_discount + discount;
+                    total_price = total_price + price * quanitty;
+                }
+
+            }
+            return {total_price: total_price, total_discount: total_discount};
+        }
+
+        function adjustOnchangeTotalPrice(response) {
+            //console.log(response);
+            let adjust_subtotal, adjust_discount, discount;
+            let total;
+
+            var old_subtotal = document.getElementById("subtotal_id").innerText;
+            var old_discount = document.getElementById("discount_id").innerText;
+            var old_delivery = document.getElementById("deliveryCharge_id").innerText;
+
+
+            //new values
+            let new_quantity = parseFloat(response.quantity);
+            let new_price = parseFloat(response.price);
+            let new_discount = parseFloat(response.discount);
+
+            //old values
+            subtotal = parseFloat(old_subtotal);
+            let persed_old_discount = parseFloat(old_discount);
+            let persed_delivery = parseFloat(old_delivery);
+
+            if (response.product_status === 1) {
+                adjust_subtotal = new_quantity * new_price;
+                adjust_discount = new_quantity * new_discount;
+                subtotal = subtotal + adjust_subtotal;
+                discount = persed_old_discount + adjust_discount;
+
+            }
+            if (response.product_status === 2 || response.product_status === 0) {
+                adjust_subtotal = new_quantity * new_price;
+                adjust_discount = new_quantity * new_discount;
+                subtotal = subtotal - adjust_subtotal;
+                discount = persed_old_discount - adjust_discount;
+
+            }
+
+            if (persed_delivery !== 0 && subtotal === 0) {
+                persed_delivery = 0;
+            } else if (persed_delivery === 0 && subtotal === 0) {
+                persed_delivery = 0;
+            } else if (persed_delivery === 0) {
+                persed_delivery = 60;
+            }
+
+            total = (subtotal - discount) + persed_delivery;
+            $('#summary_details').html(summaryCalculation(subtotal, discount, persed_delivery, total));
+        }
+
+        //for filtered datatable draw
+        $('#btnFiterSubmitSearch').on("click", function () {
             $('#user_list_table').DataTable().draw(true);
         });
+
+
     </script>
 @endsection
 @section("custom_css")
