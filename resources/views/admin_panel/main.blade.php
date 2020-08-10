@@ -45,7 +45,9 @@
 
     <!-- Custom CSS -->
     <link href={{asset("assets/admin_panel/dist/css/style.css")}} rel="stylesheet" type="text/css">
+    <link href={{asset("assets/admin_panel/dist/css/custom.css")}} rel="stylesheet" type="text/css">
 
+    @yield("dashboard_css")
     @yield("custom_css")
     @yield("product-css")
     @yield("user-css")
@@ -68,7 +70,7 @@
             <span class="feather-icon"><i data-feather="menu"></i></span>
         </a>
         <a class="navbar-brand font-weight-900 text-white" style="font-size: 30px !important;"
-           href="{{route("dashboard.show")}}">Gift Tracking
+           href="{{route("dashboard")}}">CBB
         </a>
         <ul class="navbar-nav hk-navbar-content">
             <li class="nav-item dropdown dropdown-authentication">
@@ -77,13 +79,12 @@
                     <div class="media">
                         <div class="media-img-wrap">
                             <div class="avatar">
-                                <img src={{asset("assets/admin_panel/dist/img/avatar12.jpg")}} alt="user"
-                                     class="avatar-img rounded-circle">
+                                <img src="{{auth()->user()->profile_picture}}" alt="user" class="avatar-img rounded-circle">
                             </div>
                             <span class="badge badge-success badge-indicator"></span>
                         </div>
                         <div class="media-body">
-                            <span>Sayla Zahan Surovi<i
+                            <span>{{auth()->user()->name}}<i
                                     class="zmdi zmdi-chevron-down"></i></span>
                         </div>
                     </div>
@@ -94,7 +95,7 @@
                         <span>Change Password</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{route('logout')}}">
                         <i class="dropdown-icon zmdi zmdi-power"></i>
                         <span>Log out</span></a>
                 </div>
@@ -111,8 +112,8 @@
             <div class="navbar-nav-wrap">
                 <ul class="navbar-nav flex-column">
 
-                    <li class="nav-item {{\Request::route()->getName() == 'dashboard.show' ? "active" : ""}}">
-                        <a class="nav-link" href="{{route('dashboard.show')}}">
+                    <li class="nav-item {{\Request::route()->getName() == 'dashboard' ? "active" : ""}}">
+                        <a class="nav-link" href="{{route('dashboard')}}">
                             <span class="feather-icon"><i data-feather="activity"></i></span>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
@@ -299,10 +300,10 @@
 {{--</script>--}}
 
 <!-- ADD PO -->
+@yield('dashboard-js')
 @yield("product-js")
 @yield('user-js')
 @yield('discount-js')
 @yield('manageDiscount-js')
-
 </body>
 </html>

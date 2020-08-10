@@ -14,4 +14,9 @@ class DashboardController extends Controller
     {
         return view('admin_panel.dashboard')->with('title', "CBB | Dashboard");
     }
+
+    public function showHome()
+    {
+        return view('admin_panel.home')->with('title', "CBB | Dashboard");
+    }
 }

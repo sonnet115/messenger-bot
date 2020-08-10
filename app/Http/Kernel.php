@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\RedirectIfNotAuthenticated;
 use App\Http\Middleware\VerifyShopID;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -57,13 +58,13 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'authenticated.user' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         "verify" => \App\Http\Middleware\VerifyWebhook::class,
-        "verify.shop.id" => VerifyShopID::class
+        "unauthenticated.user" => RedirectIfNotAuthenticated::class,
     ];
 
     /**

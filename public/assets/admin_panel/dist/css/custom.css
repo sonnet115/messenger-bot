@@ -1,0 +1,13 @@
+.hide {
+    position: absolute;
+    width: 101%;
+    height: 80%;
+    background: lightgray;
+    opacity: .5;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.hide:hover {
+    /*opacity: 0;*/
+}
