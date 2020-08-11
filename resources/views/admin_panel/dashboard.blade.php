@@ -2,15 +2,15 @@
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-25 mt-sm-30 mt-15">
-
-        <div class="d-flex justify-content-center">
-            <button class="btn btn-success rounded-20 pl-20 pr-20" onclick="connectPage()"><i
-                    class="fa fa-facebook"></i> Connect Page to Messenger Bot
-            </button>
-        </div>
-
-        <hr>
-
+        @if (auth()->user()->page_added == 0)
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-danger rounded-20 pl-20 pr-20" id="connect_page_btn" onclick="connectPage()">
+                    <i class="fa fa-facebook"></i>
+                    <span id="connect_text">Connect Page to Messenger Bot</span>
+                </button>
+            </div>
+            <hr>
+        @endif
         <div>
             <!-- Title -->
             <div class="hk-pg-header align-items-top">
@@ -19,8 +19,7 @@
                 </div>
             </div>
             <!-- /Title -->
-{{--            <div class="{{auth()->user()->page_added == 0 ? 'hide' : 'show'}}">--}}
-{{--            </div>--}}
+
             <!-- Row -->
             <div class="row">
                 <div class="col-xl-12">
@@ -240,24 +239,7 @@
 @endsection
 
 @section("dashboard-js")
-    <script async defer crossorigin="anonymous"
-            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v8.0&appId=967186797063633&autoLogAppEvents=1"
-            nonce="AhbIxnz8"></script>
-    <script>
-        function connectPage() {
-            FB.login(function (response) {
-                console.log(response);
-                $.ajax({
-                    type: "GET",
-                    url: "{{route('order.details.get')}}",
 
-                    success: function (response) {
-                        console.log(response);
-                    }
-                });
-            }, {scope: 'pages_messaging, pages_manage_metadata'});
-        };
-    </script>
 @endsection
 
 @section('dashboard_css')

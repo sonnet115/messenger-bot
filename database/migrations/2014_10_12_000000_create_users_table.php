@@ -18,12 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('name', 50);
             $table->string('email', 50)->unique()->nullable();
             $table->string('provider', 10)->unique()->nullable();
-            $table->string('provider_id', 100)->unique();
+            $table->string('user_id', 100)->unique();
             $table->text('profile_picture')->nullable();
             $table->string('contact', 20)->nullable();
             $table->boolean('page_added')->default(0);
             $table->boolean('profile_completed')->default(0);
-            $table->text('page_added_token')->nullable();
+            $table->text('long_lived_user_token')->nullable();
             $table->timestamps();
         });
     }

@@ -88,6 +88,9 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
             Route::get("get-click", "Admin_Panel\OrderController@realtion");
         });
 
+        Route::group(['prefix' => 'pages'], function () {
+            Route::get("store-page", "Admin_Panel\PageController@storePages")->name('page.store');
+        });
     });
 
 });

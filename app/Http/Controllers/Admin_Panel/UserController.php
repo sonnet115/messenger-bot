@@ -70,19 +70,20 @@ class UserController extends Controller
         $getInfo = Socialite::driver($provider)->user();
         $user = $this->createUser($getInfo, $provider);
         auth()->login($user);
+//        dd($getInfo);
         return redirect()->to('http://localhost:8000/admin/dashboard');
     }
 
     function createUser($getInfo, $provider)
     {
-        $user = User::where('provider_id', $getInfo->id)->first();
+        $user = User::where('user_id', $getInfo->id)->first();
         if (!$user) {
             $user = User::create([
                 'name' => $getInfo->name,
                 'email' => $getInfo->email,
                 'provider' => $provider,
-                'provider_id' => $getInfo->id,
-                'profile_picture' => $getInfo->avatar
+                'user_id' => $getInfo->id,
+                'profile_picture' => $getInfo->avatar,
             ]);
         }
         return $user;

@@ -79,13 +79,13 @@
                     <div class="media">
                         <div class="media-img-wrap">
                             <div class="avatar">
-                                <img src="{{auth()->user()->profile_picture}}" alt="user" class="avatar-img rounded-circle">
+                                <img src="{{auth()->user()->profile_picture}}" alt="user"
+                                     class="avatar-img rounded-circle">
                             </div>
                             <span class="badge badge-success badge-indicator"></span>
                         </div>
                         <div class="media-body">
-                            <span>{{auth()->user()->name}}<i
-                                    class="zmdi zmdi-chevron-down"></i></span>
+                            <span>{{auth()->user()->name}}<i class="zmdi zmdi-chevron-down"></i></span>
                         </div>
                     </div>
                 </a>
@@ -298,8 +298,47 @@
 
 {{--    setTimeout(refresh, 1000);--}}
 {{--</script>--}}
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v8.0&appId=967186797063633&autoLogAppEvents=1"
+        nonce="AhbIxnz8"></script>
+<script>
+    function connectPage() {
+        FB.login(function (response) {
+            console.log(response);
+            let connect_btn = $("#connect_page_btn");
+            let connect_text = $("#connect_text");
+            connect_btn.removeClass('btn-danger').addClass('btn-primary');
+            connect_text.html('Connecting to pages. Please wait...')
+            $.ajax({
+                type: "GET",
+                url: "{{route('page.store')}}",
+                data: {
+                    facebook_api_response: response
+                },
+                success: function (backend_response) {
+                    if(backend_response === 'success'){
+                        connect_btn.removeClass('btn-primary').addClass('btn-success');
+                        connect_text.html('Congratulation! Your Page is now connected.');
+                        // connect_btn.attr('disabled', true);
+                        setTimeout(function(){
+                            window.location.reload(true);
+                        }, 2000);
+                    }else if(backend_response === 'no_page_added'){
+                        connect_btn.removeClass('btn-primary').addClass('btn-danger');
+                        connect_text.html('All Pages Removed. Connect Page Again!');
+                    }
+                    else{
+                        connect_btn.removeClass('btn-primary').addClass('btn-danger');
+                        connect_text.html('Something went wrong! Try Again.');
+                    }
 
-<!-- ADD PO -->
+                    console.log(backend_response);
+                }
+            });
+        }, {scope: 'pages_messaging, pages_manage_metadata, pages_show_list'});
+    };
+</script>
+
 @yield('dashboard-js')
 @yield("product-js")
 @yield('user-js')

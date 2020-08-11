@@ -198,12 +198,22 @@
                                 <input type="hidden" name="image_2_id"
                                        value="{{$product_details !== null ? count($product_details->images) > 1 ? $product_details->images[1]->id : "" : ""}}">
                                 <hr>
-                                <div class="form-group text-right">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fa fa-plus-circle"></i> {{ $product_details !== null ? "Update" : "Add" }}
-                                        Product
-                                    </button>
-                                </div>
+
+                                @if (auth()->user()->page_added > 0)
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-plus-circle"></i> {{ $product_details !== null ? "Update" : "Add" }}
+                                            Product
+                                        </button>
+                                    </div>
+                                @else
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)" onclick="connectPage()">
+                                            <i class="fa fa-facebook"></i> Connect Page to Add Product
+                                        </a>
+                                    </div>
+                                @endif
+                                <br>
                             </form>
                         </div>
                     </div>

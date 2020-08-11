@@ -15,15 +15,18 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->string('page_name', '50');
-            $table->string('page_contact', '15');
-            $table->string('page_address', '100');
-            $table->text('page_web_link');
-            $table->string('page_unique_id', 50);
-            $table->text('page_token');
-            $table->string('app_id', 100);
-            $table->string('owner_name', '30');
-            $table->string('owner_contact', '15');
+            $table->string('page_name', 50);
+            $table->string('page_id', 100);
+            $table->text('page_access_token');
+            $table->string('page_owner_id', 100);
+            $table->boolean('page_connected_status');
+            $table->string('page_contact', 15)->nullable();
+            $table->bigInteger('page_likes')->nullable();
+            $table->boolean('is_published')->nullable();
+            $table->boolean('is_webhooks_subscribed')->nullable();
+            $table->string('page_username',100)->nullable();
+            $table->string('page_address', 100)->nullable();
+            $table->text('page_web_link')->nullable();
             $table->timestamps();
         });
     }

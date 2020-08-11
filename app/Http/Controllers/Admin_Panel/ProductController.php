@@ -78,23 +78,23 @@ class ProductController extends Controller
 
     public function getProduct(Request $request)
     {
-        $stock = "";
-        $status= "";
+        $and = "";
 
         //filter option for stock from stock to and status
         if (request()->has('stock_from') && request()->has('stock_to') && request('stock_from') != null
-            && request('stock_to') != null)
-        {
-            $stock = " AND stock >= " . request('stock_from') . " AND stock <= " . request('stock_to');
+            && request('stock_to') != null) {
+            $and .= " AND stock >= " . request('stock_from') . " AND stock <= " . request('stock_to');
         }
 
-        if(request()->has('status') && request('status')!=null){
-            $status = " AND state = " . request('status');
+        if (request()->has('status') && request('status') != null) {
+            $and .= " AND state = " . request('status');
         }
 
-        return datatables(Product::selectRaw(" * ")->whereRaw(1 . $stock . $status )->orderBy('id', 'asc')->with("images"))->toJson();
-
-
+        if (auth()->user()->page_added > 0) {
+            return datatables(Product::selectRaw(" * ")->whereRaw(1 . $and)->orderBy('id', 'asc')->with("images"))->toJson();
+        } else {
+            return datatables(array())->toJson();
+        }
     }
 
     public function updateProduct(Request $request)

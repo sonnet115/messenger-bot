@@ -41,11 +41,19 @@
             <!--state ends-->
 
             <!--button-->
-            <div class="text-left pl-4">
-                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" ><i
-                        class="fa fa-search">&nbsp;</i>Filter
-                </button>
-            </div>
+            @if (auth()->user()->page_added > 0)
+                <div class="text-left pl-4">
+                    <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" ><i
+                            class="fa fa-search">&nbsp;</i>Filter
+                    </button>
+                </div>
+            @else
+                <div class="text-left pl-4">
+                    <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)" onclick="connectPage()">
+                        <i class="fa fa-facebook"></i> Connect Page
+                    </a>
+                </div>
+        @endif
             <!--button ends-->
         </div>
         <!-- filter ends-->
