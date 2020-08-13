@@ -4,9 +4,9 @@
     <div class="container mt-xl-25 mt-sm-30 mt-15">
         @if (auth()->user()->page_added == 0)
             <div class="d-flex justify-content-center">
-                <button class="btn btn-danger rounded-20 pl-20 pr-20" id="connect_page_btn" onclick="connectPage()">
+                <button class="btn btn-danger rounded-20 pl-20 pr-20 connect_page_btn"  onclick="connectPage()">
                     <i class="fa fa-facebook"></i>
-                    <span id="connect_text">Connect Page to Messenger Bot</span>
+                    <span class="connect_text">Connect Page to Messenger Bot</span>
                 </button>
             </div>
             <hr>
@@ -239,7 +239,41 @@
 @endsection
 
 @section("dashboard-js")
+    <script>
+        function connectPage() {
+            FB.login(function (response) {
+                console.log(response);
+                let connect_btn = $(".connect_page_btn");
+                let connect_text = $(".connect_text");
+                connect_btn.removeClass('btn-danger').addClass('btn-primary');
+                connect_text.html('Please wait. Connecting your page...')
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('page.store')}}",
+                    data: {
+                        facebook_api_response: response
+                    },
+                    success: function (backend_response) {
+                        if (backend_response === 'success') {
+                            connect_btn.removeClass('btn-primary').addClass('btn-success');
+                            connect_text.html('Congratulation! Your Page is now connected.');
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 500);
+                        } else if (backend_response === 'no_page_added') {
+                            connect_btn.removeClass('btn-primary').addClass('btn-danger');
+                            connect_text.html('All Pages Removed. Connect Page Again!');
+                        } else {
+                            connect_btn.removeClass('btn-primary').addClass('btn-danger');
+                            connect_text.html('Something went wrong! Try Again.');
+                        }
 
+                        console.log(backend_response);
+                    }
+                });
+            }, {scope: 'pages_messaging, pages_manage_metadata, pages_show_list'});
+        };
+    </script>
 @endsection
 
 @section('dashboard_css')

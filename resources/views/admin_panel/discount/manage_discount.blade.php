@@ -43,13 +43,19 @@
             </div>
             <!-- product filter box ends-->
 
-            <!--button-->
-            <div class="text-left col-md-2" style="margin-left: 15px">
-                <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top: 19px"><i
-                        class="fa fa-search">&nbsp;</i>Filter
-                </button>
-            </div>
-            <!--button ends-->
+            @if (auth()->user()->page_added > 0)
+                <div class="text-left col-md-2" style="margin-left: 15px">
+                    <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top: 19px"><i
+                            class="fa fa-search">&nbsp;</i>Filter
+                    </button>
+                </div>
+            @else
+                <div class="text-left pl-4">
+                    <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)" onclick="connectPage()">
+                        <i class="fa fa-facebook"></i> Connect Page
+                    </a>
+                </div>
+            @endif
         </div>
         <!-- filter ends-->
 
@@ -60,6 +66,7 @@
                 <section class="hk-sec-wrapper">
                     <div class="row">
                         <div class="col-sm">
+                            <span class="font-18 connect_text text-primary"></span>
                             @if(Session::has('success_message'))
                                 <p class="text-center alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('success_message') }}</p>
                             @endif
@@ -67,12 +74,13 @@
                                 <table id="user_list_table" class="table table-bordered w-100 display">
                                     <thead class="btn-gradient-info">
                                     <tr>
-                                        <th class="text-center text-white">Discount Name</th>
+                                        <th class="text-center text-white" data-priority="1">Discount Name</th>
                                         <th class="text-center text-white">Product Name</th>
                                         <th class="text-center text-white">Discount From</th>
                                         <th class="text-center text-white">Discount To</th>
                                         <th class="text-center text-white">Discount %</th>
-                                        <th class="text-center text-white">Max customers</th>
+                                        <th class="text-center text-white">Shop Name</th>
+                                        <th class="text-center text-white" data-priority="1">State</th>
                                         <th class="text-center text-white">Action</th>
                                     </tr>
                                     </thead>
@@ -186,20 +194,34 @@
                     {data: 'name', name: 'name'},
                     {
                         'render': function (data, type, row) {
-
-                            return "<b class='text-muted'>" + row.product.name + " </b>";
+                            return "<b class='text-dark'>" + row.product.name + " </b>";
                         }
                     },
                     {data: 'dis_from', name: 'dis_from'},
                     {data: 'dis_to', name: 'dis_to'},
                     {data: 'dis_percentage', name: 'dis_percentage'},
-                    {data: 'max_customers', name: 'max_customers'},
-
+                    {data: 'shop.page_name', name: 'shop.page_name'},
                     {
                         'render': function (data, type, row) {
-                            return '<a class="btn btn-sm btn-gradient-ashes" ' +
-                                '   href="/admin/discount/add-form?p_name=update&did=' + row.id + '">' +
-                                '   Update</a>';
+                            let color = row.state === 1 ? "success" : "danger";
+                            let text = row.state === 1 ? "Active" : "Inactive";
+                            if (row.shop.page_connected_status === 1) {
+                                return '<span class="badge badge-pill badge-' + color + ' pr-15 pl-15">' + text + '</span>';
+                            } else {
+                                return '<span class="badge badge-pill badge-danger pr-15 pl-15">Page Disconnected</span>';
+                            }
+                        },
+                    },
+                    {
+                        'render': function (data, type, row) {
+                            if (row.shop.page_connected_status === 1) {
+                                return '<a style="min-width: 101px;border:1px solid" class="shadow btn btn-sm pr-15 pl-15 btn-outline-dark" ' +
+                                    '   href="/admin/discount/add-form?mode=update&did=' + row.id + '">' +
+                                    '   Update</a>';
+                            } else {
+                                return '<button style="min-width: 101px;border:1px solid" onclick="connectPageProduct()" class="shadow btn btn-sm pr-15 pl-15 btn-outline-success">Connect</button>';
+                            }
+
                         },
                     },
                 ],
@@ -215,7 +237,35 @@
         });
 
     </script>
-
+    <script>
+        function connectPageDiscount() {
+            FB.login(function (response) {
+                console.log(response);
+                let connect_text_container = $(".connect_text");
+                connect_text_container.html('Please Wait...')
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('page.store')}}",
+                    data: {
+                        facebook_api_response: response
+                    },
+                    success: function (backend_response) {
+                        if (backend_response === 'success') {
+                            connect_text_container.html("Completed!");
+                        } else if (backend_response === 'no_page_added') {
+                            connect_text_container.html('All Pages Removed. Connect Page Again!');
+                        } else {
+                            connect_text_container.html('Something went wrong! Try Again.');
+                        }
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 1000);
+                        console.log(backend_response);
+                    }
+                });
+            }, {scope: 'pages_messaging, pages_manage_metadata, pages_show_list'});
+        }
+    </script>
 
 @endsection
 @section("custom_css")

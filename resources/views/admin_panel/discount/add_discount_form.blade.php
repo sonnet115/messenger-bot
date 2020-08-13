@@ -15,7 +15,8 @@
         .select2-selection__arrow {
             top: 6px !important;
         }
-        .select2-selection__choice__display{
+
+        .select2-selection__choice__display {
             color: #f40600 !important;
         }
     </style>
@@ -26,7 +27,8 @@
     <div class="container mt-xl-30 mt-sm-30 mt-15">
         <!-- Title -->
         <div class="hk-pg-header align-items-top">
-            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-plus">{{$discount_details!==null?"Update Discount":"Add Discount"}}</i>
+            <h2 class="hk-pg-title font-weight-700 mb-10 text-muted"><i
+                    class="fa fa-plus">{{$discount_details!==null?"Update Discount":"Add Discount"}}</i>
             </h2>
         </div>
         <!-- /Title -->
@@ -95,6 +97,37 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label class="control-label mb-10">Choose a shop<span
+                                            class="text-danger font-16">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="icon-shuffle"></i></span>
+                                        </div>
+                                        <select class="form-control" id="shop_id" name="shop_id" required>
+                                            <option value="0" disabled selected>Select shop</option>
+                                            @if($discount_details !== null)
+                                                @foreach($shop_list as $shop)
+                                                    <option value="{{$shop->id}}"
+                                                        {{$shop->id == $discount_details->shop_id ? "selected" : ""}}>
+                                                        {{$shop->page_name}}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                @foreach($shop_list as $shop)
+                                                    <option value="{{$shop->id}} ">
+                                                        {{$shop->page_name}}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <label for="product_price" class="error text-danger"></label>
+                                    @if($errors->has('shop_id'))
+                                        <p class="text-danger font-14">{{ $errors->first('shop_id') }}</p>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
                                     <label class="control-label mb-10">Select Product<span class="text-danger">*</span></label>
                                     <div class="d-flex flex-row justify-content-between">
                                         <div class="input-group-prepend">
@@ -104,19 +137,12 @@
                                         @if($discount_details===null)
                                             <select class="js-example-basic-multiple" name="product_id" id="product_id">
                                                 <option value="" selected disabled>Choose product</option>
-                                                @foreach($product_names as $names)
-                                                    <option value="{{$names->id}}">{{$names->name}}</option>
-                                                @endforeach
                                             </select>
                                         @endif
 
                                         @if($discount_details!==null)
                                             <select class="js-example-basic-multiple" name="product_id" id="product_id">
-                                                <option value="" selected>choose product</option>
-                                                @foreach($product_names as $names)
-                                                    <option
-                                                        value="{{$names->id}}" {{$names->id == $discount_details->pid ? "selected": ""}}>{{$names->name}}</option>
-                                                @endforeach
+                                                <option value="" selected disabled>Choose product</option>
                                             </select>
                                         @endif
                                     </div>
@@ -125,7 +151,6 @@
                                         <p class="text-danger">{{ $errors->first('product_id') }}</p>
                                     @endif
                                 </div>
-
 
                                 <div class="form-group">
                                     <label class="control-label mb-10">Discounts Percentages<span
@@ -146,29 +171,32 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="control-label mb-10">Maximum Customers</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="icon-magnet"></i></span>
-                                        </div>
-                                        <input type="text" name="max_customer"
-                                               placeholder="Enter Product Discount Percentage" class="form-control"
-                                               value="{{$discount_details!==null?$discount_details->max_customers:old('max_customer')}}">
+                                @if($discount_details !== null)
+                                    <input type="hidden" name="discount_id"
+                                           value="{{$discount_details !== null ? $discount_details->id : ""}}">
+                                    <input type="hidden" id="shop_id_product"
+                                           value="{{$discount_details !== null ? $discount_details->shop_id : ""}}">
+                                    <input type="hidden" id="selected_pid"
+                                           value="{{$discount_details !== null ? $discount_details->pid : ""}}">
+                                @endif
+
+                                @if (auth()->user()->page_added > 0)
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-plus-circle"></i> {{$discount_details!==null?"Update":"Store"}}
+                                            Discount
+                                            Product
+                                        </button>
                                     </div>
-
-                                    @if($errors->has('max_customer'))
-                                        <p class="text-danger">{{ $errors->first('max_customer') }}</p>
-                                    @endif
-                                </div>
-                                <input type="hidden" name="discount_id"
-                                       value="{{$discount_details !== null ? $discount_details->id : ""}}">
-
-                                <div class="form-group text-right">
-                                    <button type="submit" class="btn btn-primary mr-10">
-                                        {{$discount_details!==null?"Update":"Store Discount"}}
-                                    </button>
-                                </div>
+                                @else
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)"
+                                           onclick="connectPage()">
+                                            <i class="fa fa-facebook"></i> Connect Page to Add Discount
+                                        </a>
+                                    </div>
+                                @endif
+                                <br>
                             </form>
                         </div>
                     </div>
@@ -194,7 +222,6 @@
     <script>
         $(document).ready(function () {
             $('.discount_date').daterangepicker({
-
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
@@ -207,6 +234,8 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            getSelectedProduct();
+
             $('.js-example-basic-multiple').select2();
 
             jQuery.validator.setDefaults({
@@ -256,7 +285,6 @@
                         required: "Discount percentage is required",
                         min: "minimum 1% is required",
                         max: "minimum 100% is required"
-
                     },
                 },
 
@@ -264,6 +292,49 @@
                     form.submit();
                 }
             });
+
+            $("#shop_id").on("change", function () {
+                let shop_id = $(this).val();
+                $(".preloader-it").css('opacity', .7).show();
+                $.ajax({
+                    url: "{{ route('get.shop.product') }}",
+                    type: "GET",
+                    data: {"shop_id": shop_id},
+                    success: function (result) {
+                        $("#product_id").html("");
+                        let products = "";
+                        for (let i = 0; i < result.length; i++) {
+                            products += '<option value="' + result[i].id + '" selected="selected">' + result[i].name + '</option>';
+                        }
+                        $("#product_id").html(products);
+                        $(".preloader-it").hide();
+                    }
+                });
+            });
+
+            function getSelectedProduct() {
+                let shop_id_product = $("#shop_id_product").val();
+                let selected_pid = $("#selected_pid").val();
+
+                if (shop_id_product !== "") {
+                    $.ajax({
+                        url: "{{ route('get.shop.product') }}",
+                        type: "GET",
+                        data: {"shop_id": shop_id_product},
+                        success: function (result) {
+                            $("#product_id").html("");
+                            let products = "";
+                            for (let i = 0; i < result.length; i++) {
+                                products += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                            }
+                            $("#product_id").html(products);
+                            $("#product_id").select2().select2('val', selected_pid);
+
+                            $(".preloader-it").hide();
+                        }
+                    });
+                }
+            }
         });
 
     </script>

@@ -72,6 +72,7 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
         //Routes for discount
         Route::group(['prefix' => 'discount'], function () {
             Route::get("add-form", "Admin_Panel\DiscountController@viewAddDiscountForm")->name("discount.add.view");
+            Route::get("get-product-shop", "Admin_Panel\DiscountController@filterProductByShop")->name("get.shop.product");
             Route::post("store-discount", "Admin_Panel\DiscountController@storeDiscount")->name("discount.store");
             Route::get("manage-form", "Admin_Panel\DiscountController@viewUpdateDiscount")->name("discount.manage.view");
             Route::post("update-discount", "Admin_Panel\DiscountController@updateDiscount")->name("discount.update");
@@ -88,8 +89,10 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
             Route::get("get-click", "Admin_Panel\OrderController@realtion");
         });
 
-        Route::group(['prefix' => 'pages'], function () {
+        Route::group(['prefix' => 'shop_billing'], function () {
             Route::get("store-page", "Admin_Panel\PageController@storePages")->name('page.store');
+            Route::get("shop-list", "Admin_Panel\PageController@viewShopList")->name('shop.list.view');
+            Route::get("get-list", "Admin_Panel\PageController@getShopsList")->name('shop.list.get');
         });
     });
 

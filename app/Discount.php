@@ -11,4 +11,8 @@ class Discount extends Model
     function product(){
         return $this->belongsTo(Product::class, 'pid');
     }
+
+    public function shop(){
+        return $this->hasOne(Shop::class, 'id', 'shop_id');
+    }
 }

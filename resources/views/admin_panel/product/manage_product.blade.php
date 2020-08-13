@@ -1,7 +1,7 @@
 @extends("admin_panel.main")
 @section("product-css")
     <style>
-        .pagination{
+        .pagination {
             display: block !important;
         }
     </style>
@@ -17,11 +17,11 @@
             <!--stock filter starts-->
             <div class="form-group p2">
                 <div class="controls">
-                    <input class="form-control" type="text" name="stock_from"  value=""/>
+                    <input class="form-control" type="text" name="stock_from" value=""/>
                 </div>
             </div>
             <div class="form-group p-2">
-              <p class="text-center font-15">To</p>
+                <p class="text-center font-15">To</p>
             </div>
             <div class="form-group p2">
                 <div class="controls">
@@ -32,18 +32,17 @@
 
             <!-- state starts-->
             <div class="form-group pl-2">
-                <select class="form-control"  name="status">
-                        <option value="" selected>Select a status</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
+                <select class="form-control" name="status">
+                    <option value="" selected>Select a status</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
                 </select>
             </div>
             <!--state ends-->
-
             <!--button-->
             @if (auth()->user()->page_added > 0)
                 <div class="text-left pl-4">
-                    <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" ><i
+                    <button type="text" id="btnFiterSubmitSearch" class="btn btn-info"><i
                             class="fa fa-search">&nbsp;</i>Filter
                     </button>
                 </div>
@@ -53,18 +52,19 @@
                         <i class="fa fa-facebook"></i> Connect Page
                     </a>
                 </div>
-        @endif
-            <!--button ends-->
+             @endif
+        <!--button ends-->
         </div>
         <!-- filter ends-->
 
         <!-- Product List starts -->
-        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted" ><i class="fa fa-list-alt"> Product List</i></h4>
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h4>
         <div class="row">
             <div class="col-xl-12">
                 <section class="hk-sec-wrapper">
                     <div class="row">
                         <div class="col-sm">
+                            <span class="font-18 connect_text text-primary"></span>
                             @if(Session::has('success_message'))
                                 <p class="text-center alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('success_message') }}</p>
                             @endif
@@ -74,11 +74,12 @@
                                     <tr>
                                         <th class="text-center text-white" data-priority="1">Name</th>
                                         <th class="text-center text-white">Code</th>
-                                        <th class="text-center text-white" data-priority="1">Stock</th>
+                                        <th class="text-center text-white">Stock</th>
                                         <th class="text-center text-white">UoM</th>
                                         <th class="text-center text-white">Price</th>
-                                        <th class="text-center text-white">State</th>
-                                        <th class="text-center text-white" data-priority="1">Action</th>
+                                        <th class="text-center text-white">Shop Name</th>
+                                        <th class="text-center text-white" data-priority="1">State</th>
+                                        <th class="text-center text-white">Action</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -138,11 +139,10 @@
                 serverSide: true,
                 ajax: {
                     url: "{{ route('product.get') }}",
-                    data:function(d) {
+                    data: function (d) {
                         d.stock_from = $("input[name=stock_from]").val();
                         d.stock_to = $("input[name=stock_to]").val();
                         d.status = $('select[name=status] option:selected').val();
-
                     }
                 },
 
@@ -153,7 +153,7 @@
                     },
                     {
                         "className": "dt-center",
-                        "targets": [2, 3, 4, 5, 6]
+                        "targets": [2, 3, 4, 5, 6, 7]
                     }
                 ],
                 columns: [
@@ -162,18 +162,28 @@
                     {data: 'stock', name: 'stock'},
                     {data: 'uom', name: 'uom'},
                     {data: 'price', name: 'price'},
+                    {data: 'shop.page_name', name: 'shop.page_name'},
                     {
                         'render': function (data, type, row) {
                             let color = row.state === 1 ? "success" : "danger";
                             let text = row.state === 1 ? "Active" : "Inactive";
-                            return '<span class="badge badge-pill badge-' + color + '">' + text + '</span>';
+                            if (row.shop.page_connected_status === 1) {
+                                return '<span class="badge badge-pill badge-' + color + ' pr-15 pl-15">' + text + '</span>';
+                            } else {
+                                return '<span class="badge badge-pill badge-danger pr-15 pl-15">Page Disconnected</span>';
+                            }
                         },
                     },
                     {
                         'render': function (data, type, row) {
-                            return '<a class="btn btn-sm btn-gradient-secondary" ' +
-                                '   href="/admin/product/add-form?mode=update&pid=' + row.id + '">' +
-                                '   Update</a>';
+                            if (row.shop.page_connected_status === 1) {
+                                return '<a style="min-width: 101px;border:1px solid" class="shadow btn btn-sm pr-15 pl-15 btn-outline-dark" ' +
+                                    '   href="/admin/product/add-form?mode=update&pid=' + row.id + '">' +
+                                    '   Update</a>';
+                            } else {
+                                return '<button style="min-width: 101px;border:1px solid" onclick="connectPageProduct()" class="shadow btn btn-sm pr-15 pl-15 btn-outline-success">Connect</button>';
+                            }
+
                         },
                     },
                 ],
@@ -186,7 +196,38 @@
             $('#user_list_table').DataTable().draw(true);
         });
     </script>
+
+    <script>
+        function connectPageProduct() {
+            FB.login(function (response) {
+                console.log(response);
+                let connect_text_container = $(".connect_text");
+                connect_text_container.html('Please Wait...')
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('page.store')}}",
+                    data: {
+                        facebook_api_response: response
+                    },
+                    success: function (backend_response) {
+                        if (backend_response === 'success') {
+                            connect_text_container.html("Completed!");
+                        } else if (backend_response === 'no_page_added') {
+                            connect_text_container.html('All Pages Removed. Connect Page Again!');
+                        } else {
+                            connect_text_container.html('Something went wrong! Try Again.');
+                        }
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 1000);
+                        console.log(backend_response);
+                    }
+                });
+            }, {scope: 'pages_messaging, pages_manage_metadata, pages_show_list'});
+        }
+    </script>
 @endsection
+
 @section("custom_css")
     <style>
         #user_list_table_length {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin_Panel;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\ProductImage;
+use App\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -16,11 +17,23 @@ class ProductController extends Controller
     {
         if (request()->get('mode')) {
             $pid = request()->get('pid');
-            $product_details = Product::where('id', $pid)->with('images')->first();
+            $product_details = Product::where('id', $pid)->with('images')->with('shop')->first();
+            if ($product_details->shop->page_connected_status != 1){
+                return redirect(route('product.manage.view'));
+            }
+
+            if ($product_details->shop->page_owner_id !== auth()->user()->user_id){
+                return redirect(route('product.manage.view'));
+            }
+//            dd($product_details->shop->page_owner_id !== auth()->user()->user_id);
         } else {
             $product_details = null;
         }
-        return view('admin_panel.product.add_product_form')->with("title", "CBB | Add Product")->with('product_details', $product_details);
+        $shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
+        return view('admin_panel.product.add_product_form')
+            ->with("title", "CBB | Add Product")
+            ->with('product_details', $product_details)
+            ->with('shop_list', $shops);
     }
 
     public function storeProduct(Request $request)
@@ -32,6 +45,7 @@ class ProductController extends Controller
             'product_stock' => 'required|integer|max:100000',
             'product_uom' => 'required|string|max:10',
             'product_price' => 'required|numeric|between:0,500000',
+            'shop_id_name' => 'required',
             'product_image_1' => 'required|file|max:1024',
             'product_image_1.*' => 'mimes:jpeg,png,jpg',
             'product_image_2' => 'file|max:1024',
@@ -44,6 +58,7 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
+            $shop_name = str_replace(' ', '_', explode('_', $request->shop_id_name)[1]);
             //product save
             $product = new Product();
             $product->name = $request->product_name;
@@ -51,14 +66,13 @@ class ProductController extends Controller
             $product->stock = $request->product_stock;
             $product->uom = $request->product_uom;
             $product->price = $request->product_price;
-            $product->shop_id = 1;
+            $product->shop_id = explode('_', $request->shop_id_name)[0];
             $product->save();
             $product_id = $product->id;
 
-
             //product image save
-            $this->storeProductImage($request, $product_id, 'product_image_1', 1);
-            $this->storeProductImage($request, $product_id, 'product_image_2', 2);
+            $this->storeProductImage($request, $product_id, 'product_image_1', 1, $shop_name);
+            $this->storeProductImage($request, $product_id, 'product_image_2', 2, $shop_name);
 
             DB::commit();
             Session::flash('success_message', 'Product added successfully');
@@ -76,10 +90,9 @@ class ProductController extends Controller
         return view("admin_panel.product.manage_product")->with("title", "CBB | Manage Product");
     }
 
-    public function getProduct(Request $request)
+    public function getProduct()
     {
         $and = "";
-
         //filter option for stock from stock to and status
         if (request()->has('stock_from') && request()->has('stock_to') && request('stock_from') != null
             && request('stock_to') != null) {
@@ -91,7 +104,7 @@ class ProductController extends Controller
         }
 
         if (auth()->user()->page_added > 0) {
-            return datatables(Product::selectRaw(" * ")->whereRaw(1 . $and)->orderBy('id', 'asc')->with("images"))->toJson();
+            return datatables(Product::selectRaw(" * ")->whereRaw('1' . $and)->orderBy('id', 'asc')->with("images")->with('shop'))->toJson();
         } else {
             return datatables(array())->toJson();
         }
@@ -104,6 +117,7 @@ class ProductController extends Controller
             'product_stock' => 'required|integer|max:100000',
             'product_uom' => 'required|string|max:10',
             'product_price' => 'required|numeric|between:0,500000',
+            'shop_id_name' => 'required',
             'product_image_1' => 'file|max:1024',
             'product_image_1.*' => 'mimes:jpeg,png,jpg',
             'product_image_2' => 'file|max:1024',
@@ -123,6 +137,7 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
+            $shop_name = str_replace(' ', '_', explode('_', $request->shop_id_name)[1]);
             //product save
             $product = Product::find($request->product_id);
             $product->code = $request->product_code;
@@ -131,14 +146,15 @@ class ProductController extends Controller
             $product->uom = $request->product_uom;
             $product->price = $request->product_price;
             $product->state = $request->product_state;
+            $product->shop_id = explode('_', $request->shop_id_name)[0];
             $product->save();
 
             //product image save
             if ($request->hasfile('product_image_1')) {
-                $this->updateProductImage($request, 'product_image_1', 1);
+                $this->updateProductImage($request, 'product_image_1', 1, $shop_name);
             }
             if ($request->hasfile('product_image_2')) {
-                $this->updateProductImage($request, 'product_image_2', 2);
+                $this->updateProductImage($request, 'product_image_2', 2, $shop_name);
             }
 
             DB::commit();
@@ -151,12 +167,12 @@ class ProductController extends Controller
         return redirect(route('product.manage.view'));
     }
 
-    public function storeProductImage($request, $product_id, $image, $image_no)
+    public function storeProductImage($request, $product_id, $image, $image_no, $shop_name)
     {
         if ($request->hasfile($image)) {
             $file = $request->file($image);
             $image_name = $request->product_code . '_' . $image_no . '.' . $file->extension();
-            $shop_name = 'shop_1';
+            $shop_name = $shop_name;
             $file->move(public_path() . '/images/products/' . $shop_name . '/', $image_name);
 
             $productImage = new ProductImage();
@@ -166,11 +182,11 @@ class ProductController extends Controller
         }
     }
 
-    public function updateProductImage($request, $image, $image_no)
+    public function updateProductImage($request, $image, $image_no, $shop_name)
     {
         $file = $request->file($image);
         $image_name = $request->product_code . '_' . $image_no . '.' . $file->extension();
-        $shop_name = 'shop_1';
+        $shop_name = $shop_name;
         $file->move(public_path() . '/images/products/' . $shop_name . '/', $image_name);
 
         $image_id = 0;

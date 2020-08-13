@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -111,15 +109,15 @@
         <div class="nicescroll-bar">
             <div class="navbar-nav-wrap">
                 <ul class="navbar-nav flex-column">
-
                     <li class="nav-item {{\Request::route()->getName() == 'dashboard' ? "active" : ""}}">
                         <a class="nav-link" href="{{route('dashboard')}}">
                             <span class="feather-icon"><i data-feather="activity"></i></span>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
                     </li>
-                    <hr class="nav-separator">
 
+                    {{-- manage products--}}
+                    <hr class="nav-separator">
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#product_manager">
@@ -172,7 +170,7 @@
                         </ul>
                     </li>
 
-                    {{-- manage discounts--}}
+                    {{-- manage orders--}}
                     <hr class="nav-separator">
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
@@ -188,6 +186,29 @@
                                         <a class="nav-link"
                                            href="{{route('order.manage.view')}}"><i
                                                 class="fa fa-user-plus"></i>Order list</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- manage shops--}}
+                    <hr class="nav-separator">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#shop_manager">
+                            <i class="fa fa-dollar"></i></span>
+                            <span class="nav-link-text">Shops & Billing</span>
+                        </a>
+                        <ul id="shop_manager"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "shop_billing" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "shop.list.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('shop.list.view')}}"><i
+                                                class="fa fa-shopping-cart"></i>My Shops</a>
                                     </li>
 
                                 </ul>
@@ -305,10 +326,10 @@
     function connectPage() {
         FB.login(function (response) {
             console.log(response);
-            let connect_btn = $("#connect_page_btn");
-            let connect_text = $("#connect_text");
+            let connect_btn = $(".connect_page_btn");
+            let connect_text = $(".connect_text");
             connect_btn.removeClass('btn-danger').addClass('btn-primary');
-            connect_text.html('Connecting to pages. Please wait...')
+            connect_text.html('Please wait. Connecting your page...')
             $.ajax({
                 type: "GET",
                 url: "{{route('page.store')}}",
@@ -316,18 +337,16 @@
                     facebook_api_response: response
                 },
                 success: function (backend_response) {
-                    if(backend_response === 'success'){
+                    if (backend_response === 'success') {
                         connect_btn.removeClass('btn-primary').addClass('btn-success');
                         connect_text.html('Congratulation! Your Page is now connected.');
-                        // connect_btn.attr('disabled', true);
-                        setTimeout(function(){
+                        setTimeout(function () {
                             window.location.reload(true);
-                        }, 2000);
-                    }else if(backend_response === 'no_page_added'){
+                        }, 500);
+                    } else if (backend_response === 'no_page_added') {
                         connect_btn.removeClass('btn-primary').addClass('btn-danger');
                         connect_text.html('All Pages Removed. Connect Page Again!');
-                    }
-                    else{
+                    } else {
                         connect_btn.removeClass('btn-primary').addClass('btn-danger');
                         connect_text.html('Something went wrong! Try Again.');
                     }
@@ -338,11 +357,11 @@
         }, {scope: 'pages_messaging, pages_manage_metadata, pages_show_list'});
     };
 </script>
-
 @yield('dashboard-js')
 @yield("product-js")
 @yield('user-js')
 @yield('discount-js')
 @yield('manageDiscount-js')
+@yield('shop-js')
 </body>
 </html>

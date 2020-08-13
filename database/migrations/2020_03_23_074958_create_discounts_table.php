@@ -20,7 +20,6 @@ class CreateDiscountsTable extends Migration
             $table->date('dis_to');
             $table->integer('pid');
             $table->float('dis_percentage')->default(0);
-            $table->smallInteger('max_customers')->nullable();
             $table->smallInteger('shop_id');
             $table->tinyInteger('state')->default(1);
             $table->timestamps();

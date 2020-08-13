@@ -124,6 +124,37 @@
                                     @endif
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="control-label mb-10">Choose a shop<span
+                                            class="text-danger font-16">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="icon-shuffle"></i></span>
+                                        </div>
+                                        <select class="form-control" id="shop_id" name="shop_id_name" required>
+                                            <option disabled>Select shop</option>
+                                            @if($product_details !== null)
+                                                @foreach($shop_list as $shop)
+                                                    <option value="{{$shop->id."_".$shop->page_name}}"
+                                                    {{$shop->id == $product_details->shop_id ? "selected" : ""}}>
+                                                        {{$shop->page_name}}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                @foreach($shop_list as $shop)
+                                                    <option value="{{$shop->id."_".$shop->page_name}} ">
+                                                        {{$shop->page_name}}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <label for="product_price" class="error text-danger"></label>
+                                    @if($errors->has('shop_id_name'))
+                                        <p class="text-danger font-14">{{ $errors->first('shop_id_name') }}</p>
+                                    @endif
+                                </div>
+
                                 <label class="control-label mb-10">Product Images<span
                                         class="text-danger font-16">*</span></label>
                                 <span class="text-muted font-12">[Max 1 MB | Upload at least 1 image]</span>
@@ -208,7 +239,8 @@
                                     </div>
                                 @else
                                     <div class="d-flex justify-content-center">
-                                        <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)" onclick="connectPage()">
+                                        <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)"
+                                           onclick="connectPage()">
                                             <i class="fa fa-facebook"></i> Connect Page to Add Product
                                         </a>
                                     </div>
