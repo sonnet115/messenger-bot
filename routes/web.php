@@ -89,7 +89,17 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
             Route::get("get-click", "Admin_Panel\OrderController@realtion");
         });
 
-        Route::group(['prefix' => 'shop_billing'], function () {
+        //Routes for delivery charges
+        Route::group(['prefix' => 'delivery-charge'], function () {
+            Route::get("add-form", "Admin_Panel\DeliveryChargeController@viewAddDeliveryChargeForm")->name("dc.add.view");
+            Route::post("store-dc", "Admin_Panel\DeliveryChargeController@storeDeliveryCharge")->name('dc.store');
+            Route::get("dc-list", "Admin_Panel\DeliveryChargeController@viewDeliveryChargeList")->name('dc.list.view');
+            Route::post("update-dc", "Admin_Panel\DeliveryChargeController@updateDeliveryCharge")->name('dc.update');
+            Route::get("get-dc", "Admin_Panel\DeliveryChargeController@getDeliveryCharges")->name('dc.get');
+        });
+
+        //Routes for shops & billing
+        Route::group(['prefix' => 'shop-billing'], function () {
             Route::get("store-page", "Admin_Panel\PageController@storePages")->name('page.store');
             Route::get("shop-list", "Admin_Panel\PageController@viewShopList")->name('shop.list.view');
             Route::get("get-list", "Admin_Panel\PageController@getShopsList")->name('shop.list.get');

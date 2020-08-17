@@ -20,6 +20,7 @@ class DiscountController extends Controller
         } else {
             $discount_details = null;
         }
+
         $shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
         return view("admin_panel.discount.add_discount_form")
             ->with("title", "CBB | Add Discount")
@@ -84,7 +85,11 @@ class DiscountController extends Controller
             $pid = " and pid IN(" . implode(',', request('pid')) . ")";
         }
 
-        return datatables(Discount::selectRaw("*")->whereRaw(1 . $date_range . $pid . $start_date . $end_date)->orderBy('id', 'asc')->with('product')->with('shop'))->toJson();
+        if (auth()->user()->page_added > 0) {
+            return datatables(Discount::selectRaw("*")->whereRaw(1 . $date_range . $pid . $start_date . $end_date)->orderBy('id', 'asc')->with('product')->with('shop'))->toJson();
+        } else {
+            return datatables(array())->toJson();
+        }
     }
 
     public function updateDiscount(Request $request)

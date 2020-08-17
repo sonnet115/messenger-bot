@@ -193,6 +193,40 @@
                         </ul>
                     </li>
 
+                    {{-- manage delivery charges--}}
+                    <hr class="nav-separator">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
+                           data-target="#order_dc">
+                            <i class="fa fa-users"></i></span>
+                            <span class="nav-link-text">Delivery Charges</span>
+                        </a>
+                        <ul id="order_dc"
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "delivery-charge" ? "show" : "" }}">
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "dc.add.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('dc.add.view')}}"><i
+                                                class="fa fa-user-plus"></i>Add Delivery Charge</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item {{\Request::route()->getName() == "dc.list.view" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('dc.list.view')}}"><i
+                                                class="fa fa-user-plus"></i>Delivery Charges List</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
                     {{-- manage shops--}}
                     <hr class="nav-separator">
                     <li class="nav-item">
@@ -202,7 +236,7 @@
                             <span class="nav-link-text">Shops & Billing</span>
                         </a>
                         <ul id="shop_manager"
-                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "shop_billing" ? "show" : "" }}">
+                            class="nav flex-column collapse collapse-level-1 {{ Request::segment(2) == "shop-billing" ? "show" : "" }}">
                             <li class="nav-item">
                                 <ul class="nav flex-column">
                                     <li class="nav-item {{\Request::route()->getName() == "shop.list.view" ? "active" : ""}}">

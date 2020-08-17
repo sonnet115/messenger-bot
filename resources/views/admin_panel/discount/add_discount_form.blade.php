@@ -52,7 +52,7 @@
                                         </div>
                                         <input type="text" id="discount_name" name="discount_name"
                                                placeholder="Enter Discount Name" class="form-control"
-                                               value="{{$discount_details!==null?$discount_details->name:old('name')}}"
+                                               value="{{$discount_details!==null?$discount_details->name:old('discount_name')}}"
                                                required>
                                     </div>
                                     <label for="discount_name" class="error text-danger"></label>
