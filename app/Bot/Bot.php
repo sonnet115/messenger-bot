@@ -17,7 +17,7 @@ class Bot
         $this->messaging = $messaging;
         $this->type = $type;
         $this->recipientId = $this->messaging->getSenderId();//User ID
-        $this->senderID = $this->messaging->getRecipientId();//App ID
+        $this->senderID = $this->messaging->getRecipientId();//Page ID
         $this->page_token = $page_token;//page token
     }
 

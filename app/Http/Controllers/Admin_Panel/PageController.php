@@ -219,7 +219,7 @@ class PageController extends Controller
     {
         $request_body = '{
                             "whitelisted_domains": [
-                                "https://e91dd6f5e4b7.ngrok.io/"
+                                "https://a7850057d57d.ngrok.io/"
                             ]
                         }';
 

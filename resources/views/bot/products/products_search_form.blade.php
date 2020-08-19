@@ -84,7 +84,7 @@
     <!-- The Notification Modal Ends-->
 
     <input type="hidden" value="{{$customer_id}}" id="customer_id">
-    <input type="hidden" value="{{$app_id}}" id="app_id">
+    <input type="hidden" value="{{$page_id}}" id="app_id">
 @endsection
 
 @section('product-search-js')

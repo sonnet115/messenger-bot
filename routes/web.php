@@ -12,16 +12,16 @@
 */
 
 use App\Http\Middleware\VerifyShopID;
-
+//Route for user login
 Route::get("/", "Admin_Panel\DashboardController@showHome")->name('home')->middleware('authenticated.user');
 Route::get('/auth/redirect/{provider}', 'Admin_Panel\UserController@redirect');
 Route::get('/callback/{provider}', 'Admin_Panel\UserController@callback');
 Route::get('logout', 'Admin_Panel\UserController@logout')->name('logout');
 
 //Route for verification
-Route::get("bot/{app_id}/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
+Route::get("bot/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware("verify");
 //where Facebook sends messages to. No need to attach the middleware to this because the verification is via GET
-Route::post("bot/{app_id}/verify-web-hook", "Bot\BotController@verifyWebhook");
+Route::post("bot/verify-web-hook", "Bot\BotController@verifyWebhook");
 
 
 Route::group(['prefix' => 'bot/{app_id}'], function () {
