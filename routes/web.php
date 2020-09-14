@@ -26,7 +26,7 @@ Route::post("bot/verify-web-hook", "Bot\BotController@verifyWebhook");
 
 Route::group(['prefix' => 'bot/{app_id}'], function () {
     //Routes for place orders
-    Route::get("cart/{id}", "Bot\OrderController@viewOrderForm")->name("cart.show");
+    Route::get("cart/{customer_fb_id}", "Bot\OrderController@viewCheckoutForm")->name("cart.show");
     Route::get("get-cart-products", "Bot\OrderController@getCartProducts")->name("cart.get");
     Route::get("order-store", "Bot\OrderController@storeOrder")->name("order.store");
     Route::get("check-product", "Bot\OrderController@checkProductCode")->name("product.code.check");

@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/iofrm-style.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/iofrm-theme24.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/custom.css">
+    @yield('check-out-css')
 </head>
 <body style="overflow-x: hidden">
 <div class="spinner-wrapper">

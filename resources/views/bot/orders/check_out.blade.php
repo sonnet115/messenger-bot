@@ -1,5 +1,22 @@
 @extends('bot.main')
 
+@section('check-out-css')
+    <style>
+        .total_title {
+            font-size: 13px !important;
+            line-height: 0 !important;
+            margin-bottom: 20px !important;
+        }
+
+        .total_value {
+            font-size: 13px !important;
+            line-height: 0 !important;
+            margin-bottom: 20px !important;
+            text-align: right !important;
+        }
+    </style>
+@endsection
+
 @section('main-content')
     <div class="text-center" style="margin-top: 20px">
         <h3 class="text-muted">Checkout</h3>
@@ -23,6 +40,52 @@
 
                             <div id="product_info_container" class="col-12 col-sm-12" style="margin-bottom: 20px">
 
+                            </div>
+
+                            <div class="col-6" style="margin-bottom: 20px">
+                                <select class="form-control" style="font-size: 12px" id="delivery_charge">
+                                    <option selected disabled>Choose delivery area</option>
+                                    @foreach($delivery_charges as $dc)
+                                        <option value="{{$dc->delivery_charge}}">{{$dc->name}}</option>
+                                    @endforeach
+                                </select>
+                                <br>
+                            </div>
+
+                            @foreach($delivery_charges as $dc)
+                                <input type="hidden" value="{{$dc->delivery_charge}}" id="dc_{{$dc->delivery_charge}}">
+                            @endforeach
+
+                            <div id="total_calculation_container" class="col-12 col-sm-12" style="margin-bottom: 20px">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <p class="total_title">Subtotal: </p>
+                                        <p class="total_title">Delivery Charge:</p>
+                                        <hr>
+                                        <p class="total_title"><b>Total: </b></p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="total_value"><span id="subtotal">100000 </span> Tk</p>
+                                        <p class="total_value"><span id="delivery_charge_value">0 </span> Tk</p>
+                                        <hr>
+                                        <p class="total_value"><span>100060 </span> Tk</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 20px">
+                                <div class="col-12 col-sm-6 text-center text-sm-left" style="margin-bottom: 20px;">
+                                    <a href="" id="more_products_btn" style="border-radius: 50px;min-width: 170px"
+                                       class="btn btn-outline-primary outline_btn">
+                                        <i class="fa fa-shopping-cart"></i> More Products
+                                    </a>
+                                </div>
+                                <div class="col-12 col-sm-6 text-center text-sm-right" style="margin-bottom: 20px;">
+                                    <button id="checkout_btn" style="border-radius: 50px;min-width: 170px"
+                                            class="btn btn-outline-success outline_btn">
+                                        <i class="fa fa-check-circle"></i> Checkout
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="col-4 col-sm-4 basic_info">
@@ -103,6 +166,7 @@
         </div>
     </div>
     <!-- The Notification Modal Ends-->
+
     <input type="hidden" value="{{$app_id}}" id="app_id">
 @endsection
 
@@ -129,8 +193,8 @@
                             let increment_decrement_btn_content = incrementDecrementButton(result[i].products.code);
                             let product_details_content = productDetails(result[i].products.name, result[i].products.code, result[i].products.price);
 
-                            let cart_products = '<div style="padding: 10px 0px;">' +
-                                '                      <div class="card shadow" style="padding: 10px 0px;">\n' +
+                            let cart_products = '<div style="padding: 10px 0;">' +
+                                '                      <div class="card shadow-sm" style="padding: 10px 0;">\n' +
                                 '                           <div class="row">\n' +
                                 '' + delete_btn_content +
                                 '' + product_details_content +
@@ -245,9 +309,7 @@
                             });
                         }
 
-                        let add_more_product = addMoreAndCheckoutButton(product_search_url);
-
-                        product_info_container.append(add_more_product);
+                        $("#more_products_btn").attr('href', product_search_url);
 
                         $("#checkout_btn").on("click", function () {
                             $(".basic_info").show(1000);
@@ -318,6 +380,18 @@
                     hidePreloader();
                 }
             });
+
+            $("#delivery_charge").on('change', function () {
+                $("#delivery_charge_value").html($("#dc_" + $(this).val()).val());
+            });
+
+            function calculateSubtotal(bucket) {
+                let subtotal = 0;
+                for (let i = 0; i < bucket.length; i++) {
+                    subtotal += bucket[i].products.price;
+                }
+                $("#subtotal").html(subtotal);
+            }
 
             function validate(field_name, value, error_field, validation_type) {
                 switch (validation_type) {
@@ -401,29 +475,20 @@
             function showNotification(message, text_class, display_time) {
                 $("#notification_modal").modal('toggle');
 
-                $("#notification_modal_body").html(message);
-                $("#notification_modal_body").addClass(" " + text_class);
+                let notification_modal_body = $("#notification_modal_body");
+
+                if (text_class === 'text-danger') {
+                    notification_modal_body.removeClass('text-success')
+                } else {
+                    notification_modal_body.removeClass('text-danger')
+                }
+
+                notification_modal_body.html(message);
+                notification_modal_body.addClass(" " + text_class);
 
                 setTimeout(function () {
                     $('#notification_modal').modal('hide');
                 }, display_time);
-            }
-
-            function addMoreAndCheckoutButton(more_product_url) {
-                return '<div class="row" style="margin-top: 20px">\n' +
-                    '         <div class="col-12 col-sm-6 text-center text-sm-left" style="margin-bottom: 20px;">\n' +
-                    '              <a href="' + more_product_url + '" style="border-radius: 50px;min-width: 170px"\n' +
-                    '                  class="btn btn-outline-primary outline_btn">\n' +
-                    '                  <i class="fa fa-shopping-cart"></i> More Products\n' +
-                    '              </a>\n' +
-                    '         </div>\n' +
-                    '         <div class="col-12 col-sm-6 text-center text-sm-right" style="margin-bottom: 20px;">\n' +
-                    '              <button id="checkout_btn" style="border-radius: 50px;min-width: 170px"\n' +
-                    '                    class="btn btn-outline-success outline_btn">\n' +
-                    '                     <i class="fa fa-check-circle"></i> Checkout\n' +
-                    '               </button>\n' +
-                    '         </div>\n' +
-                    '   </div>';
             }
 
             function noProductFound(product_search_url) {

@@ -198,7 +198,7 @@ class PageController extends Controller
                                         },
                                         {
                                             "type": "postback",
-                                            "title": "Talk to Agent",
+                                            "title": "Chat with Agent",
                                             "payload": "TALK_TO_AGENT"
                                         }
                                     ]
@@ -219,7 +219,7 @@ class PageController extends Controller
     {
         $request_body = '{
                             "whitelisted_domains": [
-                                "https://a7850057d57d.ngrok.io/"
+                                "' . env("APP_URL") . '"
                             ]
                         }';
 

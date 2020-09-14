@@ -74,8 +74,9 @@
     <!-- The Notification Modal Starts-->
     <div class="modal fade" id="notification_modal">
         <div class="modal-dialog modal-dialog-centered" style="padding: 20px;">
-            <div class="modal-content">
-                <div class="modal-body" style="font-size: 14px; background: whitesmoke;padding: 15px 0px 0px 0px;">
+            <div class="modal-content" style="border-radius: 30px">
+                <div class="modal-body"
+                     style="font-size: 14px; background: whitesmoke;padding: 15px 0 0 0;border-radius: 30px">
                     <p id="notification_modal_body" class="text-center"></p>
                 </div>
             </div>
@@ -435,13 +436,20 @@
 
         function showNotification(message, text_class) {
             $("#notification_modal").modal('toggle');
+            let notification_modal_body = $("#notification_modal_body");
 
-            $("#notification_modal_body").html(message);
-            $("#notification_modal_body").addClass(" " + text_class);
+            if (text_class === 'text-danger') {
+                notification_modal_body.removeClass('text-success')
+            } else {
+                notification_modal_body.removeClass('text-danger')
+            }
+
+            notification_modal_body.html(message);
+            notification_modal_body.addClass(" " + text_class);
 
             setTimeout(function () {
                 $('#notification_modal').modal('hide');
-            }, 4000);
+            }, 3000);
         }
 
         function pagination(data) {

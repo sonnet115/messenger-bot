@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Bot;
 
-use App\Http\Controllers\Controller;
 use App\Bot\Common;
 use App\Bot\Template;
 use App\Bot\TextMessages;
 use App\Cart;
 use App\Customer;
+use App\DeliveryCharge;
+use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderedProducts;
 use App\PreOrder;
@@ -26,6 +27,7 @@ class OrderController extends Controller
     private $app_id_segment = 2;
     private $customer_fb_id;
     private $app_id;
+    private $shop;
     private $shop_id;
     private $page_token;
 
@@ -33,18 +35,19 @@ class OrderController extends Controller
     {
         $this->customer_fb_id = request()->segment($this->customer_fb_id_segment);
         $this->app_id = request()->segment($this->app_id_segment);
-        $shop = Shop::where('app_id', $this->app_id)->first();
-        $this->shop_id = $shop->id;
-        $this->page_token = $shop->page_token;
+        $this->shop = Shop::where('page_id', $this->app_id)->first();
+        $this->shop_id = $this->shop->id;
+        $this->page_token = $this->shop->page_token;
 
         $this->common = new Common($this->page_token);
         $this->job_controller = new JobController();
     }
 
-    public function viewOrderForm(Request $request)
+    public function viewCheckoutForm(Request $request)
     {
         $get_customer_info = Customer::where('fb_id', $this->customer_fb_id)->first();
-        return view("bot.orders.check_out")->with("customer_info", $get_customer_info)->with('app_id', $this->app_id);
+        $delivery_charges = DeliveryCharge::where('shop_id', $this->shop_id)->get();
+        return view("bot.orders.check_out")->with("customer_info", $get_customer_info)->with('app_id', $this->app_id)->with('delivery_charges', $delivery_charges);
     }
 
     public function storeOrder(Request $request)
@@ -236,29 +239,19 @@ class OrderController extends Controller
         if ($product_exists_in_cart) {
             return response()->json("Already In Cart", 409);
         } else {
-            $this->job_controller->addToCartJob($request->all());
-            return response()->json("Added To Cart", 200);
-        }
-    }
-
-    public function processAddToCart($data)
-    {
-        try {
-            $this->text_message = new TextMessages($data['customer_fb_id']);
-            $customer_id = Customer::select('id')->where('fb_id', $data['customer_fb_id'])->first();
-            $product_id = Product::select('id')->where('code', $data['cart_product_code'])->where('shop_id', $this->shop_id)->first();
-            $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
-
-            if (!$product_exists_in_cart) {
+            try {
+                $this->text_message = new TextMessages($request->customer_fb_id);
                 $cart = new Cart();
                 $cart->pid = $product_id->id;
                 $cart->customer_id = $customer_id->id;
-                $cart->customer_fb_id = $data['customer_fb_id'];
+                $cart->customer_fb_id = $request->customer_fb_id;
                 $cart->shop_id = $this->shop_id;
                 $cart->save();
+                return response()->json("Added To Cart", 200);
+            } catch (\Exception $e) {
+                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product cannot be added to cart. Try Again!"));
+                return response()->json("Couldn't add to cart", 400);
             }
-        } catch (\Exception $e) {
-            $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product cannot be added to cart. Try Again!"));
         }
     }
 
@@ -273,7 +266,7 @@ class OrderController extends Controller
         if ($this->processRemoveCartProducts($request->product_code, $request->customer_fb_id)) {
             return response()->json("Product removed from cart successfully.", 200);
         } else {
-            return response()->json("Cannot remove product. Please try again!", 408);
+            return response()->json("Cannot remove product. Please try again!", 400);
         }
     }
 
