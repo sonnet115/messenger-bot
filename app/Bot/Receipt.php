@@ -65,8 +65,8 @@ class Receipt
         }
         return [
             "subtotal" => $subtotal,
-            "shipping_cost" => 60,
-            "total_cost" => ($subtotal - $this->total_discount) + 60
+            "shipping_cost" => $this->placed_order_data->delivery_charge,
+            "total_cost" => ($subtotal - $this->total_discount) + $this->placed_order_data->delivery_charge
         ];
     }
 

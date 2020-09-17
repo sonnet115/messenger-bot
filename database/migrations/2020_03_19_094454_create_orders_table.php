@@ -25,6 +25,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('order_status')->default(0);
             $table->integer('status_updated_by')->nullable();
             $table->smallInteger('shop_id');
+            $table->smallInteger('delivery_charge')->default(0);
             $table->timestamps();
         });
     }

@@ -42,19 +42,15 @@
 
                             </div>
 
-                            <div class="col-6" style="margin-bottom: 20px">
+                            <div class="col-6" style="margin-bottom: 20px" id="delivery_area_container">
+                                <label>Choose a delivery area</label>
                                 <select class="form-control" style="font-size: 12px" id="delivery_charge">
-                                    <option selected disabled>Choose delivery area</option>
                                     @foreach($delivery_charges as $dc)
                                         <option value="{{$dc->delivery_charge}}">{{$dc->name}}</option>
                                     @endforeach
                                 </select>
                                 <br>
                             </div>
-
-                            @foreach($delivery_charges as $dc)
-                                <input type="hidden" value="{{$dc->delivery_charge}}" id="dc_{{$dc->delivery_charge}}">
-                            @endforeach
 
                             <div id="total_calculation_container" class="col-12 col-sm-12" style="margin-bottom: 20px">
                                 <div class="row">
@@ -68,12 +64,12 @@
                                         <p class="total_value"><span id="subtotal">100000 </span> Tk</p>
                                         <p class="total_value"><span id="delivery_charge_value">0 </span> Tk</p>
                                         <hr>
-                                        <p class="total_value"><span>100060 </span> Tk</p>
+                                        <p class="total_value"><b id="total">100060 </b> Tk</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row" style="margin-top: 20px">
+                            <div class="row" id="more_product_container" style="margin-top: 20px">
                                 <div class="col-12 col-sm-6 text-center text-sm-left" style="margin-bottom: 20px;">
                                     <a href="" id="more_products_btn" style="border-radius: 50px;min-width: 170px"
                                        class="btn btn-outline-primary outline_btn">
@@ -150,6 +146,7 @@
 
                 {{--hidden fields--}}
                 <input type="hidden" value="{{$customer_info->fb_id}}" name="customer_fb_id">
+                <input type="hidden" value="" name="selected_delivery_charge" id="selected_delivery_charge">
 
             </div>
         </div>
@@ -195,7 +192,7 @@
 
                             let cart_products = '<div style="padding: 10px 0;">' +
                                 '                      <div class="card shadow-sm" style="padding: 10px 0;">\n' +
-                                '                           <div class="row">\n' +
+                                '                           <div class="row product_container">\n' +
                                 '' + delete_btn_content +
                                 '' + product_details_content +
                                 '' + increment_decrement_btn_content +
@@ -204,6 +201,11 @@
                                 '                 </div>';
 
                             product_info_container.append(cart_products);
+
+                            $("#selected_delivery_charge").val($("#delivery_charge").val());
+                            $("#delivery_charge_value").html($("#selected_delivery_charge").val());
+
+                            calculateTotal($(".product_container"));
 
                             $("#delete_btn_" + result[i].products.code).on("click", function () {
                                 let delete_btn = $(this);
@@ -221,11 +223,12 @@
                                             $(this).remove();
                                             let count = product_info_container.children().length;
 
-                                            if (count < 2) {
-                                                product_info_container.html("");
-                                                let add_more_product = noProductFound(product_search_url);
-                                                product_info_container.append(add_more_product);
-                                                $(".basic_info").hide(500);
+                                            if (count < 1) {
+                                                hideContainers();
+                                                let no_product = noProductFound(product_search_url);
+                                                product_info_container.html(no_product);
+                                            } else {
+                                                calculateTotal($(".product_container"));
                                             }
                                         });
                                     },
@@ -264,6 +267,7 @@
                                         }
                                         $("#submit").attr("disabled", false);
                                         increment_btn.html("<i class='fa fa-plus-square'></i>");
+                                        calculateTotal($(".product_container"));
                                     }
                                 });
                             });
@@ -282,6 +286,7 @@
                                     qty_container.html(1);
                                     qty_input_field.val(1);
                                     $("#submit").attr("disabled", false);
+                                    calculateTotal(product_container);
                                 } else {
                                     decrement_btn.html("<i class='fas fa-spinner fa-spin'></i>");
                                     $.ajax({
@@ -290,7 +295,6 @@
                                         data: {
                                             "product_code": result[i].products.code
                                         },
-
                                         success: function (result) {
                                             if (new_qty > parseInt(result.stock)) {
                                                 showNotification("Not enough in stock", "text-danger", 3000);
@@ -302,6 +306,7 @@
                                             }
                                             $("#submit").attr("disabled", false);
                                             decrement_btn.html("<i class='fa fa-minus-square'></i>");
+                                            calculateTotal($(".product_container"));
                                         }
                                     });
 
@@ -324,14 +329,15 @@
                             let shipping_address = $("textarea[name=shipping_address]").val();
                             let billing_address = $("textarea[name=billing_address]").val();
                             let customer_fb_id = $("input[name=customer_fb_id]").val();
+                            let delivery_charge = $("#selected_delivery_charge").val();
 
                             let product_code = $("input[name='product_code[]']").map(function () {
                                 return $(this).val();
                             }).get();
+
                             let product_qty = $("input[name='product_qty[]']").map(function () {
                                 return $(this).val();
                             }).get();
-
 
                             if (!validate("First Name", first_name, "first_name_error", 1)) {
                                 return;
@@ -361,19 +367,21 @@
                                     'product_code': product_code,
                                     'product_qty': product_qty,
                                     'customer_fb_id': customer_fb_id,
+                                    'delivery_charge': delivery_charge,
                                 },
                                 success: function (result) {
                                     showNotification(result, "text-success", 4000);
                                     setTimeout(function () {
-                                        $("#product_info_container").html("");
+                                        hideContainers();
+
                                         let add_more_product = noProductFound(product_search_url);
                                         $("#product_info_container").append(add_more_product);
-                                        $(".basic_info").hide(500);
                                     }, 5000);
                                 }
                             });
                         });
                     } else {
+                        hideContainers();
                         let no_product = noProductFound(product_search_url);
                         product_info_container.html(no_product);
                     }
@@ -382,15 +390,42 @@
             });
 
             $("#delivery_charge").on('change', function () {
-                $("#delivery_charge_value").html($("#dc_" + $(this).val()).val());
+                $("#selected_delivery_charge").val($("#delivery_charge").val());
+                $("#delivery_charge_value").html($("#selected_delivery_charge").val());
+                calculateTotal($('.product_container'));
             });
 
-            function calculateSubtotal(bucket) {
-                let subtotal = 0;
-                for (let i = 0; i < bucket.length; i++) {
-                    subtotal += bucket[i].products.price;
-                }
+            function hideContainers() {
+                $("#product_info_container").html("");
+                $("#more_product_container").hide(500);
+                $("#total_calculation_container").hide(500);
+                $("#delivery_area_container").hide(500);
+
+                $(".basic_info").hide(500);
+            }
+
+            function calculateSubtotal(product_container) {
+                console.log(product_container);
+                let products = product_container.map(function () {
+                    return $(this).find("input[name='product_qty[]']").val() * $(this).find("input[name='product_price[]']").val();
+                }).get();
+
+                let subtotal = products.reduce(function (a, b) {
+                    return a + b;
+                }, 0);
+
                 $("#subtotal").html(subtotal);
+            }
+
+            function calculateTotal(product_container) {
+                calculateSubtotal(product_container);
+
+                let subtotal = $("#subtotal").html();
+                let delivery_charge = $("#delivery_charge_value").html();
+                let total = Math.ceil(parseFloat(subtotal) + parseInt(delivery_charge));
+
+                $("#total").html(total);
+                console.log(total);
             }
 
             function validate(field_name, value, error_field, validation_type) {
@@ -447,8 +482,10 @@
                     '        </p>\n' +
                     '        <p class="product_details"><b class="text-primary"> Code:</b> ' + code + ' </p>\n' +
                     '        <p class="product_details"><b class="text-primary"> Price:</b> ' + price + ' </p>\n' +
-                    '        <input type="hidden" class="form-control" placeholder="Product Code" required\n' +
+                    '        <input type="hidden" class="form-control" required\n' +
                     '                                               name="product_code[]" value="' + code + '">\n' +
+                    '        <input type="hidden" class="form-control" required\n' +
+                    '                                               name="product_price[]" value="' + price + '">\n' +
                     '   </div>\n';
             }
 
@@ -463,7 +500,7 @@
                     '                <span style="text-align: center;font-size: 15px;margin: 0px"\n' +
                     '                      class="product_qty">1</span>\n' +
                     '        </button>\n' +
-                    '        <input type="hidden" class="form-control" placeholder="Product Qty" required\n' +
+                    '        <input type="hidden" class="form-control" value="1" placeholder="Product Qty" required\n' +
                     '                                               name="product_qty[]" id="qty_' + product_code + '">\n' +
                     '        <button id="decrement_btn_' + product_code + '" class="outline_btn btn btn-sm btn-outline-danger shadow-sm"\n' +
                     '                style="padding: 5px 10px;font-size: 12px;border-radius: 2px;">\n' +

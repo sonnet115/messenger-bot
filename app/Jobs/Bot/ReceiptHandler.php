@@ -30,7 +30,7 @@ class ReceiptHandler implements ShouldQueue
 
     public function handle()
     {
-        $order_number = "Your order code is '".$this->order_data->code."'. Use this code to track your order";
+        $order_number = "Your order code is '" . $this->order_data->code . "'. Use this code to track your order";
         $this->common->sendAPIRequest($this->receipt->sendReceipt());
         $this->common->sendAPIRequest($this->text_message->sendTextMessage($order_number));
     }

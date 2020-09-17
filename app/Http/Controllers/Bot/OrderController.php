@@ -37,7 +37,7 @@ class OrderController extends Controller
         $this->app_id = request()->segment($this->app_id_segment);
         $this->shop = Shop::where('page_id', $this->app_id)->first();
         $this->shop_id = $this->shop->id;
-        $this->page_token = $this->shop->page_token;
+        $this->page_token = $this->shop->page_access_token;
 
         $this->common = new Common($this->page_token);
         $this->job_controller = new JobController();
@@ -85,6 +85,7 @@ class OrderController extends Controller
             $order->shipping_address = $data['shipping_address'];
             $order->billing_address = $data['billing_address'];
             $order->shop_id = $this->shop_id;
+            $order->delivery_charge = $data['delivery_charge'];
             $order->save();
             $order_id = $order->id;
 
@@ -105,7 +106,7 @@ class OrderController extends Controller
                         $discounted_price = 0;
                     }
 
-                    $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
+//                    $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
 
                     if ($qty > $product_details->stock) {
                         array_push($stock_out_product, $product_codes[$i]);
@@ -142,7 +143,6 @@ class OrderController extends Controller
             $this->processReceipt($data['customer_fb_id'], $order_code);
         } catch (\Exception $e) {
             DB::rollBack();
-//            dd($e);
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
             $this->common->sendAPIRequest($this->template->orderProductTemplate());
         }
@@ -279,20 +279,20 @@ class OrderController extends Controller
     //test function
     public function getTestData()
     {
-        $dd = Order::where('code', '1592421643_26395')->with('ordered_products')->get();
+        $dd = Order::where('code', '1600332097_13712')->with('ordered_products')->get();
         dd($dd);
 
-        $p = array();
-        foreach ($dd as $d) {
-            array_push($p, [
-                "title" => $d->products->name,
-                "subtitle" => "100% Soft and Luxurious Cotton",
-                "quantity" => $d->product_qty,
-                "price" => $d->product_price,
+        $products = array();
+        foreach ($dd[0]->ordered_products as $product) {
+            array_push($products, [
+                "title" => $product->name,
+                "subtitle" => "Product_Code:" . $product->code,
+                "quantity" => $product->pivot->quantity,
+                "price" => $product->pivot->price,
                 "currency" => "BDT",
-                "image_url" => "http://134.209.108.173/uploads/C05V0144_mega_handover.png"
+                "image_url" => "https://i.picsum.photos/id/1021/2048/1206.jpg"
             ]);
         }
-        return response()->json($p);
+        return response()->json($products);
     }
 }
