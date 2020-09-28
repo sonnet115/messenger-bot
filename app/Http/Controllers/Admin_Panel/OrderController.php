@@ -7,50 +7,55 @@ use App\Order;
 use App\OrderedProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\User;
 
 class OrderController extends Controller
 {
-    public function viewUpdateOrder(){
-        return view('admin_panel.orders.manage_order')->with("title"," CBB || Manage Orders");
+    public function viewUpdateOrder()
+    {
+        return view('admin_panel.orders.manage_order')->with("title", " Howkar Tech || Manage Orders");
     }
 
-    public function getOrders(){
-//        $status_updated_by = User::find()->status_updated_by;
-//        dd($status_updated_by);
+    public function getOrders()
+    {
         return datatables(Order::selectRaw("*")->whereRaw(1)->orderBy('id', 'asc')->with('status_updated_by'))->toJson();
-
-    }
-    public function getOrdersDetails(Request $request){
-
-           // $order =new Order();
-            //$data=Order::all();
-            $order_id=$request->order_id;
-            $data = Order::where('id', $order_id)->with('ordered_products')->first();
-
-            //dd($data);
-            if($data){
-                return response()->json($data);
-            }
-
     }
 
-    public function getProductStatus(Request $request){
-            $status= $request->product_status;
-            $product_id= $request->product_id;
-            $order_id= $request->order_id;
-            $order=OrderedProducts::where('oid',$order_id)->where('pid',$product_id)->update(['product_status' => $status]);
-            if($order){
-                $result = DB::table('ordered_products')->select('product_status','quantity','price','discount')
-                    ->where('oid', $order_id)->where('pid',$product_id)->first();
-                return response()->json($result);
-            }
-
-
+    public function getOrdersDetails(Request $request)
+    {
+        $order_id = $request->order_id;
+        $data = Order::where('id', $order_id)->with('ordered_products')->first();
+        if ($data) {
+            return response()->json($data);
+        }
     }
 
-    public function realtion(){
-        $status_updated_by = Order::selectRaw("*")->whereRaw(1)->orderBy('id', 'asc')->with('status_updated_by')->get();
-        dd($status_updated_by);
+    public function getProductStatus(Request $request)
+    {
+        $status = $request->product_status;
+        $product_id = $request->product_id;
+        $order_id = $request->order_id;
+        $order = OrderedProducts::where('oid', $order_id)->where('pid', $product_id)->update(['product_status' => $status]);
+        if ($order) {
+            $result = DB::table('ordered_products')->select('product_status', 'quantity', 'price', 'discount')
+                ->where('oid', $order_id)->where('pid', $product_id)->first();
+            return response()->json($result);
+        }
+    }
+
+    public function changeOrderStatus(Request $request)
+    {
+        try {
+            $order_id = $request->order_id;
+            $order_status = $request->order_status;
+
+            $order = Order::find($order_id);
+            $order->order_status = $order_status;
+            $order->status_updated_by = auth()->user()->id;
+            $order->save();
+
+            return response()->json('Successfully updated status', 200);
+        } catch (\Exception $e) {
+            return response()->json('Update Failed', 400);
+        }
     }
 }

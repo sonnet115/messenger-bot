@@ -86,6 +86,7 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
             Route::get("get-order", "Admin_Panel\OrderController@getOrders")->name("order.get");
             Route::get("get-order-details", "Admin_Panel\OrderController@getOrdersDetails")->name("order.details.get");
             Route::get("get-order-status", "Admin_Panel\OrderController@getProductStatus")->name("order.status.get");
+            Route::get("change-order-status", "Admin_Panel\OrderController@changeOrderStatus")->name("order.status.change");
             Route::get("get-click", "Admin_Panel\OrderController@realtion");
         });
 

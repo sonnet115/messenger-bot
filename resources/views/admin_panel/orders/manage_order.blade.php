@@ -2,9 +2,8 @@
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
-        <a href="get-clcik"> click</a>
         <!-- Order List starts -->
-        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Product List</i></h4>
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Orders List</i></h4>
         <div class="row">
             <div class="col-xl-12">
                 <section class="hk-sec-wrapper">
@@ -14,14 +13,15 @@
                                 <p class="text-center alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('success_message') }}</p>
                             @endif
                             <div class="table-wrap">
-                                <table id="user_list_table" class="table table-bordered w-100 display">
+                                <table id="order_list_table" class="table table-bordered w-100 display">
                                     <thead class="btn-gradient-info">
                                     <tr>
                                         <th class="text-center text-white" data-priority="1">Order Code</th>
-                                        <th class="text-center text-white">Ordered Date</th>
+                                        <th class="text-center text-white">Order Date</th>
                                         <th class="text-center text-white">Status Updated By</th>
-                                        <th class="text-center text-white">Product Details</th>
-                                        <th class="text-center text-white">Order Status</th>
+                                        <th class="text-center text-white">Status</th>
+                                        <th class="text-center text-white">Details</th>
+                                        <th class="text-center text-white">Change Status</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -32,6 +32,7 @@
             </div>
         </div>
         <!-- Order list ends -->
+
         <!-- modal body starts-->
         <div class="modal fade" id="myModal">
             <div class="modal-dialog modal-xl">
@@ -131,7 +132,7 @@
     </div>
     <!-- /Container -->
 @endsection
-@section("product-js")
+@section("order-js")
     <script src={{asset("assets/admin_panel/vendors/datatables.net/js/jquery.dataTables.min.js")}}></script>
     <script src={{asset("assets/admin_panel/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js")}}></script>
     <script src={{asset("assets/admin_panel/vendors/datatables.net-dt/js/dataTables.dataTables.min.js")}}></script>
@@ -147,20 +148,20 @@
     <script
         src={{asset("assets/admin_panel/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")}}></script>
     <script src={{asset("assets/admin_panel/dist/js/dataTables-data.js")}}></script>
+    <script src={{asset("assets/admin_panel/dist/js/moment.js")}}></script>
 
     <!-- data table-->
     <script>
         $(document).ready(function () {
-            $('#user_list_table').DataTable({
+            $('#order_list_table').DataTable({
                 dom: 'Blfrtip',
                 responsive: true,
                 language: {
                     search: "",
                     searchPlaceholder: "Search",
+                    processing: "Loading. Please wait..."
                 },
-                "language": {
-                    "processing": "Loading. Please wait..."
-                },
+
                 "lengthMenu": [[25, 50, 100, 500, 10000], [25, 50, 100, 500, "All"]],
                 "bPaginate": true,
                 "info": true,
@@ -191,18 +192,45 @@
                     },
                     {
                         "className": "dt-center",
-                        "targets": [2, 3, 4]
+                        "targets": [1, 2, 3, 4]
                     }
                 ],
 
                 columns: [
                     {data: 'code', name: 'code'},
-                    {data: 'created_at', name: 'created_at'},
-                    {data: 'status_updated_by.name', name: 'status_updated_by'},
+                    {
+                        'render': function (data, type, row) {
+                            return '<span class="font-14">' + moment(row.created_at, 'YYYY/MM/DD HH:mm:ss').format("DD-MMM-YYYY hh:mm A") + '</span>';
+                        }
+                    },
+                    {
+                        'render': function (data, type, row) {
+                            if (row.status_updated_by) {
+                                return '<span class="font-14">' + row.status_updated_by.name + '</span>';
+                            } else {
+                                return "N/A";
+                            }
+                        }
+                    },
+                    {
+                        'render': function (data, type, row) {
+                            if (row.order_status === 0) {
+                                return '<p class="status_text"><span class=" badge badge-info rounded-10 pl-4 pr-4">Pending</span></p>';
+                            } else if (row.order_status === 1) {
+                                return '<p class="status_text"><span class="badge badge-primary rounded-10 pl-4 pr-4">Processing</span></p>';
+                            } else if (row.order_status === 2) {
+                                return '<p class="status_text"><span class="badge badge-warning rounded-10 pl-4 pr-4">Dispatched</span></p>';
+                            } else if (row.order_status === 3) {
+                                return '<p class="status_text"><span class="badge badge-success rounded-10 pl-4 pr-4">Delivered</span></p>';
+                            } else if (row.order_status === 4) {
+                                return '<p class="status_text"><span class="badge badge-danger rounded-10 pl-4 pr-4">Cancelled</span></p>';
+                            }
+                        }
+                    },
                     {
                         'render': function (data, type, row) {
                             let details_button = ' <div class="text-center">' +
-                                '<button type="button" class="btn btn-sm btn-outline-dark order_details" style="border: 1px solid !important" ' +
+                                '<button type="button" class="font-11 btn btn-sm btn-outline-dark order_details" style="border: 1px solid !important" ' +
                                 '> View\n' +
                                 '  </button>' +
                                 '<input type="hidden" value="' + row.id + '" class="order_id">' +
@@ -213,23 +241,58 @@
                     },
                     {
                         'render': function (data, type, row) {
-                            let details_button = ' <div class="dropdown">' +
-                                '<select name="cars" id="cars">\n' +
-                                '  <option value="1">Pending</option>\n' +
-                                '  <option value="saab">Processing</option>\n' +
-                                '  <option value="mercedes">Dispatched</option>\n' +
-                                '  <option value="audi">Delivered</option>\n' +
-                                '  <option value="audi">Cancelled</option>\n' +
-                                '</select>' + '</div>';
+                            let details_button = '<div class="dropdown">' +
+                                '<select class="form-control order_status font-11" name="order_status">\n' +
+                                '  <option selected disabled>Change</option>\n' +
+                                '  <option value="0">Pending</option>\n' +
+                                '  <option value="1">Processing</option>\n' +
+                                '  <option value="2">Dispatched</option>\n' +
+                                '  <option value="3">Delivered</option>\n' +
+                                '  <option value="4">Cancelled</option>\n' +
+                                '</select>' +
+                                '<input type="hidden" value="' + row.id + '" class="order_id">' +
+                                '</div>';
                             return details_button;
                         },
                     },
-                    // {data: 'order_status', name: 'order_status'},
                 ],
 
                 "drawCallback": function () {
                     $('.dt-buttons > .btn').addClass('btn-outline-light btn-sm');
                 },
+            });
+
+            //order status
+            $(document).on("change", ".order_status", function () {
+                let order_id = $(this).parent().find('.order_id').val();
+                let order_status_text = $(this).find('option:selected').text();
+                let order_status = $(this).val();
+                let order_status_container = $(this).parent().parent().parent().find('.status_text');
+                order_status_container.html('<span class="badge badge-dark rounded-10 pl-4 pr-4">Updating...</span>');
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('order.status.change')}}",
+                    data: {
+                        order_id: order_id,
+                        order_status: order_status,
+                    },
+                    success: function (response) {
+                        let v = "";
+                        if (order_status == 0) {
+                            v = '<span class=" badge badge-info rounded-10 pl-4 pr-4">Pending</span>';
+                        } else if (order_status == 1) {
+                            v = '<span class="badge badge-primary rounded-10 pl-4 pr-4">Processing</span>';
+                        } else if (order_status == 2) {
+                            v = '<span class="badge badge-warning rounded-10 pl-4 pr-4">Dispatched</span>';
+                        } else if (order_status == 3) {
+                            v = '<span class="badge badge-success rounded-10 pl-4 pr-4">Delivered</span>';
+                        } else if (order_status == 4) {
+                            v = '<span class="badge badge-danger rounded-10 pl-4 pr-4">Cancelled</span>';
+                        }
+                        order_status_container.html(v);
+                    }
+                });
             });
 
             //order details modal informations
@@ -248,7 +311,6 @@
                     },
 
                     success: function (response) {
-                        //console.log(response.ordered_products.pivot.product_status);
                         //order details
                         for (var i = 0; i < response.ordered_products.length; i++) {
                             let row = myOrder(response, i);
@@ -260,7 +322,7 @@
                         $('#customer_table_data').append(customer);
                         $('#myModal').modal('toggle');
 
-                        //summary detsils
+                        //summary details
                         let summary = summaryDetails(response);
                         let subtotal = summary['total_price'];
                         let total_discount = summary['total_discount'];
@@ -287,8 +349,8 @@
             let product_id = product_status_parent.find('.product_id').val();
             let order_id = product_status_parent.find('.order_id').val();
             let old_product_status = product_status_parent.find('.old_product_status').val();
-            //console.log(old_product_status);
             product_status_parent.find('.old_product_status').val(new_product_status);
+
             $.ajax({
                 type: "GET",
                 url: "{{route('order.status.get')}}",
@@ -298,9 +360,8 @@
                     order_id: order_id
                 },
                 success: function (response) {
-                    //console.log(response);
-
                     let product_status = product_status_parent.find('.product_status_td');
+
                     if ((response.product_status) === 1) {
 
                         product_status.html("<span class='badge badge-pill badge-danger'>Available</span>");
@@ -316,7 +377,6 @@
                     }
 
                     if (old_product_status !== new_product_status) {
-
                         if (new_product_status === "1") {
                             adjustOnchangeTotalPrice(response);
                         }
@@ -408,8 +468,6 @@
                 '                                <div>\n' +
                 '                                    <p>Total: <span>' + total + '</span></p>\n' +
                 '                                </div>';
-
-
         }
 
         function summaryDetails(response) {
@@ -477,15 +535,13 @@
 
         //for filtered datatable draw
         $('#btnFiterSubmitSearch').on("click", function () {
-            $('#user_list_table').DataTable().draw(true);
+            $('#order_list_table').DataTable().draw(true);
         });
-
-
     </script>
 @endsection
 @section("custom_css")
     <style>
-        #user_list_table_length {
+        #order_list_table_length {
             margin-right: 10px;
         }
 

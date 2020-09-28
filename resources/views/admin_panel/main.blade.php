@@ -50,7 +50,7 @@
     @yield("product-css")
     @yield("user-css")
     @yield("discount-css")
-
+    @yield("order-css")
 </head>
 
 <body>
@@ -397,5 +397,6 @@
 @yield('discount-js')
 @yield('manageDiscount-js')
 @yield('shop-js')
+@yield('order-js')
 </body>
 </html>
