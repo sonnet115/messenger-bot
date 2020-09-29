@@ -311,8 +311,9 @@
                     },
 
                     success: function (response) {
+                        console.log(response);
                         //order details
-                        for (var i = 0; i < response.ordered_products.length; i++) {
+                        for (let i = 0; i < response.ordered_products.length; i++) {
                             let row = myOrder(response, i);
                             $('#product_table_data').append(row);
                         }
@@ -320,23 +321,23 @@
                         //customer details
                         let customer = myCustomers(response);
                         $('#customer_table_data').append(customer);
-                        $('#myModal').modal('toggle');
 
                         //summary details
-                        let summary = summaryDetails(response);
+                        let summary = summaryCalculation(response);
                         let subtotal = summary['total_price'];
                         let total_discount = summary['total_discount'];
-                        let delivery_charge;
+                        let delivery_charge = 0;
+
                         if (subtotal) {
-                            delivery_charge = 60;
-                        } else {
-                            delivery_charge = 0;
+                            delivery_charge = response.delivery_charge;
                         }
 
                         let total_price = (subtotal - total_discount) + delivery_charge;
 
-                        let summary_elem = summaryCalculation(subtotal, total_discount, delivery_charge, total_price);
+                        let summary_elem = summaryDetails(subtotal, total_discount, delivery_charge, total_price);
                         $('#summary_details').html(summary_elem);
+
+                        $('#myModal').modal('toggle');
                     }
                 });
             })
@@ -362,32 +363,39 @@
                 success: function (response) {
                     let product_status = product_status_parent.find('.product_status_td');
 
-                    if ((response.product_status) === 1) {
-
-                        product_status.html("<span class='badge badge-pill badge-danger'>Available</span>");
-                        //adjustOnchangeTotalPrice(response);
-                    }
                     if ((response.product_status) === 0) {
-                        product_status.html("<span class='badge badge-pill badge-danger'>Unavailable</span>");
-                        //adjustOnchangeTotalPrice(response);
+                        product_status.html("<span class='badge badge-pill badge-warning'>Unavailable</span>");
+                    }
+                    if ((response.product_status) === 1) {
+                        product_status.html("<span class='badge badge-pill badge-primary'>Available</span>");
                     }
                     if ((response.product_status) === 2) {
+                        product_status.html("<span class='badge badge-pill badge-success'>Delivered</span>");
+                    }
+                    if ((response.product_status) === 3) {
                         product_status.html("<span class='badge badge-pill badge-danger'>Cancelled</span>");
-                        //adjustOnchangeTotalPrice(response);
                     }
 
                     if (old_product_status !== new_product_status) {
                         if (new_product_status === "1") {
-                            adjustOnchangeTotalPrice(response);
-                        }
-
-                        if (new_product_status === "0") {
                             if (old_product_status !== "2") {
                                 adjustOnchangeTotalPrice(response);
                             }
                         }
 
                         if (new_product_status === "2") {
+                            if (old_product_status !== "1") {
+                                adjustOnchangeTotalPrice(response);
+                            }
+                        }
+
+                        if (new_product_status === "0") {
+                            if (old_product_status !== "3") {
+                                adjustOnchangeTotalPrice(response);
+                            }
+                        }
+
+                        if (new_product_status === "3") {
                             if (old_product_status !== "0") {
                                 adjustOnchangeTotalPrice(response);
                             }
@@ -401,41 +409,44 @@
         function myOrder(response, i) {
             let product_status_show = "";
             let product_status = response.ordered_products[i].pivot.product_status;
-            let selected = "selected";
+
             if (product_status === 0) {
-                product_status_show = '<span class="badge badge-pill badge-danger">Unavailable</span>';
+                product_status_show = '<span class="badge badge-pill badge-warning">Unavailable</span>';
             }
             if (product_status === 1) {
-                product_status_show = '<span class="badge badge-pill badge-danger">Avaiable</span>';
+                product_status_show = '<span class="badge badge-pill badge-primary">Available</span>';
             }
             if (product_status === 2) {
+                product_status_show = '<span class="badge badge-pill badge-success">Delivered</span>';
+            }
+            if (product_status === 3) {
                 product_status_show = '<span class="badge badge-pill badge-danger">Cancelled</span>';
             }
 
-            let row = '<tr>\n' +
+            return '<tr style="font-size: 15px">\n' +
                 '        <td>' + response.ordered_products[i].name + '</td>\n' +
                 '        <td>' + response.ordered_products[i].price + '</td>\n' +
                 '        <td>' + response.ordered_products[i].pivot.quantity + '<span>Sets</span></td>\n' +
                 '        <td>' + response.ordered_products[i].pivot.discount + '</td>\n' +
                 '        <td class="product_status_td">' + product_status_show + '</td>\n' +
                 '        <td>' +
-                '           <select name="cars" class="product_status_select">\n' +
+                '           <select name="cars" class="form-control product_status_select" style="font-size: 13px">\n' +
                 '               <option value="" selected>Choose Status</option>\n' +
-                '               <option value="1">Available</option>\n' +
                 '               <option value="0">Unavailable</option>\n' +
-                '               <option value="2">Cancelled</option>\n' +
+                '               <option value="1">Available</option>\n' +
+                '               <option value="2">Delivered</option>\n' +
+                '               <option value="3">Cancelled</option>\n' +
                 '           </select>' +
                 '           <input type="hidden" class="product_id" value="' + response.ordered_products[i].id + '">' +
                 '           <input type="hidden" class="order_id" value="' + response.id + '">' +
                 '           <input type="hidden" class="old_product_status" value="' + product_status + '">' +
                 '       </td>\n' +
                 '      </tr>';
-            return row;
         }
 
         function myCustomers(response) {
             let customer = '<thead>\n' +
-                '                                        <tr>\n' +
+                '                                   <tr>\n' +
                 '                                            <td>Name</td>\n' +
                 '                                            <td>' + response.customer_name + '</td>\n' +
                 '                                        </tr>\n' +
@@ -451,86 +462,78 @@
                 '                                        </tr>\n' +
                 '                                        <tr>\n' +
                 '                                            <td>Contact Number</td>\n' +
-                '                                            <td>' + response.contact + '</td>\n' +
+                '                                            <td>' + response.contact +
+                '                                               <input type="hidden" value="' + response.delivery_charge + '" id="old_delivery_charge">' +
+                '                                            </td>\n' +
                 '                                        </tr>\n' +
                 '                                    </tbody>';
+
             return customer;
         }
 
         //summary details functions
-        function summaryCalculation(subtotal, discount, delivery, total) {
+        function summaryDetails(subtotal, discount, delivery, total) {
             return '<div class="border-bottom">\n' +
-                '          <p style="text-decoration: underline">Summary:</p>\n' +
-                '                                    <p>Subtotal: <span id="subtotal_id">' + subtotal + '</span> <span>tk</span></p>\n' +
-                '                                    <p>Discounts: <span>-</span> <span id="discount_id">' + discount + '</span> <span>tk</span></p>\n' +
-                '                                    <p>Delivery charge: <span id="deliveryCharge_id">' + delivery + '</span></p>\n' +
-                '                                </div>\n' +
-                '                                <div>\n' +
-                '                                    <p>Total: <span>' + total + '</span></p>\n' +
-                '                                </div>';
+                '        <p style="text-decoration: underline">Summary:</p>\n' +
+                '        <p>Subtotal: <span id="subtotal">' + subtotal + '</span> <span>tk</span></p>\n' +
+                '        <p>Discounts: <span>-</span> <span id="discount">' + discount + '</span> <span>tk</span></p>\n' +
+                '        <p>Delivery Fee: <span>+</span> <span id="delivery_charge">' + delivery + '</span> <span>tk</span></p>\n' +
+                '   </div>\n' +
+                '   <div>\n' +
+                '       <p>Total: <span>' + total + '</span></p>\n' +
+                '   </div>';
         }
 
-        function summaryDetails(response) {
+        function summaryCalculation(response) {
             let total_price = 0;
             let total_discount = 0;
-            for (var i = 0; i < response.ordered_products.length; i++) {
-                if (response.ordered_products[i].pivot.product_status == 1) {
-                    let quanitty = response.ordered_products[i].pivot.quantity;
+            for (let i = 0; i < response.ordered_products.length; i++) {
+                if (response.ordered_products[i].pivot.product_status == 1 || response.ordered_products[i].pivot.product_status == 2) {
+                    let quantity = response.ordered_products[i].pivot.quantity;
                     let price = response.ordered_products[i].pivot.price;
                     let discount = response.ordered_products[i].pivot.discount;
                     total_discount = total_discount + discount;
-                    total_price = total_price + price * quanitty;
+                    total_price = total_price + (price * quantity);
                 }
-
             }
             return {total_price: total_price, total_discount: total_discount};
         }
 
         function adjustOnchangeTotalPrice(response) {
             //console.log(response);
-            let adjust_subtotal, adjust_discount, discount;
-            let total;
+            let adjusted_subtotal, adjusted_discount, total, delivery_charge;
 
-            var old_subtotal = document.getElementById("subtotal_id").innerText;
-            var old_discount = document.getElementById("discount_id").innerText;
-            var old_delivery = document.getElementById("deliveryCharge_id").innerText;
+            //old values
+            let old_subtotal = parseFloat(document.getElementById("subtotal").innerText);
+            let old_discount = parseFloat(document.getElementById("discount").innerText);
 
+            delivery_charge = parseFloat(document.getElementById("delivery_charge").innerText);
 
             //new values
             let new_quantity = parseFloat(response.quantity);
             let new_price = parseFloat(response.price);
             let new_discount = parseFloat(response.discount);
 
-            //old values
-            subtotal = parseFloat(old_subtotal);
-            let persed_old_discount = parseFloat(old_discount);
-            let persed_delivery = parseFloat(old_delivery);
+            adjusted_subtotal = old_subtotal;
+            adjusted_discount = old_discount;
 
-            if (response.product_status === 1) {
-                adjust_subtotal = new_quantity * new_price;
-                adjust_discount = new_quantity * new_discount;
-                subtotal = subtotal + adjust_subtotal;
-                discount = persed_old_discount + adjust_discount;
-
+            if (response.product_status === 1 || response.product_status === 2) {
+                adjusted_discount = adjusted_discount + (new_quantity * new_discount);
+                adjusted_subtotal = adjusted_subtotal + (new_quantity * new_price);
             }
-            if (response.product_status === 2 || response.product_status === 0) {
-                adjust_subtotal = new_quantity * new_price;
-                adjust_discount = new_quantity * new_discount;
-                subtotal = subtotal - adjust_subtotal;
-                discount = persed_old_discount - adjust_discount;
-
+            if (response.product_status === 3 || response.product_status === 0) {
+                adjusted_discount = adjusted_discount - (new_quantity * new_discount);
+                adjusted_subtotal = adjusted_subtotal - (new_quantity * new_price);
             }
 
-            if (persed_delivery !== 0 && subtotal === 0) {
-                persed_delivery = 0;
-            } else if (persed_delivery === 0 && subtotal === 0) {
-                persed_delivery = 0;
-            } else if (persed_delivery === 0) {
-                persed_delivery = 60;
+            if (!adjusted_subtotal) {
+                delivery_charge = 0;
+            } else {
+                delivery_charge = parseFloat($("#old_delivery_charge").val());
             }
 
-            total = (subtotal - discount) + persed_delivery;
-            $('#summary_details').html(summaryCalculation(subtotal, discount, persed_delivery, total));
+            total = (adjusted_subtotal - adjusted_discount) + delivery_charge;
+            $('#summary_details').html(summaryDetails(adjusted_subtotal, adjusted_discount, delivery_charge, total));
         }
 
         //for filtered datatable draw
