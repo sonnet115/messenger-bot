@@ -10,26 +10,35 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use MongoDB\Driver\Query;
 
 class ProductController extends Controller
 {
+    private $shops;
+
+    public function __construct()
+    {
+
+    }
+
     public function viewAddProductForm()
     {
         if (request()->get('mode')) {
             $pid = request()->get('pid');
             $product_details = Product::where('id', $pid)->with('images')->with('shop')->first();
-            if ($product_details->shop->page_connected_status != 1){
+            if ($product_details->shop->page_connected_status != 1) {
                 return redirect(route('product.manage.view'));
             }
 
-            if ($product_details->shop->page_owner_id !== auth()->user()->user_id){
+            if ($product_details->shop->page_owner_id !== auth()->user()->user_id) {
                 return redirect(route('product.manage.view'));
             }
-//            dd($product_details->shop->page_owner_id !== auth()->user()->user_id);
         } else {
             $product_details = null;
         }
+
         $shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
+
         return view('admin_panel.product.add_product_form')
             ->with("title", "CBB | Add Product")
             ->with('product_details', $product_details)
@@ -87,24 +96,28 @@ class ProductController extends Controller
 
     public function viewUpdateProduct()
     {
-        return view("admin_panel.product.manage_product")->with("title", "CBB | Manage Product");
+        return view("admin_panel.product.manage_product")->with("title", "Howkar Technology || Manage Product");
     }
 
-    public function getProduct()
+    public function getProduct(Request $request, Product $product)
     {
-        $and = "";
-        //filter option for stock from stock to and status
+        $product = $product->newQuery();
+
         if (request()->has('stock_from') && request()->has('stock_to') && request('stock_from') != null
             && request('stock_to') != null) {
-            $and .= " AND stock >= " . request('stock_from') . " AND stock <= " . request('stock_to');
+            $product->where('stock', '>=', request('stock_from'))
+                ->where('stock', '<=', request('stock_to'));
         }
 
         if (request()->has('status') && request('status') != null) {
-            $and .= " AND state = " . request('status');
+            $product->where('state', '=', request('status'));
         }
+        $this->shops = Shop::select('id')->where('page_owner_id', auth()->user()->user_id)->get()->toArray();
+
+        $product->whereIn('shop_id', array(($this->shops)));
 
         if (auth()->user()->page_added > 0) {
-            return datatables(Product::selectRaw(" * ")->whereRaw('1' . $and)->orderBy('id', 'asc')->with("images")->with('shop'))->toJson();
+            return datatables($product->orderBy('id', 'asc')->with("images")->with('shop'))->toJson();
         } else {
             return datatables(array())->toJson();
         }
