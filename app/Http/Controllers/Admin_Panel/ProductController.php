@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use MongoDB\Driver\Query;
 
 class ProductController extends Controller
 {
@@ -96,7 +95,8 @@ class ProductController extends Controller
 
     public function viewUpdateProduct()
     {
-        return view("admin_panel.product.manage_product")->with("title", "Howkar Technology || Manage Product");
+        $this->shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
+        return view("admin_panel.product.manage_product")->with('shops', $this->shops)->with("title", "Howkar Technology || Manage Product");
     }
 
     public function getProduct(Request $request, Product $product)
@@ -112,9 +112,13 @@ class ProductController extends Controller
         if (request()->has('status') && request('status') != null) {
             $product->where('state', '=', request('status'));
         }
-        $this->shops = Shop::select('id')->where('page_owner_id', auth()->user()->user_id)->get()->toArray();
 
-        $product->whereIn('shop_id', array(($this->shops)));
+        $this->shops = Shop::select('id')->where('page_owner_id', auth()->user()->user_id)->get();
+        $shops_id = array();
+        foreach ($this->shops as $key => $value) {
+            array_push($shops_id, $value['id']);
+        }
+        $product->whereIn('shop_id', $shops_id);
 
         if (auth()->user()->page_added > 0) {
             return datatables($product->orderBy('id', 'asc')->with("images")->with('shop'))->toJson();

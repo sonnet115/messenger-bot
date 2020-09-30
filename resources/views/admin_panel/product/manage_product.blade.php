@@ -39,6 +39,18 @@
                 </select>
             </div>
             <!--state ends-->
+
+            <!-- state starts-->
+            <div class="form-group pl-2">
+                <select class="form-control" name="shop_id">
+                    <option value="" selected>Select a shop</option>
+                    @foreach($shops as $shop)
+                        <option value="{{$shop->id}}">{{$shop->page_name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <!--state ends-->
+
             <!--button-->
             @if (auth()->user()->page_added > 0)
                 <div class="text-left pl-4">

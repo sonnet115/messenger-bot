@@ -12,14 +12,14 @@
             <div class="card">
                 <div class="card-body text-center">
                     <div class="text-center">
-                        <img src="{{asset('images/logo.png')}}" style="max-width: 100px">
+{{--                        <img src="{{asset('images/logo.png')}}" style="max-width: 100px">--}}
                     </div>
-                    <p class="text-center text-muted" style="font-size: 20px">Welcome to ChatBotBD!</p>
+                    <p class="text-center text-muted" style="font-size: 20px">Welcome</p>
                     <hr>
                     <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-primary mb-3"><i
-                            class="fa fa-facebook"></i>Continue with Facebook</a>
-                    <p class="text-center text-muted" style="font-size: 11px">by clicking you accept ChatBotBD
-                        <a href="https://chatbotbd.com/privacy" target="_blank">terms of service</a>
+                            class="fa fa-facebook"></i>Continue</a>
+                    <p class="text-center text-muted" style="font-size: 11px">by clicking you accept
+                        <a href="https://howkar.com/privacy" target="_blank">terms of service</a>
                     </p>
                 </div>
             </div>
