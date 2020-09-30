@@ -33,7 +33,7 @@ return [
     'facebook' => [
         'client_id' => '967186797063633',
         'client_secret' => 'cf8809fcc502890072d63572b4d1f335',
-        'redirect' => 'http://localhost:8000/callback/facebook',
+        'redirect' => 'https://033a45adc191.ngrok.io/callback/facebook',
     ],
 
 ];

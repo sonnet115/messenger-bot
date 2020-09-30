@@ -61,9 +61,9 @@ class UserController extends Controller
 
     public function redirect($provider)
     {
-//        return Socialite::driver($provider)->redirect();
-        Auth::loginUsingId(1, true);
-        return redirect()->to('http://localhost:8000/admin/dashboard');
+        return Socialite::driver($provider)->redirect();
+//        Auth::loginUsingId(1, true);
+//        return redirect()->to('http://localhost:8000/admin/dashboard');
     }
 
     public function callback($provider)
@@ -71,7 +71,7 @@ class UserController extends Controller
         $getInfo = Socialite::driver($provider)->user();
         $user = $this->createUser($getInfo, $provider);
         auth()->login($user);
-        return redirect()->to('http://localhost:8000/admin/dashboard');
+        return redirect()->to(env('APP_URL') . 'admin/dashboard');
     }
 
     function createUser($getInfo, $provider)
@@ -92,6 +92,6 @@ class UserController extends Controller
     function logout()
     {
         Auth::logout();
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(env('APP_URL'));
     }
 }
