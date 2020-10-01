@@ -68,6 +68,7 @@ class UserController extends Controller
 
     public function callback($provider)
     {
+//        dd($provider);
         $getInfo = Socialite::driver($provider)->user();
         $user = $this->createUser($getInfo, $provider);
         auth()->login($user);
