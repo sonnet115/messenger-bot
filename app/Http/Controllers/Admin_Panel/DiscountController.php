@@ -13,7 +13,6 @@ class DiscountController extends Controller
 {
     public function viewAddDiscountForm()
     {
-        $Product_names = Product::select('name', 'id')->get();
         if (request()->get('mode')) {
             $did = request()->get('did');
             $discount_details = Discount::where('id', $did)->first();
@@ -22,16 +21,21 @@ class DiscountController extends Controller
         }
 
         $shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
+
         return view("admin_panel.discount.add_discount_form")
-            ->with("title", "CBB | Add Discount")
+            ->with("title", "Howkar Technology | Add Discount")
             ->with('discount_details', $discount_details)
-            ->with('shop_list', $shops)
-            ->with('product_names', $Product_names);
+            ->with('shop_list', $shops);
     }
 
     public function viewUpdateDiscount()
     {
-        $products = Product::selectRaw('id, name')->get();
+        $shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
+        $shops_id = array();
+        foreach ($shops as $key => $value) {
+            array_push($shops_id, $value['id']);
+        }
+        $products = Product::select('name', 'id')->whereIn('shop_id', $shops_id)->get();
 
         return view("admin_panel.discount.manage_discount")->with("title", "CBB | manage Discount")->with('products', $products);
     }
@@ -117,16 +121,5 @@ class DiscountController extends Controller
 
         return redirect(route('discount.manage.view'));
     }
-
-    public function filterProductByShop(Request $request)
-    {
-        $shop_id = $request->shop_id;
-        if ($shop_id != 0) {
-            return response()->json(Product::selectRaw("id, name")->whereRaw('shop_id=' . $shop_id)->get());
-        } else {
-            return response()->json(null);
-        }
-    }
-
 
 }

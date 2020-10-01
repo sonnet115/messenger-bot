@@ -64,7 +64,7 @@
                         <i class="fa fa-facebook"></i> Connect Page
                     </a>
                 </div>
-             @endif
+        @endif
         <!--button ends-->
         </div>
         <!-- filter ends-->
@@ -90,8 +90,8 @@
                                         <th class="text-center text-white">UoM</th>
                                         <th class="text-center text-white">Price</th>
                                         <th class="text-center text-white">Shop Name</th>
-                                        <th class="text-center text-white" data-priority="1">State</th>
-                                        <th class="text-center text-white">Action</th>
+                                        <th class="text-center text-white">State</th>
+                                        <th class="text-center text-white" data-priority="1">Action</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -155,6 +155,7 @@
                         d.stock_from = $("input[name=stock_from]").val();
                         d.stock_to = $("input[name=stock_to]").val();
                         d.status = $('select[name=status] option:selected').val();
+                        d.shop_id = $('select[name=shop_id] option:selected').val();
                     }
                 },
 

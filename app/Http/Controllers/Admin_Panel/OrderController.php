@@ -12,7 +12,7 @@ class OrderController extends Controller
 {
     public function viewUpdateOrder()
     {
-        return view('admin_panel.orders.manage_order')->with("title", " Howkar Tech || Manage Orders");
+        return view('admin_panel.orders.manage_order')->with("title", " Howkar Technology || Manage Orders");
     }
 
     public function getOrders()

@@ -61,9 +61,9 @@ class UserController extends Controller
 
     public function redirect($provider)
     {
-        return Socialite::driver($provider)->redirect();
-//        Auth::loginUsingId(1, true);
-//        return redirect()->to('http://localhost:8000/admin/dashboard');
+//        return Socialite::driver($provider)->redirect();
+        Auth::loginUsingId(1, true);
+        return redirect()->to('http://localhost:8000/admin/dashboard');
     }
 
     public function callback($provider)

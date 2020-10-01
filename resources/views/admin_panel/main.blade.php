@@ -68,7 +68,7 @@
             <span class="feather-icon"><i data-feather="menu"></i></span>
         </a>
         <a class="navbar-brand font-weight-900 text-white" style="font-size: 30px !important;"
-           href="{{route("dashboard")}}">CBB
+           href="{{route("dashboard")}}">Howkar Technology
         </a>
         <ul class="navbar-nav hk-navbar-content">
             <li class="nav-item dropdown dropdown-authentication">
@@ -121,7 +121,7 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#product_manager">
-                            <i class="fa fa-users"></i></span>
+                            <i class="fa fa-beer"></i></span>
                             <span class="nav-link-text">Manage Products </span>
                         </a>
                         <ul id="product_manager"
@@ -130,7 +130,7 @@
                                 <ul class="nav flex-column">
                                     <li class="nav-item {{\Request::route()->getName() == "product.add.view" ? "active" : ""}}">
                                         <a class="nav-link"
-                                           href="{{route('product.add.view')}}"><i class="fa fa-user-plus"></i>Add
+                                           href="{{route('product.add.view')}}"><i class="fa fa-plus-square"></i>Add
                                             Product</a>
                                     </li>
                                     <li class="nav-item {{\Request::route()->getName() == "product.manage.view" ? "active" : ""}}">
@@ -148,7 +148,7 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#discount_manager">
-                            <i class="fa fa-users"></i></span>
+                            <i class="fa fa-gift"></i></span>
                             <span class="nav-link-text">Manage discounts</span>
                         </a>
                         <ul id="discount_manager"
@@ -158,7 +158,7 @@
                                     <li class="nav-item {{\Request::route()->getName() == "discount.add.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('discount.add.view')}}"><i
-                                                class="fa fa-user-plus"></i>Add Discount</a>
+                                                class="fa fa-plus-square"></i>Add Discount</a>
                                     </li>
                                     <li class="nav-item {{\Request::route()->getName() == "discount.manage.view" ? "active" : ""}}">
                                         <a class="nav-link"
@@ -175,7 +175,7 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#order_manager">
-                            <i class="fa fa-users"></i></span>
+                            <i class="fa fa-cart-plus"></i></span>
                             <span class="nav-link-text">Manage Orders</span>
                         </a>
                         <ul id="order_manager"
@@ -185,7 +185,7 @@
                                     <li class="nav-item {{\Request::route()->getName() == "order.manage.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('order.manage.view')}}"><i
-                                                class="fa fa-user-plus"></i>Order list</a>
+                                                class="fa fa-list-ul"></i>Order list</a>
                                     </li>
 
                                 </ul>
@@ -198,7 +198,7 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse"
                            data-target="#order_dc">
-                            <i class="fa fa-users"></i></span>
+                            <i class="fa fa-bicycle"></i></span>
                             <span class="nav-link-text">Delivery Charges</span>
                         </a>
                         <ul id="order_dc"
@@ -208,20 +208,13 @@
                                     <li class="nav-item {{\Request::route()->getName() == "dc.add.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('dc.add.view')}}"><i
-                                                class="fa fa-user-plus"></i>Add Delivery Charge</a>
+                                                class="fa fa-plus-square"></i>Add Delivery Charge</a>
                                     </li>
-
-                                </ul>
-                            </li>
-
-                            <li class="nav-item">
-                                <ul class="nav flex-column">
                                     <li class="nav-item {{\Request::route()->getName() == "dc.list.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('dc.list.view')}}"><i
-                                                class="fa fa-user-plus"></i>Delivery Charges List</a>
+                                                class="fa fa-list-ul"></i>Delivery Charges List</a>
                                     </li>
-
                                 </ul>
                             </li>
                         </ul>
@@ -242,7 +235,7 @@
                                     <li class="nav-item {{\Request::route()->getName() == "shop.list.view" ? "active" : ""}}">
                                         <a class="nav-link"
                                            href="{{route('shop.list.view')}}"><i
-                                                class="fa fa-shopping-cart"></i>My Shops</a>
+                                                class="fa fa-building-o"></i>My Shops</a>
                                     </li>
 
                                 </ul>
@@ -265,7 +258,7 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <p>Pampered by<a href="https://hencework.com/" class="text-dark"
-                                         target="_blank">Hencework</a> ©
+                                         target="_blank">Howkar Technology</a> ©
                             2019</p>
                     </div>
                     <div class="col-md-6 col-sm-12">

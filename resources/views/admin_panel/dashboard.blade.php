@@ -32,7 +32,7 @@
                                             <div class="d-flex justify-content-between mb-5">
                                                 <div>
                                                 <span class="d-block font-15 text-primary font-weight-500">
-                                                    Pending Gift
+                                                    Total Pages
                                                 </span>
                                                 </div>
                                             </div>
@@ -52,7 +52,7 @@
                                             <div class="d-flex justify-content-between mb-5">
                                                 <div>
                                                 <span class="d-block font-15 text-warning font-weight-500">
-                                                    Pending Approval
+                                                    Total Products
                                                 </span>
                                                 </div>
                                                 <br>
@@ -73,7 +73,7 @@
                                             <div class="d-flex justify-content-between mb-5">
                                                 <div>
                                                 <span class="d-block font-15 text-success font-weight-500">
-                                                    Completed
+                                                    Total Customers
                                                 </span>
                                                 </div>
                                             </div>

@@ -113,6 +113,10 @@ class ProductController extends Controller
             $product->where('state', '=', request('status'));
         }
 
+        if (request()->has('shop_id') && request('shop_id') != null) {
+            $product->where('shop_id', '=', request('shop_id'));
+        }
+
         $this->shops = Shop::select('id')->where('page_owner_id', auth()->user()->user_id)->get();
         $shops_id = array();
         foreach ($this->shops as $key => $value) {

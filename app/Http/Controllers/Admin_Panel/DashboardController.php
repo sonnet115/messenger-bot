@@ -12,11 +12,11 @@ class DashboardController extends Controller
 {
     public function showDashboard()
     {
-        return view('admin_panel.dashboard')->with('title', "CBB | Dashboard");
+        return view('admin_panel.dashboard')->with('title', "Howkar Technology || Dashboard");
     }
 
     public function showHome()
     {
-        return view('admin_panel.home')->with('title', "CBB | Dashboard");
+        return view('admin_panel.home')->with('title', "Howkar Technology || Dashboard");
     }
 }
