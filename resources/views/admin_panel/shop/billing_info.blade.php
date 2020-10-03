@@ -4,7 +4,8 @@
         .pagination {
             display: block !important;
         }
-        td{
+
+        td {
             font-size: 11px !important;
         }
     </style>
@@ -84,7 +85,7 @@
                 "columnDefs": [
                     {
                         "className": "dt-center",
-                        "targets": [1, 2, 3, 4]
+                        "targets": [1, 2, 3, 4, 5, 6]
                     }
                 ],
                 columns: [

@@ -77,7 +77,7 @@
                 "columnDefs": [
                     {
                         "className": "dt-center",
-                        "targets": [1, 2, 3, 4]
+                        "targets": [1, 2, 3]
                     }
                 ],
                 columns: [

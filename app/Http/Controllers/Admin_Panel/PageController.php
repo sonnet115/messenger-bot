@@ -151,12 +151,12 @@ class PageController extends Controller
 
     function getBillingInfo()
     {
-        return datatables(Shop::where('page_owner_id', auth()->user()->user_id)->with('billing'))->toJson();
+        return datatables(Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->with('billing'))->toJson();
     }
 
     function getShopsList()
     {
-        return datatables(Shop::where('page_owner_id', auth()->user()->user_id))->toJson();
+        return datatables(Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1))->toJson();
     }
 
     public function getLongLivedUserAccessToken($short_lived_user_access_token)
