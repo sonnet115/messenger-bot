@@ -20,11 +20,12 @@ class CreatePagesTable extends Migration
             $table->text('page_access_token');
             $table->string('page_owner_id', 100);
             $table->boolean('page_connected_status');
+            $table->boolean('page_subscription_status')->default(0);
             $table->string('page_contact', 15)->nullable();
             $table->bigInteger('page_likes')->nullable();
             $table->boolean('is_published')->nullable();
             $table->boolean('is_webhooks_subscribed')->nullable();
-            $table->string('page_username',100)->nullable();
+            $table->string('page_username', 100)->nullable();
             $table->string('page_address', 100)->nullable();
             $table->text('page_web_link')->nullable();
             $table->timestamps();

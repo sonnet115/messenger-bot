@@ -4,6 +4,9 @@
         .pagination {
             display: block !important;
         }
+        td{
+            font-size: 11px !important;
+        }
     </style>
 @endsection
 @section("main_content")
@@ -25,8 +28,11 @@
                                     <thead class="btn-gradient-info">
                                     <tr>
                                         <th class="text-center text-white" data-priority="1">Page Name</th>
-                                        <th class="text-center text-white">Page Likes</th>
-                                        <th class="text-center text-white"> Connection Status</th>
+                                        <th class="text-center text-white"> Subscription Status</th>
+                                        <th class="text-center text-white"> Date of payment</th>
+                                        <th class="text-center text-white"> Paid Amount</th>
+                                        <th class="text-center text-white"> Next Payable Amount</th>
+                                        <th class="text-center text-white"> Next Due Date</th>
                                         <th class="text-center text-white" data-priority="1">Action</th>
                                     </tr>
                                     </thead>
@@ -71,7 +77,8 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('shop.list.get') }}",
+                    url: "{{ route('billing.info.get') }}",
+                    type: 'POST',
                 },
 
                 "columnDefs": [
@@ -82,14 +89,17 @@
                 ],
                 columns: [
                     {data: 'page_name', name: 'page_name'},
-                    {data: 'page_likes', name: 'page_likes'},
                     {
                         'render': function (data, type, row) {
-                            let color = row.page_connected_status === 1 ? "success" : "danger";
-                            let text = row.page_connected_status === 1 ? "Connected" : "Disconnected";
+                            let color = row.page_subscription_status === 1 ? "success" : "danger";
+                            let text = row.page_subscription_status === 1 ? "Paid" : "Not Paid";
                             return '<span  style="min-width: 103px" class="badge badge-pill badge-' + color + ' pr-15 pl-15">' + text + '</span>';
                         },
                     },
+                    {data: 'billing[0].prev_billing_date', name: 'prev_billing_date'},
+                    {data: 'billing[0].paid_amount', name: 'paid_amount'},
+                    {data: 'billing[0].payable_amount', name: 'payable_amount'},
+                    {data: 'billing[0].next_billing_date', name: 'next_billing_date'},
                     {
                         'render': function (data, type, row) {
                             let color = row.page_connected_status === 1 ? "danger" : "success";

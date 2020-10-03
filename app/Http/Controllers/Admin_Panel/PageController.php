@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin_Panel;
 
+use App\Billing;
 use App\Http\Controllers\Controller;
 use App\Shop;
 use App\User;
+use DateInterval;
+use DateTime;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -17,12 +20,15 @@ class PageController extends Controller
         $pages_details = json_decode($this->addPageToApp($long_lived_user_access_token, $user_id), true);
 
         if ($connection_status === 'connected') {
+            //change all page connected status false
             $this->updatePageConnectionStatus($user_id, null, false);
 
             if (empty($pages_details['data'])) {
+                //change all page connected status false if no page is selected
                 $this->updatePageAddedStatus($user_id, $long_lived_user_access_token, false);
                 return response()->json('no_page_added');
             } else {
+                //at least 1 page is selected
                 for ($i = 0; $i < sizeof($pages_details['data']); $i++) {
                     $page_contact = null;
                     $page_address = null;
@@ -46,8 +52,10 @@ class PageController extends Controller
                     }
 
                     $page = Shop::where('page_id', $pages_details['data'][$i]['id'])->first();
+
                     if (!$page) {
-                        Shop::create([
+                        //page is not in our DB. So insert the page
+                        $shop = Shop::create([
                             'page_name' => $pages_details['data'][$i]['name'],
                             'page_id' => $pages_details['data'][$i]['id'],
                             'page_access_token' => $pages_details['data'][$i]['access_token'],
@@ -61,14 +69,17 @@ class PageController extends Controller
                             'page_web_link' => $page_web_link,
                             'page_connected_status' => true,
                         ]);
+
+                        $this->startTrailPeriod($shop->id);
                     } else {
+                        //page is already in database. So update page status
                         $this->updatePageConnectionStatus(null, $pages_details['data'][$i]['id'], true);
                     }
-
-                    $webhook_fields = json_decode($this->addFieldsToWebhook($pages_details['data'][$i]['access_token'], $pages_details['data'][$i]['id']));
-                    $get_started_button = json_decode($this->addGetStartedButton($pages_details['data'][$i]['access_token']));
-                    $persistent_menu = json_decode($this->addPersistentMenu($pages_details['data'][$i]['access_token']));
-                    $white_listed_domain = json_decode($this->addWhiteListedDomains($pages_details['data'][$i]['access_token']));
+                    $page_access_token = $pages_details['data'][$i]['access_token'];
+                    $webhook_fields = json_decode($this->addFieldsToWebhook($page_access_token, $pages_details['data'][$i]['id']));
+                    $get_started_button = json_decode($this->addGetStartedButton($page_access_token));
+                    $persistent_menu = json_decode($this->addPersistentMenu($page_access_token));
+                    $white_listed_domain = json_decode($this->addWhiteListedDomains($page_access_token));
                 }
                 $this->updatePageAddedStatus($user_id, $long_lived_user_access_token, true);
             }
@@ -108,9 +119,39 @@ class PageController extends Controller
                 ]);
     }
 
+    function startTrailPeriod($page_id)
+    {
+        $start_date = date('Y-m-d'); // Y-m-d
+        $end_date = date('Y-m-d', strtotime($start_date. ' + 10 days'));
+
+        Billing::create([
+            'page_id' => $page_id,
+            'prev_billing_date' => $start_date,
+            'next_billing_date' => $end_date,
+            'paid_amount' => 0,
+            'payable_amount' => $this->calculatePayableAmount($page_id),
+            'status' => 0,
+        ]);
+    }
+
+    function calculatePayableAmount($page_id)
+    {
+        return 2000;
+    }
+
     function viewShopList()
     {
-        return view("admin_panel.shop.shop_lists")->with("title", "CBB | Shops List");
+        return view("admin_panel.shop.shop_lists")->with("title", "Howkar Technology || Shops List");
+    }
+
+    function viewBillingInfo()
+    {
+        return view("admin_panel.shop.billing_info")->with("title", "Howkar Technology || Shops List");
+    }
+
+    function getBillingInfo()
+    {
+        return datatables(Shop::where('page_owner_id', auth()->user()->user_id)->with('billing'))->toJson();
     }
 
     function getShopsList()

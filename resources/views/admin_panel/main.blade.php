@@ -237,7 +237,11 @@
                                            href="{{route('shop.list.view')}}"><i
                                                 class="fa fa-building-o"></i>My Shops</a>
                                     </li>
-
+                                    <li class="nav-item {{\Request::route()->getName() == "billing.info" ? "active" : ""}}">
+                                        <a class="nav-link"
+                                           href="{{route('billing.info')}}"><i
+                                                class="fa fa-money"></i>Billing Info</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>

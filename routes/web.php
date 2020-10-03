@@ -103,7 +103,9 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
         Route::group(['prefix' => 'shop-billing'], function () {
             Route::get("store-page", "Admin_Panel\PageController@storePages")->name('page.store');
             Route::get("shop-list", "Admin_Panel\PageController@viewShopList")->name('shop.list.view');
+            Route::get("billing-info", "Admin_Panel\PageController@viewBillingInfo")->name('billing.info');
             Route::get("get-list", "Admin_Panel\PageController@getShopsList")->name('shop.list.get');
+            Route::post("get-billing-info", "Admin_Panel\PageController@getBillingInfo")->name('billing.info.get');
         });
     });
 
