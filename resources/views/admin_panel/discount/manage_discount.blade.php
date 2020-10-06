@@ -1,6 +1,5 @@
 @extends("admin_panel.main")
 @section('discount-css')
-
     <link href={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.css")}} rel="stylesheet"
           type="text/css"/>
 @endsection
