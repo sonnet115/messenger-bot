@@ -60,15 +60,42 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <div class="row" id="payment_steps">
+                        <div class="col-12 col-lg-8">
+                            <b style="color: #2b383e;font-size: 17px;text-decoration: underline">Payment Steps:</b>
+                            <br>
+                            <ol style="padding: 10px 30px">
+                                <li>Go to bKash Mobile Menu by dialing *247#</li>
+                                <li>Choose “Send Money”</li>
+                                <li>Enter 01608435599</li>
+                                <li>Enter amount ' + amount + ' BDT</li>
+                                <li>Enter reference Sept1</li>
+                                <li>Now enter your bKash Mobile Menu PIN to confirm</li>
+                            </ol>
+                        </div>
 
+                        <div class="col-12 col-lg-8">
+                            <b style="color: #2b383e;font-size: 19px;text-decoration: underline">After Payment</b>
+                            <br>
+                            <form>
+                                <p id="shop_name">Shop Name</p>
+                                <input class="form-control" placeholder="Shop Name" name="shop_name" id="shop_name">
+                                <p id="month">Month Name</p>
+                                <input class="form-control" placeholder="Pay for which month" name="month" id="month">
+                                <p id="trx_id">Transaction ID</p>
+                                <input class="form-control" placeholder="bKash Transaction ID" name="trx_id">
+                                <hr>
+                                <div class="text-center">
+                                    <button class="btn btn-sm btn-success">Complete Payment</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
-                </div>
-
+{{--                <div class="modal-footer">--}}
+{{--                    <button type="button" class="btn btn-danger btn-xs" data-dismiss="modal">Close</button>--}}
+{{--                </div>--}}
             </div>
         </div>
     </div>
@@ -154,11 +181,11 @@
             // var date2 = new Date("8/11/2010");
             let diffDays = todays_date - next_billing_date;
 
-            if(diffDays < 0){
-                
+            if (diffDays < 0) {
+
             }
 
-            paymentSteps($(this).parent().find('.payable_amount').val());
+            // paymentSteps($(this).parent().find('.payable_amount').val());
             $('#myModal').modal('toggle');
         });
 
