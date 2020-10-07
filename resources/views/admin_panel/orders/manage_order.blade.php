@@ -1,7 +1,79 @@
 @extends("admin_panel.main")
+@section('order-css')
+    <style>
+        td {
+            font-size: 13px !important;
+        }
+    </style>
+    <link href={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.css")}} rel="stylesheet"
+          type="text/css"/>
+@endsection
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
+        <!-- filter starts-->
+        <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-filter">&nbsp;Filter Orders</i>
+        </h4>
+        <div class="d-flex flex-wrap">
+            <!--start date filter starts-->
+            <div class="form-group col-md-2">
+                <h5 style="font-size: 16px;color: #708090">Start From:<span class="text-danger"></span></h5>
+                <div class="controls">
+                    <input class="form-control discount_date" autocomplete="off" type="text" name="start_date" id="start_date" value=""/>
+                </div>
+            </div>
+            <!--start date filter starts-->
+
+            <!--end date filter starts-->
+            <div class="form-group col-md-2">
+                <h5 style="font-size: 16px;color: #708090">End To:<span class="text-danger"></span></h5>
+                <div class="controls">
+                    <input class="form-control discount_date" autocomplete="off" type="text" name="end_date" id="end_date" value=""/>
+                </div>
+            </div>
+            <!--end date filter ends-->
+
+            <!-- state starts-->
+            <div class="form-group col-md-2">
+                <h5 style="font-size: 16px;color: #708090">Status<span class="text-danger"></span></h5>
+                <select class="form-control" name="status">
+                    <option value="" selected>Status</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
+            <!--state ends-->
+
+            <!-- state starts-->
+            <div class="form-group col-md-2">
+                <h5 style="font-size: 16px;color: #708090">Shops<span class="text-danger"></span></h5>
+                <select class="form-control" name="shop_id">
+                    <option value="" selected>Select a shop</option>
+                    @foreach($shops as $shop)
+                        <option value="{{$shop->id}}">{{$shop->page_name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <!--state ends-->
+
+            <!--button-->
+            @if (auth()->user()->page_added > 0)
+                <div class="text-left col-md-2">
+                    <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top:19px"><i
+                            class="fa fa-search">&nbsp;</i>Filter
+                    </button>
+                </div>
+            @else
+                <div class="text-left pl-4">
+                    <a class="btn btn-success rounded-20 pl-20 pr-20" href="javascript:void(0)" onclick="connectPage()">
+                        <i class="fa fa-facebook"></i> Connect Page
+                    </a>
+                </div>
+        @endif
+        <!--button ends-->
+        </div>
+        <!-- filter ends-->
+
         <!-- Order List starts -->
         <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-list-alt"> Orders List</i></h4>
         <div class="row">
@@ -40,7 +112,7 @@
 
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Modal Heading</h4>
+                        <h4 class="modal-title">Your Orders</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
@@ -63,58 +135,21 @@
                                     </tr>
                                     </thead>
                                     <tbody id="product_table_data">
-                                    {{--                                        <tr class="tt">--}}
-                                    {{--                                            <td>Pakisthani three piece</td>--}}
-                                    {{--                                            <td>2000 BDT</td>--}}
-                                    {{--                                            <td>2 <span>Sets</span></td>--}}
-                                    {{--                                            <td>100 BDT</td>--}}
-                                    {{--                                            <td>Pending</td>--}}
-                                    {{--                                            <td><button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button></td>--}}
-                                    {{--                                        </tr>--}}
-
-                                    {{--                                    <tr>--}}
-                                    {{--                                        <td>Pakisthani three piece</td>--}}
-                                    {{--                                        <td>2000 BDT</td>--}}
-                                    {{--                                        <td>2 <span>Sets</span></td>--}}
-                                    {{--                                        <td>100 BDT</td>--}}
-                                    {{--                                        <td>Pending</td>--}}
-                                    {{--                                        <td><button class="btn btn-xs btn-danger">Remove</button></td>--}}
-                                    {{--                                    </tr>--}}
 
                                     </tbody>
                                 </table>
-
                             </div>
                             <div class="col-12 col-lg-4">
                                 <p style="color: #2b383e;font-size: 17px;text-decoration: underline">Customer
                                     Details</p>
                                 <br>
                                 <table class="table table-bordered" style="padding-left: 10px" id="customer_table_data">
-                                    {{--                                    <thead>--}}
-                                    {{--                                        <tr>--}}
-                                    {{--                                            <th>Name</th>--}}
-                                    {{--                                            <th>Details</th>--}}
-                                    {{--                                        </tr>--}}
-                                    {{--                                    </thead>--}}
-                                    {{--                                    <tbody >--}}
-                                    {{--                                        <tr>--}}
-                                    {{--                                            <td>Mark</td>--}}
-                                    {{--                                            <td>Sayla</td>--}}
-                                    {{--                                        </tr>--}}
-                                    {{--                                    </tbody>--}}
+
                                 </table>
                             </div>
                             <!--summary starts-->
                             <div class="col-4" style="color: #2b383e" id="summary_details">
-                                {{--                                <div class="border-bottom">--}}
-                                {{--                                    <p style="text-decoration: underline">Summary:</p>--}}
-                                {{--                                    <p>Total Price: <span id="total_price"></span> <span>tk</span></p>--}}
-                                {{--                                    <p>Discounts: <span>-</span> <span id="total_discount"></span> <span>tk</span></p>--}}
-                                {{--                                    <p>Delivery charge: <span>60 tk</span></p>--}}
-                                {{--                                </div>--}}
-                                {{--                                <div>--}}
-                                {{--                                    <p>subtotal: <span id="subtotal"></span></p>--}}
-                                {{--                                </div>--}}
+
                             </div>
                             <!-- summary ends-->
                         </div>
@@ -150,6 +185,9 @@
     <script src={{asset("assets/admin_panel/dist/js/dataTables-data.js")}}></script>
     <script src={{asset("assets/admin_panel/dist/js/moment.js")}}></script>
 
+    <script src={{asset("assets/admin_panel/vendors/moment/min/moment.min.js")}}></script>
+    <script src={{asset("assets/admin_panel/vendors/daterangepicker/daterangepicker.js")}}></script>
+    <script src={{asset("assets/admin_panel/dist/js/daterangepicker-data.js")}}></script>
     <!-- data table-->
     <script>
         $(document).ready(function () {
@@ -295,7 +333,7 @@
                 });
             });
 
-            //order details modal informations
+            //order details modal information
             $(document).on("click", ".order_details", function () {
                 $('#product_table_data tr').remove();
                 $('#customer_table_data td').remove();
@@ -340,7 +378,26 @@
                         $('#myModal').modal('toggle');
                     }
                 });
-            })
+            });
+
+            $('.discount_date').daterangepicker({
+                autoUpdateInput: false,
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('#start_date').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+
+            $('#end_date').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+
         });
 
         //product status in modal

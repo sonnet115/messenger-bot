@@ -9,7 +9,7 @@
 @section("main_content")
     <!-- Container -->
     <div class="container mt-xl-20 mt-sm-30 mt-15">
-        <!-- filter stast-->
+        <!-- filter starts-->
         <h4 class="hk-pg-title font-weight-700 mb-10 text-muted"><i class="fa fa-filter">&nbsp;Filter Products</i>
         </h4>
         <p style="font-size: 20px">Stock</p>

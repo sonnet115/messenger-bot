@@ -81,7 +81,7 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
 
         //Routes for order
         Route::group(['prefix' => 'order'], function () {
-            Route::get("manage-form", "Admin_Panel\OrderController@viewUpdateOrder")->name("order.manage.view");
+            Route::get("manage-form", "Admin_Panel\OrderController@viewManageOrder")->name("order.manage.view");
             //Route::post("update-discount", "Admin_Panel\DiscountController@updateDiscount")->name("discount.update");
             Route::get("get-order", "Admin_Panel\OrderController@getOrders")->name("order.get");
             Route::get("get-order-details", "Admin_Panel\OrderController@getOrdersDetails")->name("order.details.get");

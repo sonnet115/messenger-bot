@@ -7,12 +7,16 @@ use App\Order;
 use App\OrderedProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Shop;
 
 class OrderController extends Controller
 {
-    public function viewUpdateOrder()
+    public function viewManageOrder()
     {
-        return view('admin_panel.orders.manage_order')->with("title", " Howkar Technology || Manage Orders");
+        $shops = Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1)->get();
+        return view('admin_panel.orders.manage_order')
+            ->with("title", " Howkar Technology || Manage Orders")
+            ->with('shops', $shops);
     }
 
     public function getOrders()
