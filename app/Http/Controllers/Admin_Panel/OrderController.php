@@ -19,9 +19,31 @@ class OrderController extends Controller
             ->with('shops', $shops);
     }
 
-    public function getOrders()
+    public function getOrders(Order $order)
     {
-        return datatables(Order::selectRaw("*")->whereRaw(1)->orderBy('id', 'asc')->with('status_updated_by'))->toJson();
+        $order = $order->newQuery();
+
+        if (request()->has('start_date') && request('start_date') != null && request('end_date') == null) {
+            $order->whereDate('created_at', '=', request('start_date'));
+        }
+
+        if (request()->has('end_date') && request('end_date') != null && request('start_date') == null) {
+            $order->whereDate('created_at', '=', request('end_date'));
+        }
+
+        if (request()->has('start_date') && request()->has('end_date') && request('start_date') != null && request('end_date') != null) {
+            $order->whereDate('created_at', '>=', request('start_date'))->whereDate('created_at', '<=', request('end_date'));
+        }
+
+        if (request()->has('status') && request('status') != null) {
+            $order->where('order_status', '=', request('status'));
+        }
+
+        if (request()->has('shop_id') && request('shop_id') != null) {
+            $order->where('shop_id', '=', request('shop_id'));
+        }
+
+        return datatables($order->orderBy('created_at', 'desc')->with('status_updated_by'))->toJson();
     }
 
     public function getOrdersDetails(Request $request)

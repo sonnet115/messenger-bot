@@ -17,7 +17,7 @@
         <div class="d-flex flex-wrap">
             <!--start date filter starts-->
             <div class="form-group col-md-2">
-                <h5 style="font-size: 16px;color: #708090">Start From:<span class="text-danger"></span></h5>
+                <h5 style="font-size: 16px;color: #708090">From:<span class="text-danger"></span></h5>
                 <div class="controls">
                     <input class="form-control discount_date" autocomplete="off" type="text" name="start_date" id="start_date" value=""/>
                 </div>
@@ -26,7 +26,7 @@
 
             <!--end date filter starts-->
             <div class="form-group col-md-2">
-                <h5 style="font-size: 16px;color: #708090">End To:<span class="text-danger"></span></h5>
+                <h5 style="font-size: 16px;color: #708090">To:<span class="text-danger"></span></h5>
                 <div class="controls">
                     <input class="form-control discount_date" autocomplete="off" type="text" name="end_date" id="end_date" value=""/>
                 </div>
@@ -38,8 +38,11 @@
                 <h5 style="font-size: 16px;color: #708090">Status<span class="text-danger"></span></h5>
                 <select class="form-control" name="status">
                     <option value="" selected>Status</option>
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="0">Pending</option>
+                    <option value="1">Processing</option>
+                    <option value="2">Dispatched</option>
+                    <option value="3">Delivered</option>
+                    <option value="4">Cancelled</option>
                 </select>
             </div>
             <!--state ends-->
@@ -59,7 +62,7 @@
             <!--button-->
             @if (auth()->user()->page_added > 0)
                 <div class="text-left col-md-2">
-                    <button type="text" id="btnFiterSubmitSearch" class="btn btn-info" style="margin-top:19px"><i
+                    <button type="text" id="orderFilterButton" class="btn btn-info" style="margin-top:19px"><i
                             class="fa fa-search">&nbsp;</i>Filter
                     </button>
                 </div>
@@ -217,9 +220,10 @@
                 ajax: {
                     url: "{{ route('order.get') }}",
                     data: function (d) {
-                        //d.stock_from = $("input[name=stock_from]").val();
-                        //d.stock_to = $("input[name=stock_to]").val();
-                        //d.status = $('select[name=status] option:selected').val();
+                        d.start_date = $('#start_date').val();
+                        d.end_date = $('#end_date').val();
+                        d.status = $('select[name=status] option:selected').val();
+                        d.shop_id = $('select[name=shop_id] option:selected').val();
                     }
                 },
 
@@ -398,6 +402,9 @@
                 $(this).val(picker.startDate.format('YYYY-MM-DD'));
             });
 
+            $('#orderFilterButton').click(function () {
+                $('#order_list_table').DataTable().draw(true);
+            });
         });
 
         //product status in modal

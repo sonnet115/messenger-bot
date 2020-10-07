@@ -99,7 +99,7 @@ class ProductController extends Controller
         return view("admin_panel.product.manage_product")->with('shops', $this->shops)->with("title", "Howkar Technology || Manage Product");
     }
 
-    public function getProduct(Request $request, Product $product)
+    public function getProduct(Product $product)
     {
         $product = $product->newQuery();
 
