@@ -51,6 +51,7 @@
     @yield("user-css")
     @yield("discount-css")
     @yield("order-css")
+    @yield("billing-css")
 </head>
 
 <body>
@@ -68,7 +69,7 @@
             <span class="feather-icon"><i data-feather="menu"></i></span>
         </a>
         <a class="navbar-brand font-weight-900 text-white" style="font-size: 30px !important;"
-           href="{{route("dashboard")}}">Howkar Technology
+           href="{{route("dashboard")}}">HT
         </a>
         <ul class="navbar-nav hk-navbar-content">
             <li class="nav-item dropdown dropdown-authentication">
@@ -395,5 +396,6 @@
 @yield('manageDiscount-js')
 @yield('shop-js')
 @yield('order-js')
+@yield('billing-js')
 </body>
 </html>

@@ -47,8 +47,34 @@
         <!-- /Row -->
     </div>
     <!-- /Container -->
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Payment Methods</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row" id="payment_steps">
+
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
-@section("product-js")
+
+@section("billing-js")
     <script src={{asset("assets/admin_panel/vendors/datatables.net/js/jquery.dataTables.min.js")}}></script>
     <script src={{asset("assets/admin_panel/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js")}}></script>
     <script src={{asset("assets/admin_panel/vendors/datatables.net-dt/js/dataTables.dataTables.min.js")}}></script>
@@ -64,7 +90,6 @@
     <script
         src={{asset("assets/admin_panel/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")}}></script>
     <script src={{asset("assets/admin_panel/dist/js/dataTables-data.js")}}></script>
-
     <!-- data table-->
     <script>
         $(document).ready(function () {
@@ -103,9 +128,14 @@
                     {data: 'billing[0].next_billing_date', name: 'next_billing_date'},
                     {
                         'render': function (data, type, row) {
-                            let color = row.page_connected_status === 1 ? "danger" : "success";
-                            let text = row.page_connected_status === 1 ? "Disconnect" : "Connect";
-                            return '<button style="min-width: 101px;border:1px solid" onclick="connectDisconnectPage()" class="shadow btn btn-sm pr-15 pl-15 btn-outline-' + color + '">' + text + '</button>';
+                            // let color = row.page_subscription_status === 1 ? "success" : "danger";
+                            let color = "success";
+                            // let text = row.page_subscription_status === 1 ? "Active" : "Pay Now";
+                            let text = "Pay Now";
+                            let button = '<input type="hidden" value="' + row.billing[0].payable_amount + '" class="payable_amount">' +
+                                '<input type="hidden" value="' + row.billing[0].next_billing_date + '" class="next_billing_date">' +
+                                '<button style="min-width: 101px;border:1px solid" class="payment-details shadow btn btn-sm pr-15 pl-15 btn-outline-' + color + '">' + text + '</button>';
+                            return button;
                         },
                     }
                 ],
@@ -114,38 +144,40 @@
                 },
             });
         });
-    </script>
-@endsection
 
-@section("shop-js")
-    <script>
-        function connectDisconnectPage() {
-            FB.login(function (response) {
-                console.log(response);
-                let connect_text_container = $(".connect_text");
-                connect_text_container.html('Please Wait...')
-                $.ajax({
-                    type: "GET",
-                    url: "{{route('page.store')}}",
-                    data: {
-                        facebook_api_response: response
-                    },
-                    success: function (backend_response) {
-                        if (backend_response === 'success') {
-                            connect_text_container.html("Completed!");
-                        } else if (backend_response === 'no_page_added') {
-                            connect_text_container.html('All Pages Removed. Connect Page Again!');
-                        } else {
-                            connect_text_container.html('Something went wrong! Try Again.');
-                        }
-                        setTimeout(function () {
-                            window.location.reload(true);
-                        }, 1000);
-                        console.log(backend_response);
-                    }
-                });
-            }, {scope: 'pages_messaging, pages_manage_metadata, pages_show_list'});
-        };
+        $(document).on("click", ".payment-details", function () {
+            let payable_amount = $(this).parent().find('.payable_amount').val();
+            let next_billing_date = $(this).parent().find('.next_billing_date').val();
+            let todays_date = new Date();
+            next_billing_date = new Date(next_billing_date);
+
+            // var date2 = new Date("8/11/2010");
+            let diffDays = todays_date - next_billing_date;
+
+            if(diffDays < 0){
+                
+            }
+
+            paymentSteps($(this).parent().find('.payable_amount').val());
+            $('#myModal').modal('toggle');
+        });
+
+        function paymentSteps(amount) {
+            let html = '<div class="col-12 col-lg-8">\n' +
+                '         <b style="color: #2b383e;font-size: 17px;text-decoration: underline">Payment Steps:</b>\n' +
+                '         <br>\n' +
+                '         <ol style="padding: 10px 30px">\n' +
+                '             <li>Go to bKash Mobile Menu by dialing *247#</li>\n' +
+                '             <li>Choose “Send Money”</li>\n' +
+                '             <li>Enter 01608435599</li>\n' +
+                '             <li>Enter amount ' + amount + ' BDT</li>\n' +
+                '             <li>Enter reference Sept1</li>\n' +
+                '             <li>Now enter your bKash Mobile Menu PIN to confirm</li>\n' +
+                '          </ol>\n' +
+                '      </div>';
+
+            $("#payment_steps").html(html);
+        }
     </script>
 @endsection
 
