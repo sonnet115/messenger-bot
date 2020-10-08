@@ -106,6 +106,7 @@ Route::group(['middleware' => 'unauthenticated.user'], function () {
             Route::get("billing-info", "Admin_Panel\PageController@viewBillingInfo")->name('billing.info');
             Route::get("get-list", "Admin_Panel\PageController@getShopsList")->name('shop.list.get');
             Route::post("get-billing-info", "Admin_Panel\PageController@getBillingInfo")->name('billing.info.get');
+            Route::post("store-payment-info", "Admin_Panel\PageController@storePaymentInfo")->name('payment.info.store');
         });
     });
 

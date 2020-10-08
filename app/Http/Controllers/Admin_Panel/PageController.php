@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin_Panel;
 
 use App\Billing;
 use App\Http\Controllers\Controller;
+use App\PaymentInfo;
 use App\Shop;
 use App\User;
 use DateInterval;
@@ -157,6 +158,11 @@ class PageController extends Controller
     function getShopsList()
     {
         return datatables(Shop::where('page_owner_id', auth()->user()->user_id)->where('page_connected_status', 1))->toJson();
+    }
+
+    function storePaymentInfo(Request $request){
+        PaymentInfo::create($request->all());
+        return response()->json('Success');
     }
 
     public function getLongLivedUserAccessToken($short_lived_user_access_token)
