@@ -12,7 +12,7 @@
 */
 
 //Route for user login
-Route::get("/", "Admin_Panel\DashboardController@showHome")->name('home')->middleware('authenticated.user');
+Route::get("/", "Bot\BotController@showHome")->name('home')->middleware('authenticated.user');
 Route::get('/auth/redirect/{provider}', 'Admin_Panel\UserController@redirect');
 Route::get('/callback/{provider}', 'Admin_Panel\UserController@callback');
 Route::get('logout', 'Admin_Panel\UserController@logout')->name('logout');
@@ -33,7 +33,7 @@ Route::group(['prefix' => 'bot/{app_id}'], function () {
     Route::get("check-qty", "Bot\OrderController@checkProductQty")->name("product.qty.check");
 
     //Routes for track orders
-    Route::get("track-order-form/{id}", "Bot\OrderController@viewTrackOrderForm")->name("track.order.form");
+    Route::get("track-order-form/{customer_fb_id}", "Bot\OrderController@viewTrackOrderForm")->name("track.order.form");
     Route::get("get-order-status", "Bot\OrderController@getOrderStatus")->name("order.status.get");
 
     //Routes for pre orders
@@ -44,7 +44,7 @@ Route::group(['prefix' => 'bot/{app_id}'], function () {
     Route::get("remove-cart-product", "Bot\OrderController@removeCartProducts")->name("remove.cart");
 
     //Route for product enquiry
-    Route::get("product-search-form/{id}", "Bot\ProductController@viewProductSearchForm")->name("product.search.form");
+    Route::get("product-search-form/{customer_fb_id}", "Bot\ProductController@viewProductSearchForm")->name("product.search.form");
     Route::get("get-product", "Bot\ProductController@getProduct")->name("product.get");
 });
 

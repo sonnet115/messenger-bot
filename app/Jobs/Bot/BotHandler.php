@@ -25,6 +25,7 @@ class BotHandler implements ShouldQueue
 
     public function handle()
     {
+
         if ($this->messaging->getType() == "message") {
             $bot = new Bot($this->messaging, "message", $this->page_token);
             $bot->reply();

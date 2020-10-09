@@ -31,7 +31,6 @@ class Bot
         } else {
             $user_response = $this->messaging->getPostback()->getPayload();
         }
-
         $decision_maker = new DecisionMaker($user_response, $this->recipientId, $this->senderID, $this->page_token);
         $decision_maker->preparedResponses();
     }

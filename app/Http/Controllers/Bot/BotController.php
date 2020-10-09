@@ -22,4 +22,8 @@ class BotController extends Controller
         }
         return json_encode(response());
     }
+
+    public function showHome(){
+        echo 'home';
+    }
 }
