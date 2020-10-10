@@ -2,6 +2,8 @@
 
 namespace App\Bot;
 
+use App\ProductImage;
+
 class Receipt
 {
     private $recipientId;
@@ -89,13 +91,15 @@ class Receipt
     {
         $products = array();
         foreach ($this->placed_order_data->ordered_products as $product) {
+            $product_image = ProductImage::where('pid', $product->id)->first();
+            $absolute_url = 'https://clients.howkar.com/images/products/' . $product_image->image_url;
             array_push($products, [
                 "title" => $product->name,
                 "subtitle" => "Product_Code:" . $product->code,
                 "quantity" => $product->pivot->quantity,
                 "price" => $product->pivot->price,
                 "currency" => "BDT",
-                "image_url" => "https://i.picsum.photos/id/1021/2048/1206.jpg"
+                "image_url" => $absolute_url
             ]);
         }
 
