@@ -106,7 +106,7 @@ class OrderController extends Controller
                         $discounted_price = 0;
                     }
 
-//                    $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
+                    $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
 
                     if ($qty > $product_details->stock) {
                         array_push($stock_out_product, $product_codes[$i]);

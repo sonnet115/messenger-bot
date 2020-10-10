@@ -382,7 +382,8 @@
 
         function productImage(all_images) {
             let image = '';
-            let image_base_path = "{{asset('images/products')."/"}}";
+            {{--let image_base_path = "{{asset('images/products')."/"}}";//dev--}}
+            let image_base_path = "https://clients.howkar.com/images/products/";//live
             console.log(image_base_path);
             for (let i = 0; i < all_images.length; i++) {
                 if (i === 0) {
