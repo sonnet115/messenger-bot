@@ -13,6 +13,7 @@ use App\Order;
 use App\OrderedProducts;
 use App\PreOrder;
 use App\Product;
+use App\ProductImage;
 use App\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -279,18 +280,19 @@ class OrderController extends Controller
     //test function
     public function getTestData()
     {
-        $dd = Order::where('code', '1600332097_13712')->with('ordered_products')->get();
-        dd($dd);
+        $placed_order_data = Order::where('code', '1600337860_50691')->with('ordered_products')->first();
 
         $products = array();
-        foreach ($dd[0]->ordered_products as $product) {
+        foreach ($placed_order_data->ordered_products as $product) {
+            $product_image = ProductImage::where('pid', $product->id)->first();
+            $absolute_url = 'https://clients.howkar.com/images/products/' . $product_image->image_url;
             array_push($products, [
                 "title" => $product->name,
                 "subtitle" => "Product_Code:" . $product->code,
                 "quantity" => $product->pivot->quantity,
                 "price" => $product->pivot->price,
                 "currency" => "BDT",
-                "image_url" => "https://i.picsum.photos/id/1021/2048/1206.jpg"
+                "image_url" => $absolute_url
             ]);
         }
         return response()->json($products);
