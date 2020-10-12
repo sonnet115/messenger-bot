@@ -56,13 +56,15 @@
                                 <div class="row">
                                     <div class="col-5">
                                         <p class="total_title">Subtotal: </p>
+                                        <p class="total_title">Discount: </p>
                                         <p class="total_title">Delivery Charge:</p>
                                         <hr>
                                         <p class="total_title"><b>Total: </b></p>
                                     </div>
                                     <div class="col-4">
                                         <p class="total_value"><span id="subtotal">100000 </span> Tk</p>
-                                        <p class="total_value"><span id="delivery_charge_value">0 </span> Tk</p>
+                                        <p class="total_value">-<span id="discount">100000 </span> Tk</p>
+                                        <p class="total_value">+<span id="delivery_charge_value">0 </span> Tk</p>
                                         <hr>
                                         <p class="total_value"><b id="total">100060 </b> Tk</p>
                                     </div>
@@ -184,11 +186,13 @@
 
                 success: function (result) {
                     product_info_container.html("");
+
                     if (result.length > 0) {
                         for (let i = 0; i < result.length; i++) {
                             let delete_btn_content = deleteButton(result[i].products.code);
                             let increment_decrement_btn_content = incrementDecrementButton(result[i].products.code);
-                            let product_details_content = productDetails(result[i].products.name, result[i].products.code, result[i].products.price);
+                            let discounts = discountDetails(result[i].products);
+                            let product_details_content = productDetails(result[i].products.name, result[i].products.code, result[i].products.price, discounts);
 
                             let cart_products = '<div style="padding: 10px 0;">' +
                                 '                      <div class="card shadow-sm" style="padding: 10px 0;">\n' +
@@ -417,12 +421,27 @@
                 $("#subtotal").html(subtotal);
             }
 
+            function calculateDiscount(product_container) {
+                console.log(product_container);
+                let products = product_container.map(function () {
+                    return $(this).find("input[name='product_qty[]']").val() * $(this).find("input[name='product_discount[]']").val();
+                }).get();
+
+                let subtotal = products.reduce(function (a, b) {
+                    return a + b;
+                }, 0);
+
+                $("#discount").html(subtotal);
+            }
+
             function calculateTotal(product_container) {
                 calculateSubtotal(product_container);
+                calculateDiscount(product_container)
 
                 let subtotal = $("#subtotal").html();
                 let delivery_charge = $("#delivery_charge_value").html();
-                let total = Math.ceil(parseFloat(subtotal) + parseInt(delivery_charge));
+                let discounts = $("#discount").html();
+                let total = Math.ceil((parseFloat(subtotal) - parseFloat(discounts)) + parseInt(delivery_charge));
 
                 $("#total").html(total);
                 console.log(total);
@@ -476,7 +495,7 @@
                     '   </div>\n';
             }
 
-            function productDetails(name, code, price) {
+            function productDetails(name, code, price, discount) {
                 return '<div class="col-7 col-sm-7">\n' +
                     '        <p class="product_details"><b class="text-primary"> Name:</b> ' + name + '\n' +
                     '        </p>\n' +
@@ -486,7 +505,15 @@
                     '                                               name="product_code[]" value="' + code + '">\n' +
                     '        <input type="hidden" class="form-control" required\n' +
                     '                                               name="product_price[]" value="' + price + '">\n' +
+                    '        <input type="hidden" class="form-control" required\n' +
+                    '                                               name="product_discount[]" value="' + discount + '">\n' +
                     '   </div>\n';
+            }
+
+            function discountDetails(products) {
+                let discounts = ((products.discounts.dis_percentage * products.price) / 100);
+                console.log(discounts);
+                return discounts;
             }
 
             function incrementDecrementButton(product_code) {
