@@ -35,6 +35,11 @@ return [
     */
 
     'channels' => [
+        'page_add' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/your_file_name.log'),
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
