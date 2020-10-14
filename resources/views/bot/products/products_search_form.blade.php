@@ -145,7 +145,7 @@
                                                 'customer_fb_id': $("#customer_id").val(),
                                             },
                                             success: function (result, jqXHR) {
-                                                showNotification(result, "text-success");
+                                                // showNotification(result, "text-success");
                                                 button.hide(300);
                                             },
                                             error: function (error, jqXHR) {
@@ -168,12 +168,12 @@
                                                 'customer_fb_id': $("#customer_id").val(),
                                             },
                                             success: function (result, jqXHR) {
-                                                showNotification(result, "text-success");
+                                                // showNotification(result, "text-success");
                                                 add_to_cart_button.off("click");
                                                 add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                             },
                                             error: function (error, jqXHR) {
-                                                showNotification(error.responseJSON, "text-danger");
+                                                // showNotification(error.responseJSON, "text-danger");
                                                 add_to_cart_button.off("click");
                                                 add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                             }
@@ -251,10 +251,10 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success", button);
                                         },
                                         error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger", button);
+                                            // showNotification(error.responseJSON, "text-danger", button);
                                         }
                                     });
                                 });
@@ -306,7 +306,7 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success", button);
                                         },
                                         error: function (error, jqXHR) {
                                             showNotification(error.responseJSON, "text-danger", button);
@@ -327,7 +327,7 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success", button);
                                         },
                                         error: function (error, jqXHR) {
                                             showNotification(error.responseJSON, "text-danger", button);
@@ -385,17 +385,20 @@
             {{--let image_base_path = "{{asset('images/products')."/"}}";//dev--}}
             let image_base_path = "https://clients.howkar.com/images/products/";//live
             console.log(image_base_path);
-            for (let i = 0; i < all_images.length; i++) {
-                if (i === 0) {
-                    image += '<div class="carousel-item active">\n' +
-                        '         <img src="' + image_base_path + all_images[i].image_url + '" style="max-height: 170px;">' +
-                        '     </div>';
-                } else {
-                    image += '<div class="carousel-item">\n' +
-                        '         <img src="' + image_base_path + all_images[i].image_url + '" style="max-height: 170px;">' +
-                        '     </div>';
-                }
-            }
+            image = '<div class="">\n' +
+                '         <img src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
+                '     </div>';
+            // for (let i = 0; i < all_images.length; i++) {
+            //     if (i === 0) {
+            //         image = '<div class="active">\n' +
+            //             '         <img src="' + image_base_path + all_images[i].image_url + '" style="max-height: 170px;">' +
+            //             '     </div>';
+            //     } else {
+            //         image = '<div class="">\n' +
+            //             '         <img src="' + image_base_path + all_images[i].image_url + '" style="max-height: 170px;">' +
+            //             '     </div>';
+            //     }
+            // }
             return image;
         }
 
@@ -416,23 +419,33 @@
             return '  <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n' +
                 '                        ' + discount_available +
                 '                        <div class="col-6" style="max-height: 200px">\n' +
-                '                           <div id="' + code + '" class="carousel slide shadow-sm rounded" data-ride="carousel">\n' +
-                '                                <div class="carousel-inner">\n' +
-                '                                   ' + images +
-                '                                </div>\n' +
-                '                                <a class="carousel-control-prev" href="#' + code + '" data-slide="prev">\n' +
-                '                                    <span class="carousel-control-prev-icon text-dark"></span>\n' +
-                '                                </a>\n' +
-                '                                <a class="carousel-control-next" href="#' + code + '" data-slide="next">\n' +
-                '                                    <span class="carousel-control-next-icon text-dark"></span>\n' +
-                '                                </a>\n' +
-                '                            </div>\n' +
+                '                            ' + images +
                 '                            ' + order_pre_order_button +
                 '                        </div>\n' +
                 '                         <div class="col-6" style="font-size: 13px">\n' +
                 '                            ' + product_details +
                 '                         </div>\n' +
                 '                    </div>';
+            // return '  <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n' +
+            //     '                        ' + discount_available +
+            //     '                        <div class="col-6" style="max-height: 200px">\n' +
+            //     '                           <div id="' + code + '" class="carousel slide shadow-sm rounded" data-ride="carousel">\n' +
+            //     '                                <div class="carousel-inner">\n' +
+            //     '                                   ' + images +
+            //     '                                </div>\n' +
+            //     '                                <a class="carousel-control-prev" href="#' + code + '" data-slide="prev">\n' +
+            //     '                                    <span class="carousel-control-prev-icon text-dark"></span>\n' +
+            //     '                                </a>\n' +
+            //     '                                <a class="carousel-control-next" href="#' + code + '" data-slide="next">\n' +
+            //     '                                    <span class="carousel-control-next-icon text-dark"></span>\n' +
+            //     '                                </a>\n' +
+            //     '                            </div>\n' +
+            //     '                            ' + order_pre_order_button +
+            //     '                        </div>\n' +
+            //     '                         <div class="col-6" style="font-size: 13px">\n' +
+            //     '                            ' + product_details +
+            //     '                         </div>\n' +
+            //     '                    </div>';
         }
 
         function showNotification(message, text_class) {

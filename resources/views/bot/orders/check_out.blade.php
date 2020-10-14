@@ -511,8 +511,11 @@
             }
 
             function discountDetails(products) {
-                let discounts = ((products.discounts.dis_percentage * products.price) / 100);
-                console.log(discounts);
+                let discounts = 0;
+                if (products.discounts != null) {
+                    discounts = ((products.discounts.dis_percentage * products.price) / 100);
+                    console.log(discounts);
+                }
                 return discounts;
             }
 
