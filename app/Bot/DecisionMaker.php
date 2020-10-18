@@ -2,6 +2,8 @@
 
 namespace App\Bot;
 
+use App\Shop;
+
 class DecisionMaker
 {
     private $user_response;
@@ -11,6 +13,7 @@ class DecisionMaker
     private $text_message;
     private $app_id;
     private $page_token;
+    private $shop;
 
     public function __construct($user_response, $recipientId, $app_id, $page_token)
     {
@@ -33,6 +36,7 @@ class DecisionMaker
 
     private function fetchResponse()
     {
+        $this->shop = Shop::where('page_id', '=', $this->app_id)->first();
         switch ($this->user_response) {
             case "VIEW_CART":
                 $this->sendTemplate("VIEW_CART");
@@ -50,10 +54,10 @@ class DecisionMaker
                 $this->sendHandover("An agent will contact you shortly. Please tell us what do you want to know.");
                 break;
             case "CANCEL_ORDER":
-                $this->sendHandover("An agent will contact you shortly.Please tell us your reason to cancel");
+                $this->sendHandover("An agent will contact you shortly.Please tell us your reason to cancel.");
                 break;
             case "GET_STARTED":
-                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Welcome To DEMO BOT"));
+                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Welcome to " . $this->shop->page_name));
                 $this->sendQuickReply();
                 break;
             default:
@@ -110,7 +114,7 @@ class DecisionMaker
 
     private function sendHandover($message)
     {
-        $this->common->sendHandoverRequest($this->handover->handoverControlToHumanAgent());
+        $this->common->sendHandoverRequest($this->handover->handoverControlToHumanAgent($this->app_id));
         $this->common->sendAPIRequest($this->text_message->sendTextMessage($message));
     }
 

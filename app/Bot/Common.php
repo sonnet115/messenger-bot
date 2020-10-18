@@ -24,9 +24,10 @@ class Common
           curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
           curl_setopt($ch, CURLOPT_POST, true);
           curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
-          curl_exec($ch);
+          $response = curl_exec($ch);
 
-          Log::channel('page_add')->info('bot response: ' . json_encode($messageData));
+//          Log::channel('page_add')->info('bot response: ' . json_encode($messageData).PHP_EOL);
+//          Log::channel('page_add')->info('bot response: ' . json_encode($response).PHP_EOL);
       }catch (\Exception $e){
           dd($e);
       }
@@ -40,6 +41,9 @@ class Common
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
-        curl_exec($ch);
+        $response = curl_exec($ch);
+
+        Log::channel('page_add')->info('handover request: ' . json_encode($messageData).PHP_EOL);
+        Log::channel('page_add')->info('handover response: ' . json_encode($response).PHP_EOL);
     }
 }
