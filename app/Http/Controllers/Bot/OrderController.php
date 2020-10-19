@@ -143,6 +143,7 @@ class OrderController extends Controller
             }
             $this->processReceipt($data['customer_fb_id'], $order_code);
         } catch (\Exception $e) {
+            Log::channel('page_add')->info('order_failed: ' . json_encode($e).PHP_EOL);
             DB::rollBack();
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
             $this->common->sendAPIRequest($this->template->orderProductTemplate());
