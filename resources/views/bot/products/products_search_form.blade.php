@@ -1,61 +1,67 @@
 @extends('bot.main')
 
 @section('main-content')
+    <nav class="navbar navbar-expand-sm bg-dark fixed-top justify-content-center" style="padding: 12px">
+        <h3 class="text-uppercase text-white font-weight-bold">Our Products</h3>
+    </nav>
+    <br>
+    <br>
+    <br>
     <div class="container" style="margin-top:30px;">
         <div class="row">
             <div class="col-3 col-sm-3">
                 <hr>
             </div>
             <div class="col-6 col-sm-6 text-muted text-center font-weight-bold">
-                Product Categories
+                Browse Categories
             </div>
             <div class="col-3 col-sm-3">
                 <hr>
             </div>
             <div class="col-md-4">
+                <li>All Products</li>
                 <ul id="tree1">
-                    <li>All Products</li>
                     @include('bot.categories', ['categories' => $categories])
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="form-body on-top" style="padding-top:0px">
-        <div class="row">
-            <div class="form-holder">
-                <div class="form-content" style="padding: 10px">
-                    <div class="form-items">
-                        <div class="row">
-                            <div class="col-3 col-sm-3">
-                                <hr>
-                            </div>
-                            <div class="col-6 col-sm-6 text-danger text-center">
-                                Product Search
-                            </div>
-                            <div class="col-3 col-sm-3">
-                                <hr>
-                            </div>
+    <div class="form-body on-top" style="padding-top:0">
+        {{--        <div class="row">--}}
+        {{--            <div class="form-holder">--}}
+        {{--                <div class="form-content" style="padding: 10px">--}}
+        {{--                    <div class="form-items">--}}
+        {{--                        <div class="row">--}}
+        {{--                            <div class="col-3 col-sm-3">--}}
+        {{--                                <hr>--}}
+        {{--                            </div>--}}
+        {{--                            <div class="col-6 col-sm-6 text-danger text-center">--}}
+        {{--                                Search Product--}}
+        {{--                            </div>--}}
+        {{--                            <div class="col-3 col-sm-3">--}}
+        {{--                                <hr>--}}
+        {{--                            </div>--}}
 
-                            <div class="col-12 col-sm-12">
-                                <label>Product Code/Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter product code or name ..."
-                                       name="product_code" required>
-                                <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>
-                            </div>
+        {{--                            <div class="col-12 col-sm-12">--}}
+        {{--                                <label>Product Code/Name <span class="text-danger">*</span></label>--}}
+        {{--                                <input type="text" class="form-control" placeholder="Enter product code or name ..."--}}
+        {{--                                       name="product_code" required>--}}
+        {{--                                <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>--}}
+        {{--                            </div>--}}
 
-                            <div class="col-12 col-sm-12 text-center">
-                                <button id="search" class="btn btn-success"
-                                        style="border-radius: 25px;padding: 10px 20px">
-                                    <i class="fa fa-search"></i> Search Product
-                                </button>
-                            </div>
+        {{--                            <div class="col-12 col-sm-12 text-center">--}}
+        {{--                                <button id="search" class="btn btn-success"--}}
+        {{--                                        style="border-radius: 25px;padding: 10px 20px">--}}
+        {{--                                    <i class="fa fa-search"></i> Search Product--}}
+        {{--                                </button>--}}
+        {{--                            </div>--}}
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{--                        </div>--}}
+        {{--                    </div>--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
     </div>
 
     <!-- The Modal Starts-->
@@ -63,7 +69,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">You searched for "<span id="searched_product_code"></span>"</h4>
+                    <h5 class="modal-title">Showing Result for "<span class="text-success" id="searched_product_code"></span>"</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body ">
@@ -111,6 +117,62 @@
 @section('product-search-js')
     <script>
         $(document).ready(function () {
+            // JS for category tree view
+            $.fn.extend({
+                treed: function (o) {
+                    let openedClass = 'fa-minus-square';
+                    let closedClass = 'fa-plus-square';
+
+                    if (typeof o != 'undefined') {
+                        if (typeof o.openedClass != 'undefined') {
+                            openedClass = o.openedClass;
+                        }
+                        if (typeof o.closedClass != 'undefined') {
+                            closedClass = o.closedClass;
+                        }
+                    }
+
+                    //initialize each of the top levels
+                    let tree = $(this);
+                    tree.addClass("tree");
+                    tree.find('li').has("ul").each(function () {
+                        let branch = $(this); //li with children ul
+                        branch.prepend("<i class='indicator fa " + closedClass + "'></i>");
+                        branch.addClass('branch');
+                        branch.on('click', function (e) {
+                            if (this == e.target) {
+                                var icon = $(this).children('i:first');
+                                icon.toggleClass(openedClass + " " + closedClass);
+                                $(this).children().children().toggle();
+                            }
+                        })
+                        branch.children().children().toggle();
+                    });
+                    //fire event from the dynamically added icon
+                    tree.find('.branch .indicator').each(function () {
+                        $(this).on('click', function () {
+                            $(this).closest('li').click();
+                        });
+                    });
+                    //fire event to open branch if the li contains an anchor instead of text
+                    tree.find('.branch>a').each(function () {
+                        $(this).on('click', function (e) {
+                            $(this).closest('li').click();
+                            e.preventDefault();
+                        });
+                    });
+                    //fire event to open branch if the li contains a button instead of text
+                    tree.find('.branch>button').each(function () {
+                        $(this).on('click', function (e) {
+                            $(this).closest('li').click();
+                            e.preventDefault();
+                        });
+                    });
+                }
+            });
+            //Initialization of treeviews
+            $('#tree1').treed();
+
             let base_url = '{{env("APP_URL")}}';
             let preloaderFadeOutTime = 500;
 
@@ -121,96 +183,92 @@
 
             hidePreloader();
 
-            $("#search").on('click', function () {
-                let product_code = $("input[name='product_code']").val();
+            $(".category").on('click', function () {
+                // let product_code = $("input[name='product_code']").val();//code for searching
+                let cat_id = $(this).attr("data-cat-id");
+                let cat_name = $(this).attr("data-category-name");
                 const cart_url = base_url + "bot/" + $("#app_id").val() + "/cart/" + $("#customer_id").val();
 
-                let search_btn = $(this);
+                let cat_button = $(this);
                 let product_container = $("#product_container");
 
-                if (product_code === "") {
-                    $("#product_code_error").html("Product code cannot be empty");
-                } else {
-                    search_btn.html("Searching <i class='fas fa-spinner fa-pulse'></i>");
-                    $("#searched_product_code").html(product_code);
-                    $.ajax({
-                        url: base_url + 'bot/' + $("#app_id").val() + '/get-product',
-                        type: "GET",
-                        data: {
-                            'product_code': product_code,
-                        },
-                        success: function (result) {
-                            console.log(result);
-                            product_container.html("");
-                            if (result.data.length > 0) {
-                                for (let i = 0; i < result.data.length; i++) {
-                                    let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
-                                    let discount_available = discountAvailable(result.data[i].discounts);
-                                    let images = productImage(result.data[i].images);
-                                    let order_pre_order_button = orderPreOrderButton(result.data[i].stock, result.data[i].code);
-                                    let products = allProductDetails(product_details, discount_available, images, result.data[i].code, order_pre_order_button);
+                // cat_button.append("<i class='fas fa-spinner fa-pulse'></i>");
+                $.ajax({
+                    url: base_url + 'bot/' + $("#app_id").val() + '/get-product',
+                    type: "GET",
+                    data: {
+                        'cat_id': cat_id,
+                    },
+                    success: function (result) {
+                        // console.log(result);
+                        $("#searched_product_code").html(cat_name);
+                        product_container.html("");
+                        if (result.data.length > 0) {
+                            for (let i = 0; i < result.data.length; i++) {
+                                let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
+                                let discount_available = discountAvailable(result.data[i].discounts);
+                                let images = productImage(result.data[i].images);
+                                let order_pre_order_button = orderPreOrderButton(result.data[i].stock, result.data[i].code);
+                                let products = allProductDetails(product_details, discount_available, images, result.data[i].code, order_pre_order_button);
 
-                                    product_container.append(products);
+                                product_container.append(products);
 
-                                    $("#pre-order_" + result.data[i].code).on("click", function () {
-                                        let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                        let button = $(this);
-                                        button.html("Processing...")
+                                $("#pre-order_" + result.data[i].code).on("click", function () {
+                                    let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                    let button = $(this);
+                                    button.html("Processing...")
 
-                                        $.ajax({
-                                            url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
-                                            type: "GET",
-                                            data: {
-                                                'pre_order_product_code': pre_order_product_code,
-                                                'customer_fb_id': $("#customer_id").val(),
-                                            },
-                                            success: function (result, jqXHR) {
-                                                // showNotification(result, "text-success");
-                                                button.hide(300);
-                                            },
-                                            error: function (error, jqXHR) {
-                                                showNotification(error.responseJSON, "text-danger");
-                                                button.hide(300);
-                                            }
-                                        });
+                                    $.ajax({
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
+                                        type: "GET",
+                                        data: {
+                                            'pre_order_product_code': pre_order_product_code,
+                                            'customer_fb_id': $("#customer_id").val(),
+                                        },
+                                        success: function (result, jqXHR) {
+                                            // showNotification(result, "text-success");
+                                            button.hide(300);
+                                        },
+                                        error: function (error, jqXHR) {
+                                            showNotification(error.responseJSON, "text-danger");
+                                            button.hide(300);
+                                        }
                                     });
+                                });
 
-                                    $("#cart_button_" + result.data[i].code).on("click", function () {
-                                        let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                        let add_to_cart_button = $(this);
-                                        add_to_cart_button.html("Adding...");
+                                $("#cart_button_" + result.data[i].code).on("click", function () {
+                                    let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                    let add_to_cart_button = $(this);
+                                    add_to_cart_button.html("Adding...");
 
-                                        $.ajax({
-                                            url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
-                                            type: "GET",
-                                            data: {
-                                                'cart_product_code': cart_product_code,
-                                                'customer_fb_id': $("#customer_id").val(),
-                                            },
-                                            success: function (result, jqXHR) {
-                                                // showNotification(result, "text-success");
-                                                add_to_cart_button.off("click");
-                                                add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                            },
-                                            error: function (error, jqXHR) {
-                                                // showNotification(error.responseJSON, "text-danger");
-                                                add_to_cart_button.off("click");
-                                                add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                            }
-                                        });
+                                    $.ajax({
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
+                                        type: "GET",
+                                        data: {
+                                            'cart_product_code': cart_product_code,
+                                            'customer_fb_id': $("#customer_id").val(),
+                                        },
+                                        success: function (result, jqXHR) {
+                                            // showNotification(result, "text-success");
+                                            add_to_cart_button.off("click");
+                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        },
+                                        error: function (error, jqXHR) {
+                                            // showNotification(error.responseJSON, "text-danger");
+                                            add_to_cart_button.off("click");
+                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        }
                                     });
-                                }
-                                pagination(result);
-                                $("#product_list_modal").modal("toggle");
-                                search_btn.html('<i class="fa fa-search"></i> Search Product');
-                            } else {
-                                showNotification("No Products Found", "text-danger", null);
-                                search_btn.html('<i class="fa fa-search"></i> Search Product');
+                                });
                             }
-
+                            pagination(result);
+                            $("#product_list_modal").modal("toggle");
+                        } else {
+                            showNotification("No Products Found", "text-danger", null);
                         }
-                    });
-                }
+
+                    }
+                });
             });
 
             $("#next_button").on('click', function () {
@@ -501,132 +559,17 @@
                 $("#next_button").hide();
             }
         }
-
-        const toggler = document.getElementsByClassName("caret");
-        let i;
-
-        for (i = 0; i < toggler.length; i++) {
-            toggler[i].addEventListener("click", function () {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-                this.classList.toggle("caret-down");
-            });
-        }
-
-        $('.category').on('click', function () {
-            console.log($(this).attr("data-cat-id"));
-        });
-    </script>
-
-    <script>
-        $.fn.extend({
-            treed: function (o) {
-                let openedClass = 'fa-minus-square';
-                let closedClass = 'fa-plus-square';
-
-                if (typeof o != 'undefined') {
-                    if (typeof o.openedClass != 'undefined') {
-                        openedClass = o.openedClass;
-                    }
-                    if (typeof o.closedClass != 'undefined') {
-                        closedClass = o.closedClass;
-                    }
-                }
-
-                //initialize each of the top levels
-                let tree = $(this);
-                tree.addClass("tree");
-                tree.find('li').has("ul").each(function () {
-                    let branch = $(this); //li with children ul
-                    branch.prepend("<i class='indicator fa " + closedClass + "'></i>");
-                    branch.addClass('branch');
-                    branch.on('click', function (e) {
-                        if (this == e.target) {
-                            var icon = $(this).children('i:first');
-                            icon.toggleClass(openedClass + " " + closedClass);
-                            $(this).children().children().toggle();
-                        }
-                    })
-                    branch.children().children().toggle();
-                });
-                //fire event from the dynamically added icon
-                tree.find('.branch .indicator').each(function () {
-                    $(this).on('click', function () {
-                        $(this).closest('li').click();
-                    });
-                });
-                //fire event to open branch if the li contains an anchor instead of text
-                tree.find('.branch>a').each(function () {
-                    $(this).on('click', function (e) {
-                        $(this).closest('li').click();
-                        e.preventDefault();
-                    });
-                });
-                //fire event to open branch if the li contains a button instead of text
-                tree.find('.branch>button').each(function () {
-                    $(this).on('click', function (e) {
-                        $(this).closest('li').click();
-                        e.preventDefault();
-                    });
-                });
-            }
-        });
-
-        //Initialization of treeviews
-
-        $('#tree1').treed();
     </script>
 @endsection
 
 @section('product-search-css')
     <style>
         .form-content {
-            min-height: 50% !important;
-        }
-    </style>
-    <style>
-        .ml-18 {
-            margin-left: 18px !important;
-        }
-
-        ul, #myUL {
-            list-style-type: none;
-        }
-
-        #myUL {
-            margin: 0;
-            padding: 0;
-        }
-
-        .caret {
-            cursor: pointer;
-            -webkit-user-select: none; /* Safari 3.1+ */
-            -moz-user-select: none; /* Firefox 2+ */
-            -ms-user-select: none; /* IE 10+ */
-            user-select: none;
-        }
-
-        .caret::before {
-            content: "\25B6";
-            color: black;
-            display: inline-block;
-            margin-right: 6px;
-        }
-
-        .caret-down::before {
-            -ms-transform: rotate(90deg); /* IE 9 */
-            -webkit-transform: rotate(90deg); /* Safari */
-        ' transform: rotate(90 deg);
-        }
-
-        .nested {
-            display: none;
-        }
-
-        .active {
-            display: block;
+            min-height: 47% !important;
         }
     </style>
 
+    {{--css for category--}}
     <style>
         .tree, .tree ul {
             margin: 0;
@@ -696,8 +639,8 @@
             color: #369;
             border: none;
             background: transparent;
-            margin: 0px 0px 0px 0px;
-            padding: 0px 0px 0px 0px;
+            margin: 0;
+            padding: 0;
             outline: 0;
         }
     </style>

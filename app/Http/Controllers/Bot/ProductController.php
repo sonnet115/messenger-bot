@@ -11,26 +11,6 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
 
-    protected function getCategoryTree($level = NULL, $prefix = '')
-    {
-        $rows = Category::where("parent_id", $level)->with("subCategory")->get();
-
-        $category = '';
-        if (count($rows) > 0) {
-            foreach ($rows as $row) {
-                $category .= $prefix . $row->name . "\n";
-                // Append subcategories
-                $category .= $this->getCategoryTree($row->id, $prefix . '-');
-            }
-        }
-        return $category;
-    }
-
-    public function printCategoryTree()
-    {
-        echo $this->getCategoryTree();
-    }
-
     public function viewProductSearchForm(Request $request)
     {
         $customer_id = $request->segment(4);
@@ -45,13 +25,17 @@ class ProductController extends Controller
             ->with('title', 'Products || ' . $page_name['page_name']);
     }
 
-    public function getProduct(Request $request)
+    public function getProduct(Product $products)
     {
-        $shop = Shop::where('page_id', $request->segment(2))->first();
-        $products = Product::where('code', $request->product_code)->where('shop_id', $shop->id)->where('state', 1)
-            ->orWhere('name', 'like', '%' . $request->product_code . '%')->where('shop_id', $shop->id)->where('state', 1)
+        $shop = Shop::where('page_id', request()->segment(2))->first();
+//        $products = Product::where('code', request()->product_code)->where('shop_id', $shop->id)->where('state', 1)
+//            ->orWhere('name', 'like', '%' . request()->product_code . '%')->where('shop_id', $shop->id)->where('state', 1)
+//            ->with('images')
+//            ->with('discounts')->paginate(10);
+
+        $products = Product::where('category_id', request()->cat_id)->where('shop_id', $shop->id)->where('state', 1)
             ->with('images')
-            ->with('discounts')->paginate(10);
+            ->with('discounts')->paginate(2);
         return response()->json($products);
     }
 
