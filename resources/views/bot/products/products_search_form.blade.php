@@ -1,6 +1,26 @@
 @extends('bot.main')
 
 @section('main-content')
+    <div class="container" style="margin-top:30px;">
+        <div class="row">
+            <div class="col-3 col-sm-3">
+                <hr>
+            </div>
+            <div class="col-6 col-sm-6 text-muted text-center font-weight-bold">
+                Product Categories
+            </div>
+            <div class="col-3 col-sm-3">
+                <hr>
+            </div>
+            <div class="col-md-4">
+                <ul id="tree1">
+                    <li>All Products</li>
+                    @include('bot.categories', ['categories' => $categories])
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="form-body on-top" style="padding-top:0px">
         <div class="row">
             <div class="form-holder">
@@ -482,5 +502,203 @@
             }
         }
 
+        const toggler = document.getElementsByClassName("caret");
+        let i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+            });
+        }
+
+        $('.category').on('click', function () {
+            console.log($(this).attr("data-cat-id"));
+        });
     </script>
+
+    <script>
+        $.fn.extend({
+            treed: function (o) {
+                let openedClass = 'fa-minus-square';
+                let closedClass = 'fa-plus-square';
+
+                if (typeof o != 'undefined') {
+                    if (typeof o.openedClass != 'undefined') {
+                        openedClass = o.openedClass;
+                    }
+                    if (typeof o.closedClass != 'undefined') {
+                        closedClass = o.closedClass;
+                    }
+                }
+
+                //initialize each of the top levels
+                let tree = $(this);
+                tree.addClass("tree");
+                tree.find('li').has("ul").each(function () {
+                    let branch = $(this); //li with children ul
+                    branch.prepend("<i class='indicator fa " + closedClass + "'></i>");
+                    branch.addClass('branch');
+                    branch.on('click', function (e) {
+                        if (this == e.target) {
+                            var icon = $(this).children('i:first');
+                            icon.toggleClass(openedClass + " " + closedClass);
+                            $(this).children().children().toggle();
+                        }
+                    })
+                    branch.children().children().toggle();
+                });
+                //fire event from the dynamically added icon
+                tree.find('.branch .indicator').each(function () {
+                    $(this).on('click', function () {
+                        $(this).closest('li').click();
+                    });
+                });
+                //fire event to open branch if the li contains an anchor instead of text
+                tree.find('.branch>a').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+                //fire event to open branch if the li contains a button instead of text
+                tree.find('.branch>button').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+
+        //Initialization of treeviews
+
+        $('#tree1').treed();
+    </script>
+@endsection
+
+@section('product-search-css')
+    <style>
+        .form-content {
+            min-height: 50% !important;
+        }
+    </style>
+    <style>
+        .ml-18 {
+            margin-left: 18px !important;
+        }
+
+        ul, #myUL {
+            list-style-type: none;
+        }
+
+        #myUL {
+            margin: 0;
+            padding: 0;
+        }
+
+        .caret {
+            cursor: pointer;
+            -webkit-user-select: none; /* Safari 3.1+ */
+            -moz-user-select: none; /* Firefox 2+ */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none;
+        }
+
+        .caret::before {
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .caret-down::before {
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -webkit-transform: rotate(90deg); /* Safari */
+        ' transform: rotate(90 deg);
+        }
+
+        .nested {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+    </style>
+
+    <style>
+        .tree, .tree ul {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        .tree ul {
+            margin-left: 1em;
+            position: relative
+        }
+
+        .tree ul ul {
+            margin-left: .5em
+        }
+
+        .tree ul:before {
+            content: "";
+            display: block;
+            width: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            border-left: 1px solid
+        }
+
+        .tree li {
+            margin: 0;
+            padding: 0 1em;
+            line-height: 2em;
+            color: #369;
+            font-weight: 700;
+            position: relative
+        }
+
+        .tree ul li:before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 0;
+            border-top: 1px solid;
+            margin-top: -1px;
+            position: absolute;
+            top: 1em;
+            left: 0
+        }
+
+        .tree ul li:last-child:before {
+            background: #fff;
+            height: auto;
+            top: 1em;
+            bottom: 0
+        }
+
+        .indicator {
+            margin-right: 5px;
+        }
+
+        .tree li a {
+            text-decoration: none;
+            color: #369;
+        }
+
+        .tree li button, .tree li button:active, .tree li button:focus {
+            text-decoration: none;
+            color: #369;
+            border: none;
+            background: transparent;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            outline: 0;
+        }
+    </style>
 @endsection

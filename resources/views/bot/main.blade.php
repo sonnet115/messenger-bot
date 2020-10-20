@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Form | Shop Name</title>
+    <title>{{$title}}</title>
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/fontawesome-all.min.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/iofrm-style.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/iofrm-theme24.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/custom.css">
     @yield('check-out-css')
+    @yield('product-search-css')
 </head>
 <body style="overflow-x: hidden">
 <div class="spinner-wrapper">

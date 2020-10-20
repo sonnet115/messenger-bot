@@ -23,6 +23,7 @@ Route::get("bot/verify-web-hook", "Bot\BotController@verifyWebhook")->middleware
 Route::post("bot/verify-web-hook", "Bot\BotController@verifyWebhook");
 
 Route::get("bot/{app_id}/test", "Bot\OrderController@getTestData");
+Route::get("test", "Bot\ProductController@getCategoryTree");
 
 Route::group(['prefix' => 'bot/{app_id}'], function () {
     //Routes for place orders
