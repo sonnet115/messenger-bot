@@ -42,11 +42,13 @@
 
                             </div>
 
-                            <div class="col-6" style="margin-bottom: 20px" id="delivery_area_container">
+                            <div class="col-7" style="margin-bottom: 20px" id="delivery_area_container">
                                 <label>Choose a delivery area</label>
                                 <select class="form-control" style="font-size: 12px" id="delivery_charge">
                                     @foreach($delivery_charges as $dc)
-                                        <option value="{{$dc->delivery_charge}}">{{$dc->name}}</option>
+                                        <option value="{{$dc->delivery_charge}}">{{$dc->name}} ({{$dc->delivery_charge}}
+                                            )
+                                        </option>
                                     @endforeach
                                 </select>
                                 <br>
@@ -409,7 +411,6 @@
             }
 
             function calculateSubtotal(product_container) {
-                console.log(product_container);
                 let products = product_container.map(function () {
                     return $(this).find("input[name='product_qty[]']").val() * $(this).find("input[name='product_price[]']").val();
                 }).get();
@@ -422,7 +423,6 @@
             }
 
             function calculateDiscount(product_container) {
-                console.log(product_container);
                 let products = product_container.map(function () {
                     return $(this).find("input[name='product_qty[]']").val() * $(this).find("input[name='product_discount[]']").val();
                 }).get();

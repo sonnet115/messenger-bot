@@ -48,7 +48,13 @@ class OrderController extends Controller
     {
         $get_customer_info = Customer::where('fb_id', $this->customer_fb_id)->first();
         $delivery_charges = DeliveryCharge::where('shop_id', $this->shop_id)->get();
-        return view("bot.orders.check_out")->with("customer_info", $get_customer_info)->with('app_id', $this->app_id)->with('delivery_charges', $delivery_charges);
+        $page_id = $request->segment(2);
+        $page_name = Shop::select('page_name')->where("page_id", $page_id)->first();
+        return view("bot.orders.check_out")
+            ->with("customer_info", $get_customer_info)
+            ->with('app_id', $this->app_id)
+            ->with('delivery_charges', $delivery_charges)
+            ->with('title', 'Cart || ' . $page_name['page_name']);;
     }
 
     public function storeOrder(Request $request)
@@ -143,7 +149,7 @@ class OrderController extends Controller
             }
             $this->processReceipt($data['customer_fb_id'], $order_code);
         } catch (\Exception $e) {
-            Log::channel('page_add')->info('order_failed: ' . json_encode($e).PHP_EOL);
+            Log::channel('page_add')->info('order_failed: ' . json_encode($e) . PHP_EOL);
             DB::rollBack();
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
             $this->common->sendAPIRequest($this->template->orderProductTemplate());

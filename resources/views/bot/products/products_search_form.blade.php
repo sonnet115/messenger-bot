@@ -12,64 +12,84 @@
             <div class="col-3 col-sm-3">
                 <hr>
             </div>
-            <div class="col-6 col-sm-6 text-muted text-center font-weight-bold">
-                Browse Categories
+            <div class="col-6 col-sm-6 text-secondary text-center font-weight-bold">
+                <p style="font-size: 20px" class="text-uppercase"> Categories</p>
             </div>
             <div class="col-3 col-sm-3">
                 <hr>
             </div>
-            <div class="col-md-4">
-                <li>All Products</li>
-                <ul id="tree1">
-                    @include('bot.categories', ['categories' => $categories])
-                </ul>
+
+            {{--            <div class="col-md-4">--}}
+            {{--                <li style="list-style: none" class="category" data-cat-id="0" data-category-name= "All Products">All Products</li>--}}
+            {{--                <ul id="tree1">--}}
+            {{--                    @include('bot.categories', ['categories' => $categories])--}}
+            {{--                </ul>--}}
+            {{--            </div>--}}
+            {{--            <div class="text-center" style="max-width:500px;margin: 0 auto">--}}
+            {{--                 <p class="shadow category badge badge-pill badge-success" data-cat-id="0"--}}
+            {{--                       data-category-name="All products">All products</p>--}}
+            {{--            </div>--}}
+
+            <div class="row" style="margin:0 auto">
+                <div>
+                    @foreach($categories as $cat)
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <p class="category" data-cat-id="{{$cat->id}}"
+                                   data-category-name= {{$cat->name}}>{{$cat->name}}</p>
+                            </div>
+                        </div>
+                        <br>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="form-body on-top" style="padding-top:0">
-        {{--        <div class="row">--}}
-        {{--            <div class="form-holder">--}}
-        {{--                <div class="form-content" style="padding: 10px">--}}
-        {{--                    <div class="form-items">--}}
-        {{--                        <div class="row">--}}
-        {{--                            <div class="col-3 col-sm-3">--}}
-        {{--                                <hr>--}}
-        {{--                            </div>--}}
-        {{--                            <div class="col-6 col-sm-6 text-danger text-center">--}}
-        {{--                                Search Product--}}
-        {{--                            </div>--}}
-        {{--                            <div class="col-3 col-sm-3">--}}
-        {{--                                <hr>--}}
-        {{--                            </div>--}}
+    {{--    <div class="form-body on-top" style="padding-top:0">--}}
+    {{--                <div class="row">--}}
+    {{--                    <div class="form-holder">--}}
+    {{--                        <div class="form-content" style="padding: 10px">--}}
+    {{--                            <div class="form-items">--}}
+    {{--                                                                <div class="row">--}}
+    {{--                                                                    <div class="col-3 col-sm-3">--}}
+    {{--                                                                        <hr>--}}
+    {{--                                                                    </div>--}}
+    {{--                                                                    <div class="col-6 col-sm-6 text-danger text-center">--}}
+    {{--                                                                        Search Product--}}
+    {{--                                                                    </div>--}}
+    {{--                                                                    <div class="col-3 col-sm-3">--}}
+    {{--                                                                        <hr>--}}
+    {{--                                                                    </div>--}}
 
-        {{--                            <div class="col-12 col-sm-12">--}}
-        {{--                                <label>Product Code/Name <span class="text-danger">*</span></label>--}}
-        {{--                                <input type="text" class="form-control" placeholder="Enter product code or name ..."--}}
-        {{--                                       name="product_code" required>--}}
-        {{--                                <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>--}}
-        {{--                            </div>--}}
+    {{--                                                                    <div class="col-12 col-sm-12">--}}
+    {{--                                                                        <label>Product Code/Name <span class="text-danger">*</span></label>--}}
+    {{--                                                                        <input type="text" class="form-control" placeholder="Enter product code or name ..."--}}
+    {{--                                                                               name="product_code" required>--}}
+    {{--                                                                        <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>--}}
+    {{--                                                                    </div>--}}
 
-        {{--                            <div class="col-12 col-sm-12 text-center">--}}
-        {{--                                <button id="search" class="btn btn-success"--}}
-        {{--                                        style="border-radius: 25px;padding: 10px 20px">--}}
-        {{--                                    <i class="fa fa-search"></i> Search Product--}}
-        {{--                                </button>--}}
-        {{--                            </div>--}}
+    {{--                                                                    <div class="col-12 col-sm-12 text-center">--}}
+    {{--                                                                        <button id="search" class="btn btn-success"--}}
+    {{--                                                                                style="border-radius: 25px;padding: 10px 20px">--}}
+    {{--                                                                            <i class="fa fa-search"></i> Search Product--}}
+    {{--                                                                        </button>--}}
+    {{--                                                                    </div>--}}
 
-        {{--                        </div>--}}
-        {{--                    </div>--}}
-        {{--                </div>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
-    </div>
+    {{--                                                                </div>--}}
+    {{--                            </div>--}}
+    {{--                        </div>--}}
+    {{--                    </div>--}}
+    {{--                </div>--}}
+    {{--    </div>--}}
 
     <!-- The Modal Starts-->
     <div class="modal fade" id="product_list_modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Showing Result for "<span class="text-success" id="searched_product_code"></span>"</h5>
+                    <h5 class="modal-title">Showing Result for "<span class="text-success"
+                                                                      id="searched_product_code"></span>"</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body ">
@@ -78,13 +98,18 @@
                     </div>
 
                     <div class="text-center row">
-                        <div class="col-6 col-sm-6 text-left">
+                        <div class="col-4 col-sm-4 text-left">
                             <button class="prev_next_btn outline_btn btn btn-sm btn-outline-secondary"
                                     id="prev_button">Prev
                             </button>
                             <input type="hidden" name="prev_url"/>
                         </div>
-                        <div class="col-6 col-sm-6 text-right">
+                        <div class="col-4 col-sm-4 text-center">
+                            <p class="text-dark" style="font-size: 12px">
+                                Total Products <span class="badge badge-pill badge-success" style="font-size:16px" id="total_results"></span>
+                            </p>
+                        </div>
+                        <div class="col-4 col-sm-4 text-right">
                             <button class="prev_next_btn outline_btn btn btn-sm btn-outline-secondary"
                                     id="next_button">Next
                             </button>
@@ -112,6 +137,7 @@
 
     <input type="hidden" value="{{$customer_id}}" id="customer_id">
     <input type="hidden" value="{{$page_id}}" id="app_id">
+    <input id="category_id" type="hidden">
 @endsection
 
 @section('product-search-js')
@@ -172,6 +198,7 @@
             });
             //Initialization of treeviews
             $('#tree1').treed();
+            // JS for category tree view ends
 
             let base_url = '{{env("APP_URL")}}';
             let preloaderFadeOutTime = 500;
@@ -189,6 +216,7 @@
                 let cat_name = $(this).attr("data-category-name");
                 const cart_url = base_url + "bot/" + $("#app_id").val() + "/cart/" + $("#customer_id").val();
 
+                $("#category_id").val(cat_id);
                 let cat_button = $(this);
                 let product_container = $("#product_container");
 
@@ -200,8 +228,8 @@
                         'cat_id': cat_id,
                     },
                     success: function (result) {
-                        // console.log(result);
                         $("#searched_product_code").html(cat_name);
+                        $("#total_results").html(result.total);
                         product_container.html("");
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
@@ -273,17 +301,15 @@
 
             $("#next_button").on('click', function () {
                 let next_url = $("input[name='next_url']").val();
-                let product_code = $("input[name='product_code']").val();
                 let product_container = $("#product_container");
-
+                const cart_url = base_url + "bot/" + $("#app_id").val() + "/cart/" + $("#customer_id").val();
                 $.ajax({
                     url: next_url,
                     type: "GET",
                     data: {
-                        'product_code': product_code,
+                        'cat_id': $("#category_id").val(),
                     },
                     success: function (result) {
-                        console.log(result);
                         product_container.html("");
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
@@ -297,8 +323,8 @@
 
                                 $("#pre-order_" + result.data[i].code).on("click", function () {
                                     let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    console.log(pre_order_product_code);
                                     let button = $(this);
+                                    button.html("Processing...")
 
                                     $.ajax({
                                         url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
@@ -308,31 +334,37 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success");
+                                            button.hide(300);
                                         },
                                         error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger", button);
+                                            showNotification(error.responseJSON, "text-danger");
+                                            button.hide(300);
                                         }
                                     });
                                 });
 
                                 $("#cart_button_" + result.data[i].code).on("click", function () {
                                     let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    console.log(cart_product_code);
-                                    let button = $(this);
+                                    let add_to_cart_button = $(this);
+                                    add_to_cart_button.html("Adding...");
 
                                     $.ajax({
-                                        url: base_url + 'bot/' + app_id + '/add-to-cart',
+                                        url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
                                         type: "GET",
                                         data: {
                                             'cart_product_code': cart_product_code,
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success");
+                                            add_to_cart_button.off("click");
+                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         },
                                         error: function (error, jqXHR) {
-                                            // showNotification(error.responseJSON, "text-danger", button);
+                                            // showNotification(error.responseJSON, "text-danger");
+                                            add_to_cart_button.off("click");
+                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         }
                                     });
                                 });
@@ -349,17 +381,15 @@
 
             $("#prev_button").on('click', function () {
                 let prev_url = $("input[name='prev_url']").val();
-                let product_code = $("input[name='product_code']").val();
                 let product_container = $("#product_container");
-
+                const cart_url = base_url + "bot/" + $("#app_id").val() + "/cart/" + $("#customer_id").val();
                 $.ajax({
                     url: prev_url,
                     type: "GET",
                     data: {
-                        'product_code': product_code,
+                        'cat_id': $("#category_id").val(),
                     },
                     success: function (result) {
-                        console.log(result);
                         product_container.html("");
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
@@ -373,8 +403,8 @@
 
                                 $("#pre-order_" + result.data[i].code).on("click", function () {
                                     let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    console.log(pre_order_product_code);
                                     let button = $(this);
+                                    button.html("Processing...")
 
                                     $.ajax({
                                         url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
@@ -384,18 +414,20 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success");
+                                            button.hide(300);
                                         },
                                         error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger", button);
+                                            showNotification(error.responseJSON, "text-danger");
+                                            button.hide(300);
                                         }
                                     });
                                 });
 
                                 $("#cart_button_" + result.data[i].code).on("click", function () {
                                     let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    console.log(cart_product_code);
-                                    let button = $(this);
+                                    let add_to_cart_button = $(this);
+                                    add_to_cart_button.html("Adding...");
 
                                     $.ajax({
                                         url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
@@ -405,10 +437,14 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success", button);
+                                            // showNotification(result, "text-success");
+                                            add_to_cart_button.off("click");
+                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         },
                                         error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger", button);
+                                            // showNotification(error.responseJSON, "text-danger");
+                                            add_to_cart_button.off("click");
+                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         }
                                     });
                                 });
@@ -417,7 +453,6 @@
                         } else {
                             showNotification("No Products Found", "text-danger", null);
                         }
-
                     }
                 });
 
@@ -425,7 +460,7 @@
         });
 
         function productDetails(name, code, stock, price, discount) {
-            let discounted_price = '';
+            let discounts = '';
             let stock_available = 'Stocked Out';
             let color = 'text-danger';
 
@@ -435,14 +470,14 @@
             }
 
             if (discount !== null) {
-                discounted_price = '<p>Discounted Price: <b>' + (price - (price * discount.dis_percentage) / 100) + '</b> BDT</p>';
+                discounts = '<p><b>Discount: </b><span class="' + color + '">' + discount.dis_percentage + '</span>%</p>\n' +
+                    '<p>Discounted Price: <b><span class="' + color + '">' + (price - (price * discount.dis_percentage) / 100) + '</span></b> BDT</p>';
             }
 
             return '<p> <b>Name: </b>' + name + '</p>\n' +
                 '<p><b>Code: </b><span class="product_code">' + code + '</span></p>\n' +
-                '<p><b>In Stock: </b><span class="' + color + '">' + stock_available + '</span></p>\n' +
                 '<p><b>Price: </b>' + price + ' BDT</p>\n' +
-                '' + discounted_price;
+                '' + discounts;
         }
 
         function discountAvailable(discount) {
@@ -462,7 +497,6 @@
             let image = '';
             {{--let image_base_path = "{{asset('images/products')."/"}}";//dev--}}
             let image_base_path = "https://clients.howkar.com/images/products/";//live
-            console.log(image_base_path);
             image = '<div class="">\n' +
                 '         <img src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
                 '     </div>';
@@ -547,14 +581,14 @@
         function pagination(data) {
             if (data.prev_page_url !== null) {
                 $("#prev_button").show();
-                $("input[name='prev_url']").val(data.prev_page_url.replace("http", "https"));
+                $("input[name='prev_url']").val(data.prev_page_url.replace("http", "http"));
             } else {
                 $("#prev_button").hide();
             }
 
             if (data.next_page_url !== null) {
                 $("#next_button").show();
-                $("input[name='next_url']").val(data.next_page_url.replace("http", "https"));
+                $("input[name='next_url']").val(data.next_page_url.replace("http", "http"));
             } else {
                 $("#next_button").hide();
             }
@@ -566,6 +600,11 @@
     <style>
         .form-content {
             min-height: 47% !important;
+        }
+
+        .category {
+            text-align: center;
+            margin: 0px;
         }
     </style>
 
