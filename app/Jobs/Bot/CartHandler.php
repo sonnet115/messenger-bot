@@ -24,6 +24,6 @@ class CartHandler implements ShouldQueue
 
     public function handle()
     {
-        $this->order_controller->processAddToCart($this->data);
+
     }
 }

@@ -1,22 +1,5 @@
 @extends('bot.main')
 
-@section('check-out-css')
-    <style>
-        .total_title {
-            font-size: 13px !important;
-            line-height: 0 !important;
-            margin-bottom: 20px !important;
-        }
-
-        .total_value {
-            font-size: 13px !important;
-            line-height: 0 !important;
-            margin-bottom: 20px !important;
-            text-align: right !important;
-        }
-    </style>
-@endsection
-
 @section('main-content')
     <div class="text-center" style="margin-top: 20px">
         <h3 class="text-muted">Checkout</h3>
@@ -239,6 +222,7 @@
                                         });
                                     },
                                     error: function (error, jqXHR) {
+                                        delete_btn.html("<i class='fa fa-trash-alt'></i>");
                                         showNotification(error.responseJSON, "text-danger", 2000);
                                     }
                                 });
@@ -568,4 +552,21 @@
             }
         });
     </script>
+@endsection
+
+@section('check-out-css')
+    <style>
+        .total_title {
+            font-size: 13px !important;
+            line-height: 0 !important;
+            margin-bottom: 20px !important;
+        }
+
+        .total_value {
+            font-size: 13px !important;
+            line-height: 0 !important;
+            margin-bottom: 20px !important;
+            text-align: right !important;
+        }
+    </style>
 @endsection

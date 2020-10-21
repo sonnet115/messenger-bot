@@ -19,19 +19,28 @@
                 <hr>
             </div>
 
-            {{--            <div class="col-md-4">--}}
-            {{--                <li style="list-style: none" class="category" data-cat-id="0" data-category-name= "All Products">All Products</li>--}}
-            {{--                <ul id="tree1">--}}
-            {{--                    @include('bot.categories', ['categories' => $categories])--}}
-            {{--                </ul>--}}
-            {{--            </div>--}}
-            {{--            <div class="text-center" style="max-width:500px;margin: 0 auto">--}}
-            {{--                 <p class="shadow category badge badge-pill badge-success" data-cat-id="0"--}}
-            {{--                       data-category-name="All products">All products</p>--}}
-            {{--            </div>--}}
+           {{--Category Tree--}}
+           {{--  <div class="col-md-4">
+                <li style="list-style: none" class="category" data-cat-id="0" data-category-name="All Products">All
+                    Products
+                </li>
+                <ul id="tree1">
+                    @include('bot.categories', ['categories' => $categories])
+                </ul>
+            </div>
+            <div class="text-center" style="max-width:500px;margin: 0 auto">
+                <p class="shadow category badge badge-pill badge-success" data-cat-id="0"
+                   data-category-name="All products">All products</p>
+            </div>--}}
 
             <div class="row" style="margin:0 auto">
                 <div>
+                    <div class="card shadow bg-secondary">
+                        <div class="card-header">
+                            <p class="category text-white" data-cat-id="0" data-category-name="All Products">All Products</p>
+                        </div>
+                    </div>
+                    <br>
                     @foreach($categories as $cat)
                         <div class="card shadow">
                             <div class="card-header">
@@ -46,44 +55,46 @@
         </div>
     </div>
 
-    {{--    <div class="form-body on-top" style="padding-top:0">--}}
-    {{--                <div class="row">--}}
-    {{--                    <div class="form-holder">--}}
-    {{--                        <div class="form-content" style="padding: 10px">--}}
-    {{--                            <div class="form-items">--}}
-    {{--                                                                <div class="row">--}}
-    {{--                                                                    <div class="col-3 col-sm-3">--}}
-    {{--                                                                        <hr>--}}
-    {{--                                                                    </div>--}}
-    {{--                                                                    <div class="col-6 col-sm-6 text-danger text-center">--}}
-    {{--                                                                        Search Product--}}
-    {{--                                                                    </div>--}}
-    {{--                                                                    <div class="col-3 col-sm-3">--}}
-    {{--                                                                        <hr>--}}
-    {{--                                                                    </div>--}}
+    {{--Product search form--}}
+   {{-- <div class="form-body on-top" style="padding-top:0">
+        <div class="row">
+            <div class="form-holder">
+                <div class="form-content" style="padding: 10px">
+                    <div class="form-items">
+                        <div class="row">
+                            <div class="col-3 col-sm-3">
+                                <hr>
+                            </div>
+                            <div class="col-6 col-sm-6 text-danger text-center">
+                                Search Product
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <hr>
+                            </div>
 
-    {{--                                                                    <div class="col-12 col-sm-12">--}}
-    {{--                                                                        <label>Product Code/Name <span class="text-danger">*</span></label>--}}
-    {{--                                                                        <input type="text" class="form-control" placeholder="Enter product code or name ..."--}}
-    {{--                                                                               name="product_code" required>--}}
-    {{--                                                                        <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>--}}
-    {{--                                                                    </div>--}}
+                            <div class="col-12 col-sm-12">
+                                <label>Product Code/Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="Enter product code or name ..."
+                                       name="product_code" required>
+                                <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>
+                            </div>
 
-    {{--                                                                    <div class="col-12 col-sm-12 text-center">--}}
-    {{--                                                                        <button id="search" class="btn btn-success"--}}
-    {{--                                                                                style="border-radius: 25px;padding: 10px 20px">--}}
-    {{--                                                                            <i class="fa fa-search"></i> Search Product--}}
-    {{--                                                                        </button>--}}
-    {{--                                                                    </div>--}}
+                            <div class="col-12 col-sm-12 text-center">
+                                <button id="search" class="btn btn-success"
+                                        style="border-radius: 25px;padding: 10px 20px">
+                                    <i class="fa fa-search"></i> Search Product
+                                </button>
+                            </div>
 
-    {{--                                                                </div>--}}
-    {{--                            </div>--}}
-    {{--                        </div>--}}
-    {{--                    </div>--}}
-    {{--                </div>--}}
-    {{--    </div>--}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+--}}
 
-    <!-- The Modal Starts-->
+    <!-- The Products Modal Starts-->
     <div class="modal fade" id="product_list_modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -99,19 +110,20 @@
 
                     <div class="text-center row">
                         <div class="col-4 col-sm-4 text-left">
-                            <button class="prev_next_btn outline_btn btn btn-sm btn-outline-secondary"
-                                    id="prev_button">Prev
+                            <button class="prev_next_btn outline_btn btn btn-sm btn-outline-primary"
+                                    id="prev_button"><i class="fa fa-arrow-left"></i> Prev
                             </button>
                             <input type="hidden" name="prev_url"/>
                         </div>
                         <div class="col-4 col-sm-4 text-center">
                             <p class="text-dark" style="font-size: 12px">
-                                Total Products <span class="badge badge-pill badge-success" style="font-size:16px" id="total_results"></span>
+                                Total Products <span class="badge badge-pill badge-dark" style="font-size:16px"
+                                                     id="total_results"></span>
                             </p>
                         </div>
                         <div class="col-4 col-sm-4 text-right">
-                            <button class="prev_next_btn outline_btn btn btn-sm btn-outline-secondary"
-                                    id="next_button">Next
+                            <button class="prev_next_btn outline_btn btn btn-sm btn-outline-primary"
+                                    id="next_button">Next <i class="fa fa-arrow-right"></i>
                             </button>
                             <input type="hidden" name="next_url"/>
                         </div>
@@ -120,7 +132,7 @@
             </div>
         </div>
     </div>
-    <!-- The Modal Ends-->
+    <!-- The Products Modal Ends-->
 
     <!-- The Notification Modal Starts-->
     <div class="modal fade" id="notification_modal">
@@ -196,7 +208,6 @@
                     });
                 }
             });
-            //Initialization of treeviews
             $('#tree1').treed();
             // JS for category tree view ends
 
@@ -277,12 +288,12 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success");
+                                            showNotification(result, "text-success");
                                             add_to_cart_button.off("click");
                                             add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         },
                                         error: function (error, jqXHR) {
-                                            // showNotification(error.responseJSON, "text-danger");
+                                            showNotification(error.responseJSON, "text-danger");
                                             add_to_cart_button.off("click");
                                             add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         }
@@ -357,12 +368,12 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success");
+                                            showNotification(result, "text-success");
                                             add_to_cart_button.off("click");
                                             add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         },
                                         error: function (error, jqXHR) {
-                                            // showNotification(error.responseJSON, "text-danger");
+                                            showNotification(error.responseJSON, "text-danger");
                                             add_to_cart_button.off("click");
                                             add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         }
@@ -437,12 +448,12 @@
                                             'customer_fb_id': $("#customer_id").val(),
                                         },
                                         success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success");
+                                            showNotification(result, "text-success");
                                             add_to_cart_button.off("click");
                                             add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         },
                                         error: function (error, jqXHR) {
-                                            // showNotification(error.responseJSON, "text-danger");
+                                            showNotification(error.responseJSON, "text-danger");
                                             add_to_cart_button.off("click");
                                             add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
                                         }
@@ -515,15 +526,19 @@
         }
 
         function orderPreOrderButton(stock, product_code) {
-            if (stock > 0) {
-                return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                    '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
-                    '   </div>';
-            } else {
-                return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                    '       <button style="font-size: .6rem" class="order_pre_order_btn outline_btn btn btn-outline-danger btn-sm" id="pre-order_' + product_code + '"><i class="fa fa-gift"></i > Pre-Order</button> ' +
-                    '   </div>';
-            }
+            return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
+                '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
+                '   </div>';
+            // Pre-order
+            // if (stock > 0) {
+            //     return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
+            //         '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
+            //         '   </div>';
+            // } else {
+            //     return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
+            //         '       <button style="font-size: .6rem" class="order_pre_order_btn outline_btn btn btn-outline-danger btn-sm" id="pre-order_' + product_code + '"><i class="fa fa-gift"></i > Pre-Order</button> ' +
+            //         '   </div>';
+            // }
         }
 
         function allProductDetails(product_details, discount_available, images, code, order_pre_order_button) {
@@ -605,6 +620,10 @@
         .category {
             text-align: center;
             margin: 0px;
+        }
+
+        .card-header {
+            padding: .75rem 4.25rem;
         }
     </style>
 

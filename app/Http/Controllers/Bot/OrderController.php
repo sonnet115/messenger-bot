@@ -17,6 +17,7 @@ use App\ProductImage;
 use App\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -48,15 +49,63 @@ class OrderController extends Controller
     {
         $get_customer_info = Customer::where('fb_id', $this->customer_fb_id)->first();
         $delivery_charges = DeliveryCharge::where('shop_id', $this->shop_id)->get();
-        $page_id = $request->segment(2);
-        $page_name = Shop::select('page_name')->where("page_id", $page_id)->first();
+        $page_id = $request->segment($this->app_id_segment);
         return view("bot.orders.check_out")
             ->with("customer_info", $get_customer_info)
             ->with('app_id', $this->app_id)
             ->with('delivery_charges', $delivery_charges)
-            ->with('title', 'Cart || ' . $page_name['page_name']);;
+            ->with('title', 'Cart || ' . $this->shop->page_name);
     }
 
+
+    //Functions for carts
+    public function addToCart(Request $request)
+    {
+        $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
+        $product_id = Product::select('id')->where('code', $request->cart_product_code)->first();
+        $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
+
+        if ($product_exists_in_cart) {
+            return response()->json("Already In Cart", 409);
+        } else {
+            try {
+                $this->text_message = new TextMessages($request->customer_fb_id);
+                $cart = new Cart();
+                $cart->pid = $product_id->id;
+                $cart->customer_id = $customer_id->id;
+                $cart->customer_fb_id = $request->customer_fb_id;
+                $cart->shop_id = $this->shop_id;
+                $cart->save();
+                return response()->json("Added To Cart", 200);
+            } catch (\Exception $e) {
+                return response()->json("Couldn't add to cart", 400);
+            }
+        }
+    }
+
+    public function getCartProducts(Request $request)
+    {
+        $cart_products = Cart::where('customer_fb_id', $request->customer_fb_id)->with('products')->get();
+        return response()->json($cart_products);
+    }
+
+    public function removeCartProducts(Request $request)
+    {
+        if ($this->processRemoveCartProducts($request->product_code, $request->customer_fb_id)) {
+            return response()->json("Product removed from cart successfully.", 200);
+        } else {
+            return response()->json("Cannot remove product. Please try again!", 400);
+        }
+    }
+
+    public function processRemoveCartProducts($product_code, $customer_fb_id)
+    {
+        $product_id = Product::select('id')->where('code', $product_code)->where('shop_id', $this->shop_id)->first();
+        return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
+    }
+
+
+    //Functions for orders
     public function storeOrder(Request $request)
     {
         $this->job_controller->storeOrderJob($request->all());
@@ -115,10 +164,11 @@ class OrderController extends Controller
 
                     $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
 
-                    if ($qty > $product_details->stock) {
-                        array_push($stock_out_product, $product_codes[$i]);
-                        continue;
-                    }
+                    //Pre order
+                    /* if ($qty > $product_details->stock) {
+                         array_push($stock_out_product, $product_codes[$i]);
+                         continue;
+                     }*/
 
                     $order = new OrderedProducts();
                     $order->oid = $order_id;
@@ -133,7 +183,9 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            if (!empty($stock_out_product)) {
+
+            //Pre order
+            /*if (!empty($stock_out_product)) {
                 $stock_out_product_list = implode(" and ", $stock_out_product);
                 $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product " . $stock_out_product_list . "
                                         is out of stock. We enlisted them as pre-order. We will notify you as soon as they are available.Thanks"));
@@ -143,10 +195,9 @@ class OrderController extends Controller
                         'customer_fb_id' => $data['customer_fb_id'],
                         'pre_order_product_code' => $stock_out_product[$i],
                     );
-
                     $this->processPreOrder($data);
                 }
-            }
+            }*/
             $this->processReceipt($data['customer_fb_id'], $order_code);
         } catch (\Exception $e) {
             Log::channel('page_add')->info('order_failed: ' . json_encode($e) . PHP_EOL);
@@ -162,39 +213,16 @@ class OrderController extends Controller
         $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data, $this->page_token);
     }
 
-    public function getProductCodeAndPrice($product_code)
-    {
-        return Product::select('id', 'price', 'stock')->where('code', $product_code)->where('shop_id', $this->shop_id)->with('discounts')->first();
-    }
 
-    public function updateProductStock($product_id, $qty)
-    {
-        Product::where('id', $product_id)->decrement('stock', $qty);
-    }
-
-    public function checkProductCode(Request $request)
-    {
-        if (!(Product::where('code', $request->product_code)->count() > 0)) {
-            return response()->json(false);
-        }
-        return response()->json(true);
-    }
-
-    public function checkProductQty(Request $request)
-    {
-        return Product::select('stock')->where('code', $request->product_code)->where('shop_id', $this->shop_id)->first();
-    }
-
-    public function calculateDiscountAmount($product_price, $dis_percentage)
-    {
-        return ($product_price * $dis_percentage) / 100;
-    }
-
+    //Functions for Track orders
     public function viewTrackOrderForm(Request $request)
     {
         $customer_id = Customer::select('id')->where('fb_id', $this->customer_fb_id)->first();
         $order_status = Order::where('customer_id', $customer_id->id)->with('ordered_products')->get();
-        return view("bot.orders.track_order_form")->with("orders", $order_status)->with("app_id", $this->app_id);
+        return view("bot.orders.track_order_form")
+            ->with("orders", $order_status)
+            ->with("app_id", $this->app_id)
+            ->with('title', 'Track Orders || ' . $this->shop->page_name);;
     }
 
     public function getOrderStatus(Request $request)
@@ -203,6 +231,8 @@ class OrderController extends Controller
         return response()->json($order_status);
     }
 
+
+    //Functions for Pre-order
     public function storePreOrder(Request $request)
     {
         $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
@@ -238,51 +268,36 @@ class OrderController extends Controller
         }
     }
 
-    public function addToCart(Request $request)
-    {
-        $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
-        $product_id = Product::select('id')->where('code', $request->cart_product_code)->first();
-        $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
 
-        if ($product_exists_in_cart) {
-            return response()->json("Already In Cart", 409);
-        } else {
-            try {
-                $this->text_message = new TextMessages($request->customer_fb_id);
-                $cart = new Cart();
-                $cart->pid = $product_id->id;
-                $cart->customer_id = $customer_id->id;
-                $cart->customer_fb_id = $request->customer_fb_id;
-                $cart->shop_id = $this->shop_id;
-                $cart->save();
-                return response()->json("Added To Cart", 200);
-            } catch (\Exception $e) {
-                $this->common->sendAPIRequest($this->text_message->sendTextMessage("Product cannot be added to cart. Try Again!"));
-                return response()->json("Couldn't add to cart", 400);
-            }
+    //Helper Functions
+    public function getProductCodeAndPrice($product_code)
+    {
+        return Product::select('id', 'price', 'stock')->where('code', $product_code)->where('shop_id', $this->shop_id)->with('discounts')->first();
+    }
+
+    public function updateProductStock($product_id, $qty)
+    {
+        Product::where('id', $product_id)->decrement('stock', $qty);
+    }
+
+    public function checkProductCode(Request $request)
+    {
+        if (!(Product::where('code', $request->product_code)->count() > 0)) {
+            return response()->json(false);
         }
+        return response()->json(true);
     }
 
-    public function getCartProducts(Request $request)
+    public function checkProductQty(Request $request)
     {
-        $cart_products = Cart::where('customer_fb_id', $request->customer_fb_id)->with('products')->get();
-        return response()->json($cart_products);
+        return Product::select('stock')->where('code', $request->product_code)->where('shop_id', $this->shop_id)->first();
     }
 
-    public function removeCartProducts(Request $request)
+    public function calculateDiscountAmount($product_price, $dis_percentage)
     {
-        if ($this->processRemoveCartProducts($request->product_code, $request->customer_fb_id)) {
-            return response()->json("Product removed from cart successfully.", 200);
-        } else {
-            return response()->json("Cannot remove product. Please try again!", 400);
-        }
+        return ($product_price * $dis_percentage) / 100;
     }
 
-    public function processRemoveCartProducts($product_code, $customer_fb_id)
-    {
-        $product_id = Product::select('id')->where('code', $product_code)->where('shop_id', $this->shop_id)->first();
-        return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
-    }
 
     //test function
     public function getTestData()
