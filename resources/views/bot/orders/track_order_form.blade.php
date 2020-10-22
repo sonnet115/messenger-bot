@@ -105,7 +105,7 @@
                 status = "Processing";
                 color = "badge-primary";
             } else if (status_code === 2) {
-                status = "On the way";
+                status = "Dispatched";
                 color = "badge-warning";
             } else if (status_code === 3) {
                 status = "Delivered";
