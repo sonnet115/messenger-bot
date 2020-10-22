@@ -95,6 +95,7 @@
 --}}
 
     <!-- The Products Modal Starts-->
+
     <div class="modal fade" id="product_list_modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

@@ -112,12 +112,12 @@
                                 <p id="shipping_address_error" class="text-danger" style="font-size: 13px"></p>
                             </div>
 
-                            <div class="col-12 basic_info">
-                                <label>Billing Address <span class="text-danger"
-                                                             style="font-size: 11px">[Optional]</span></label>
-                                <textarea class="form-control" placeholder="Billing Address"
-                                          name="billing_address">{{$customer_info->billing_address != null ? $customer_info->billing_address : ""}}</textarea>
-                            </div>
+{{--                            <div class="col-12 basic_info">--}}
+{{--                                <label>Billing Address <span class="text-danger"--}}
+{{--                                                             style="font-size: 11px">[Optional]</span></label>--}}
+{{--                                <textarea class="form-control" placeholder="Billing Address"--}}
+{{--                                          name="billing_address">{{$customer_info->billing_address != null ? $customer_info->billing_address : ""}}</textarea>--}}
+{{--                            </div>--}}
 
                             <div class="col-12 col-sm-12 basic_info">
                                 <div class="form-button text-center">
