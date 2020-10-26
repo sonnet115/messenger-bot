@@ -19,30 +19,32 @@
                 <hr>
             </div>
 
-           {{--Category Tree--}}
-           {{--  <div class="col-md-4">
-                <li style="list-style: none" class="category" data-cat-id="0" data-category-name="All Products">All
-                    Products
-                </li>
-                <ul id="tree1">
-                    @include('bot.categories', ['categories' => $categories])
-                </ul>
-            </div>
-            <div class="text-center" style="max-width:500px;margin: 0 auto">
-                <p class="shadow category badge badge-pill badge-success" data-cat-id="0"
-                   data-category-name="All products">All products</p>
-            </div>--}}
+            {{--Category Tree--}}
+            {{--  <div class="col-md-4">
+                 <li style="list-style: none" class="category" data-cat-id="0" data-category-name="All Products">All
+                     Products
+                 </li>
+                 <ul id="tree1">
+                     @include('bot.categories', ['categories' => $categories])
+                 </ul>
+             </div>
+             <div class="text-center" style="max-width:500px;margin: 0 auto">
+                 <p class="shadow category badge badge-pill badge-success" data-cat-id="0"
+                    data-category-name="All products">All products</p>
+             </div>--}}
 
             <div class="row" style="margin:0 auto">
                 <div>
-                    <div class="card shadow bg-secondary">
+                    <div class="card shadow bg-secondary" style="cursor: pointer">
                         <div class="card-header">
-                            <p class="category text-white" data-cat-id="0" data-category-name="All Products">All Products</p>
+                            <p class="category text-white" data-cat-id="0" data-category-name="All Products">
+                                All Products
+                            </p>
                         </div>
                     </div>
                     <br>
                     @foreach($categories as $cat)
-                        <div class="card shadow">
+                        <div class="card shadow" style="cursor: pointer">
                             <div class="card-header">
                                 <p class="category" data-cat-id="{{$cat->id}}"
                                    data-category-name= {{$cat->name}}>{{$cat->name}}</p>
@@ -56,43 +58,43 @@
     </div>
 
     {{--Product search form--}}
-   {{-- <div class="form-body on-top" style="padding-top:0">
-        <div class="row">
-            <div class="form-holder">
-                <div class="form-content" style="padding: 10px">
-                    <div class="form-items">
-                        <div class="row">
-                            <div class="col-3 col-sm-3">
-                                <hr>
-                            </div>
-                            <div class="col-6 col-sm-6 text-danger text-center">
-                                Search Product
-                            </div>
-                            <div class="col-3 col-sm-3">
-                                <hr>
-                            </div>
+    {{-- <div class="form-body on-top" style="padding-top:0">
+         <div class="row">
+             <div class="form-holder">
+                 <div class="form-content" style="padding: 10px">
+                     <div class="form-items">
+                         <div class="row">
+                             <div class="col-3 col-sm-3">
+                                 <hr>
+                             </div>
+                             <div class="col-6 col-sm-6 text-danger text-center">
+                                 Search Product
+                             </div>
+                             <div class="col-3 col-sm-3">
+                                 <hr>
+                             </div>
 
-                            <div class="col-12 col-sm-12">
-                                <label>Product Code/Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter product code or name ..."
-                                       name="product_code" required>
-                                <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>
-                            </div>
+                             <div class="col-12 col-sm-12">
+                                 <label>Product Code/Name <span class="text-danger">*</span></label>
+                                 <input type="text" class="form-control" placeholder="Enter product code or name ..."
+                                        name="product_code" required>
+                                 <p id="product_code_error" class="text-danger" style="font-size: 13px"></p>
+                             </div>
 
-                            <div class="col-12 col-sm-12 text-center">
-                                <button id="search" class="btn btn-success"
-                                        style="border-radius: 25px;padding: 10px 20px">
-                                    <i class="fa fa-search"></i> Search Product
-                                </button>
-                            </div>
+                             <div class="col-12 col-sm-12 text-center">
+                                 <button id="search" class="btn btn-success"
+                                         style="border-radius: 25px;padding: 10px 20px">
+                                     <i class="fa fa-search"></i> Search Product
+                                 </button>
+                             </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
---}}
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ --}}
 
     <!-- The Products Modal Starts-->
 

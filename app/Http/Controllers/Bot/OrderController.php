@@ -124,7 +124,6 @@ class OrderController extends Controller
             $customer_details->last_name = $data['last_name'];
             $customer_details->contact = $data['contact'];
             $customer_details->shipping_address = $data['shipping_address'];
-            $customer_details->billing_address = $data['billing_address'];
             $customer_details->save();
 
             $product_codes = $data['product_code'];
@@ -139,7 +138,6 @@ class OrderController extends Controller
             $order->customer_id = $customer_details->id;
             $order->contact = $data['contact'];
             $order->shipping_address = $data['shipping_address'];
-            $order->billing_address = $data['billing_address'];
             $order->shop_id = $this->shop_id;
             $order->delivery_charge = $data['delivery_charge'];
             $order->save();
