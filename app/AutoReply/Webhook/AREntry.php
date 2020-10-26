@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Bot\Webhook;
+namespace App\AutoReply\Webhook;
 
 use Illuminate\Http\Request;
 
-class Entry
+class AREntry
 {
     private $time;
     private $id;
-    private $messagings;
+    private $changes;
 
     private function __construct(array $data)
     {
         $this->id = $data["id"];
         $this->time = $data["time"];
-        $this->messagings = [];
-        foreach ($data["messaging"] as $datum) {
-            $this->messagings[] = new Messaging($datum);
+        $this->changes = [];
+        foreach ($data["changes"] as $datum) {
+            $this->changes[] = new Changes($datum);
         }
     }
 
@@ -26,7 +26,7 @@ class Entry
         $entries = [];
         $data = $request->input("entry");
         foreach ($data as $datum) {
-            $entries[] = new Entry($datum);
+            $entries[] = new AREntry($datum);
         }
         return $entries;
     }
@@ -41,8 +41,8 @@ class Entry
         return $this->id;
     }
 
-    public function getMessagings()
+    public function getChanges()
     {
-        return $this->messagings;
+        return $this->changes;
     }
 }

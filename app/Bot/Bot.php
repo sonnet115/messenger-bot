@@ -2,6 +2,7 @@
 
 namespace App\Bot;
 
+use App\Bot\Webhook\Changes;
 use App\Bot\Webhook\Messaging;
 
 class Bot
