@@ -2,7 +2,8 @@
 
 namespace App\Jobs\Bot;
 
-use App\AutoReply\Webhook\Changes;
+use App\Bot\Bot;
+use App\Bot\Webhook\Messaging;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,7 +17,7 @@ class BotHandler implements ShouldQueue
     private $messaging;
     private $page_token;
 
-    public function __construct(Changes $messaging, $page_token)
+    public function __construct(Messaging $messaging, $page_token)
     {
         $this->messaging = $messaging;
         $this->page_token = $page_token;
@@ -24,9 +25,7 @@ class BotHandler implements ShouldQueue
 
     public function handle()
     {
-
-        var_dump($this->messaging->getVerb());
-        /* if ($this->messaging->getType() == "message") {
+         if ($this->messaging->getType() == "message") {
              $bot = new Bot($this->messaging, "message", $this->page_token);
              $bot->reply();
          }
@@ -34,7 +33,7 @@ class BotHandler implements ShouldQueue
          if ($this->messaging->getType() == "postback") {
              $bot = new Bot($this->messaging, "postback", $this->page_token);
              $bot->reply();
-         }*/
+         }
     }
 
 }

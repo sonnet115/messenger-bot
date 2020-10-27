@@ -11,6 +11,7 @@ class Changes
     private $post_id;
     private $item;
     private $verb;
+    private $comment_id;
 
     public function __construct(array $data)
     {
@@ -18,6 +19,9 @@ class Changes
         $this->post_id = $data['value']["post_id"];
         $this->item = $data['value']["item"];
         $this->verb = $data['value']["verb"];
+        if (isset($data['value']["comment_id"])) {
+            $this->comment_id = $data['value']["comment_id"];
+        }
     }
 
     public function getSenderId()
@@ -38,5 +42,10 @@ class Changes
     public function getVerb()
     {
         return $this->verb;
+    }
+
+    public function getCommentId()
+    {
+        return $this->comment_id;
     }
 }
