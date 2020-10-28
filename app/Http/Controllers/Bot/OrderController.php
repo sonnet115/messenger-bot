@@ -179,7 +179,7 @@ class OrderController extends Controller
                     $this->updateProductStock($product_details->id, $qty);
                 }
             }
-
+            $this->processReceipt($data['customer_fb_id'], $order_code);
             DB::commit();
 
             //Pre order
@@ -196,7 +196,7 @@ class OrderController extends Controller
                     $this->processPreOrder($data);
                 }
             }*/
-            $this->processReceipt($data['customer_fb_id'], $order_code);
+
         } catch (\Exception $e) {
             Log::channel('page_add')->info('order_failed: ' . json_encode($e) . PHP_EOL);
             DB::rollBack();

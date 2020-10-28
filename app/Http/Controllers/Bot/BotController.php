@@ -24,7 +24,7 @@ class BotController extends Controller
 
             $data = $entry->getChanges();
             foreach ($data as $changes) {
-                if ($changes->getPostId() == '304733696848773_671998136788992') {
+                if ($changes->getPostId() == '304733696848773_672724670049672') {
                     if ($changes->getItem() == 'comment' && $changes->getVerb() == 'add') {
                         dispatch(new AutoReplyHandler($changes, $changes->getPostId()));
                     }
