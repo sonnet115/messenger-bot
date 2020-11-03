@@ -26,10 +26,10 @@ class BotController extends Controller
             $page_id = $entry->getId();
 
             foreach ($data as $changes) {
-                if ($changes->getPostId() == '304733696848773_671998136788992') {
+                if ($changes->getPostId() == '304733696848773_672724670049672') {
                     if ($changes->getItem() == 'comment' && $changes->getVerb() == 'add') {
                         $shop = Shop::where('page_id', $page_id)->first();
-                        dispatch(new AutoReplyHandler($changes, $shop->page_access_token));
+                        dispatch(new AutoReplyHandler($changes, $shop->page_access_token, $page_id));
                     }
                 }
             }

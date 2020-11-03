@@ -26,6 +26,21 @@ class ProductController extends Controller
             ->with('title', 'Products || ' . $page_name['page_name']);
     }
 
+    public function viewAutoReplyProducts(Request $request)
+    {
+        $customer_id = $request->segment(4);
+        $page_id = $request->segment(2);
+        $shop = Shop::where('page_id', request()->segment(2))->first();
+        $categories = Category::where("parent_id", NUll)->where('shop_id', $shop->id)->with("subCategory")->with("products")->get();
+        $page_name = Shop::select('page_name')->where("page_id", $page_id)->first();
+
+        return view("bot.products.products_search_form")
+            ->with('customer_id', $customer_id)
+            ->with('page_id', $page_id)
+            ->with('categories', $categories)
+            ->with('title', 'Products || ' . $page_name['page_name']);
+    }
+
     public function getProduct(Product $products)
     {
         $shop = Shop::where('page_id', request()->segment(2))->first();
