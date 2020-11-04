@@ -47,6 +47,9 @@ Route::group(['prefix' => 'bot/{app_id}'], function () {
     //Route for product enquiry
     Route::get("product-search-form/{customer_fb_id}", "Bot\ProductController@viewProductSearchForm")->name("product.search.form");
     Route::get("get-product", "Bot\ProductController@getProduct")->name("product.get");
+
+    Route::get("auto-reply-products/{customer_fb_id}/{post_id}", "Bot\ProductController@viewAutoReplyProducts")->name("auto.reply.product.search.form");
+    Route::get("auto-reply/get-product", "Bot\ProductController@getAutoReplyProducts")->name("auto.reply.product.get");
 });
 
 Route::group(['middleware' => 'unauthenticated.user'], function () {

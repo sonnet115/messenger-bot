@@ -13,7 +13,7 @@
                 <hr>
             </div>
             <div class="col-6 col-sm-6 text-secondary text-center font-weight-bold">
-                <p style="font-size: 20px" class="text-uppercase"> Categories</p>
+                <p style="font-size: 20px" class="text-uppercase"> Products</p>
             </div>
             <div class="col-3 col-sm-3">
                 <hr>
@@ -35,23 +35,13 @@
 
             <div class="row" style="margin:0 auto">
                 <div>
-                    <div class="card shadow bg-secondary" style="cursor: pointer">
+                    <div class="card shadow" style="cursor: pointer">
                         <div class="card-header">
-                            <p class="category text-white" data-cat-id="0" data-category-name="All Products">
-                                All Products
-                            </p>
+                            <p class="category" data-cat-id="{{$post_id}}"
+                               data-category-name="Products Details">View Products Price</p>
                         </div>
                     </div>
                     <br>
-                    @foreach($categories as $cat)
-                        <div class="card shadow" style="cursor: pointer">
-                            <div class="card-header">
-                                <p class="category" data-cat-id="{{$cat->id}}"
-                                   data-category-name= {{$cat->name}}>{{$cat->name}}</p>
-                            </div>
-                        </div>
-                        <br>
-                    @endforeach
                 </div>
             </div>
         </div>
@@ -152,6 +142,7 @@
 
     <input type="hidden" value="{{$customer_id}}" id="customer_id">
     <input type="hidden" value="{{$page_id}}" id="app_id">
+    <input type="hidden" value="{{$post_id}}" id="post_id">
     <input id="category_id" type="hidden">
 @endsection
 
@@ -236,12 +227,13 @@
 
                 // cat_button.append("<i class='fas fa-spinner fa-pulse'></i>");
                 $.ajax({
-                    url: base_url + 'bot/' + $("#app_id").val() + '/get-product',
+                    url: base_url + 'bot/' + $("#app_id").val() + '/auto-reply/get-product',
                     type: "GET",
                     data: {
-                        'cat_id': cat_id,
+                        'post_id': $("#post_id").val(),
                     },
                     success: function (result) {
+                        console.log(result);
                         $("#searched_product_code").html(cat_name);
                         $("#total_results").html(result.total);
                         product_container.html("");
@@ -321,7 +313,7 @@
                     url: next_url,
                     type: "GET",
                     data: {
-                        'cat_id': $("#category_id").val(),
+                        'post_id': $("#post_id").val(),
                     },
                     success: function (result) {
                         product_container.html("");
@@ -401,7 +393,7 @@
                     url: prev_url,
                     type: "GET",
                     data: {
-                        'cat_id': $("#category_id").val(),
+                        'post_id': $("#post_id").val(),
                     },
                     success: function (result) {
                         product_container.html("");
@@ -599,14 +591,14 @@
         function pagination(data) {
             if (data.prev_page_url !== null) {
                 $("#prev_button").show();
-                $("input[name='prev_url']").val(data.prev_page_url.replace("http", "http"));
+                $("input[name='prev_url']").val(data.prev_page_url.replace("http", "https"));
             } else {
                 $("#prev_button").hide();
             }
 
             if (data.next_page_url !== null) {
                 $("#next_button").show();
-                $("input[name='next_url']").val(data.next_page_url.replace("http", "http"));
+                $("input[name='next_url']").val(data.next_page_url.replace("http", "https"));
             } else {
                 $("#next_button").hide();
             }

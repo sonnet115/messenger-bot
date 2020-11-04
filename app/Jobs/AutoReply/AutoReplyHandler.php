@@ -5,6 +5,7 @@ namespace App\Jobs\AutoReply;
 use App\AutoReply\Webhook\Changes;
 use App\Bot\AutoReplyTemplate;
 use App\Bot\Common;
+use App\Bot\DataHandler;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,6 +35,9 @@ class AutoReplyHandler implements ShouldQueue
 
     public function handle()
     {
+        $data_handler = new DataHandler($this->recipient_id, $this->page_id, $this->page_access_token);
+        $data_handler->storeUserInfo();
+
         $form_template = new AutoReplyTemplate($this->comment_id, $this->post_id, $this->recipient_id, $this->page_id);
         $common = new Common($this->page_access_token);
 //        var_dump($form_template->productsDetailsTemplate());
