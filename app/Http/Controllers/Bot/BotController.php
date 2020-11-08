@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Bot;
 
+use App\AutoReply;
 use App\Bot\Webhook\Entry;
 use App\Http\Controllers\Controller;
 use App\Jobs\AutoReply\AutoReplyHandler;
@@ -24,11 +25,12 @@ class BotController extends Controller
 
             $data = $entry->getChanges();
             $page_id = $entry->getId();
+            $shop = Shop::where('page_id', $page_id)->first();
+            $auto_reply = AutoReply::where('shop_id', $shop->id)->get();
 
             foreach ($data as $changes) {
-                if ($changes->getPostId() == '304733696848773_672724670049672') {
+                if ($auto_reply->contains('post_id', $changes->getPostId())) {
                     if ($changes->getItem() == 'comment' && $changes->getVerb() == 'add') {
-                        $shop = Shop::where('page_id', $page_id)->first();
                         dispatch(new AutoReplyHandler($changes, $shop->page_access_token, $page_id));
                     }
                 }

@@ -63,7 +63,11 @@ class ProductController extends Controller
     public function getAutoReplyProducts(Request $request)
     {
         $auto_reply = AutoReply::where('post_id', $request->post_id)->first();
-        $products = AutoReply::find($auto_reply->id)->auto_reply_products()->with('discounts')->with('images')->paginate(2);
+        if ($auto_reply) {
+            $products = AutoReply::find($auto_reply->id)->auto_reply_products()->with('discounts')->with('images')->paginate(2);
+        } else {
+            return null;
+        }
         return response()->json($products);
     }
 }

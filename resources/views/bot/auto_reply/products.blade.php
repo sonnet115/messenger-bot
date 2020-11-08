@@ -237,7 +237,9 @@
                         $("#searched_product_code").html(cat_name);
                         $("#total_results").html(result.total);
                         product_container.html("");
-                        if (result.data.length > 0) {
+                        if (result.length <= 0) {
+                            showNotification("No Products Found", "text-danger", null);
+                        } else {
                             for (let i = 0; i < result.data.length; i++) {
                                 let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
                                 let discount_available = discountAvailable(result.data[i].discounts);
@@ -297,10 +299,7 @@
                             }
                             pagination(result);
                             $("#product_list_modal").modal("toggle");
-                        } else {
-                            showNotification("No Products Found", "text-danger", null);
                         }
-
                     }
                 });
             });
