@@ -15,10 +15,22 @@ class Changes
 
     public function __construct(array $data)
     {
-        $this->senderId = $data['value']["from"]["id"];
-        $this->post_id = $data['value']["post_id"];
-        $this->item = $data['value']["item"];
-        $this->verb = $data['value']["verb"];
+        if (isset($data['value']["from"]["id"])) {
+            $this->senderId = $data['value']["from"]["id"];
+        }
+
+        if (isset($data['value']["post_id"])) {
+            $this->post_id = $data['value']["post_id"];
+        }
+
+        if (isset($data['value']["item"])) {
+            $this->item = $data['value']["item"];
+        }
+
+        if (isset($data['value']["verb"])) {
+            $this->verb = $data['value']["verb"];
+        }
+
         if (isset($data['value']["comment_id"])) {
             $this->comment_id = $data['value']["comment_id"];
         }

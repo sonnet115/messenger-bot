@@ -130,10 +130,10 @@ class OrderController extends Controller
             $product_qty = $data['product_qty'];
 
             $stock_out_product = array();
-            $order_code = time() . "_" . mt_rand(1000, 100000);
+            $order_code = str_pad(1034, 5, "0", STR_PAD_LEFT).mt_rand(0,999);
 
             $order = new Order();
-            $order->code = $order_code;
+            //$order->code = $order_code;
             $order->customer_name = $data['first_name'] . " " . $data['last_name'];
             $order->customer_id = $customer_details->id;
             $order->contact = $data['contact'];

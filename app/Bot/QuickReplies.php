@@ -22,27 +22,22 @@ class QuickReplies
                 "quick_replies" => [
                     [
                         "content_type" => "text",
+                        "title" => "Products",
+                        "payload" => "PRODUCT_SEARCH",
+                    ],
+                    [
+                        "content_type" => "text",
                         "title" => "View Cart",
                         "payload" => "VIEW_CART"
                     ],
                     [
                         "content_type" => "text",
-                        "title" => "Search Product",
-                        "payload" => "PRODUCT_SEARCH",
-                    ],
-                    [
-                        "content_type" => "text",
-                        "title" => "Order Product",
-                        "payload" => "ORDER_PRODUCT",
-                    ],
-                    [
-                        "content_type" => "text",
-                        "title" => "Track Order",
+                        "title" => "Track Orders",
                         "payload" => "TRACK_ORDER",
                     ],
                     [
                         "content_type" => "text",
-                        "title" => "Talk to Agent",
+                        "title" => "Help!",
                         "payload" => "TALK_TO_AGENT",
                     ],
                 ],
