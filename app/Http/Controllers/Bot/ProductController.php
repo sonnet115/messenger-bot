@@ -18,6 +18,7 @@ class ProductController extends Controller
         $page_id = $request->segment(2);
         $shop = Shop::where('page_id', request()->segment(2))->first();
         $categories = Category::where("parent_id", NUll)->where('shop_id', $shop->id)->with("subCategory")->with("products")->get();
+        //dd($categories);
         $page_name = Shop::select('page_name')->where("page_id", $page_id)->first();
 
         return view("bot.products.products_search_form")

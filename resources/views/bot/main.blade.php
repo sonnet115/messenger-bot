@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/iofrm-theme24.css">
     <link rel="stylesheet" type="text/css" href="{{env("APP_URL")}}assets/bot/css/custom.css">
     @yield('check-out-css')
+    @yield('track-order-css')
     @yield('product-search-css')
 </head>
 <body style="overflow-x: hidden">

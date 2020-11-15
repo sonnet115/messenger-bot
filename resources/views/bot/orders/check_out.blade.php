@@ -134,7 +134,6 @@
                 {{--hidden fields--}}
                 <input type="hidden" value="{{$customer_info->fb_id}}" name="customer_fb_id">
                 <input type="hidden" value="" name="selected_delivery_charge" id="selected_delivery_charge">
-
             </div>
         </div>
     </div>
@@ -411,11 +410,11 @@
                     return $(this).find("input[name='product_qty[]']").val() * $(this).find("input[name='product_discount[]']").val();
                 }).get();
 
-                let subtotal = products.reduce(function (a, b) {
+                let discount = products.reduce(function (a, b) {
                     return a + b;
                 }, 0);
 
-                $("#discount").html(subtotal);
+                $("#discount").html(discount);
             }
 
             function calculateTotal(product_container) {

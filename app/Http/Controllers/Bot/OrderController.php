@@ -130,10 +130,8 @@ class OrderController extends Controller
             $product_qty = $data['product_qty'];
 
             $stock_out_product = array();
-            $order_code = str_pad(1034, 5, "0", STR_PAD_LEFT).mt_rand(0,999);
 
             $order = new Order();
-            //$order->code = $order_code;
             $order->customer_name = $data['first_name'] . " " . $data['last_name'];
             $order->customer_id = $customer_details->id;
             $order->contact = $data['contact'];
@@ -142,6 +140,11 @@ class OrderController extends Controller
             $order->delivery_charge = $data['delivery_charge'];
             $order->save();
             $order_id = $order->id;
+
+            $order_code = str_pad($order_id, 5, "0", STR_PAD_LEFT) . mt_rand(0, 999);
+            $order_code_update = Order::find($order_id);
+            $order_code_update->code = $order_code;
+            $order_code_update->save();
 
             for ($i = 0; $i < sizeof($product_codes); $i++) {
                 if ($product_codes[$i] != null) {

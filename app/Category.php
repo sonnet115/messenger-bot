@@ -15,7 +15,8 @@ class Category extends Model
 
     public function products()
     {
-        return $this->hasManyThrough(Product::class, self::class, 'parent_id', 'category_id', 'id');
+        return $this->hasManyThrough(Product::class, self::class, 'parent_id', 'category_id', 'id')
+            ->where('show_in_bot', '=', 1);
     }
 
 }

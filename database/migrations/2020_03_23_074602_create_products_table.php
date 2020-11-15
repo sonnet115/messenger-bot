@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('uom', '10')->nullable();
             $table->float('price');
             $table->smallInteger('shop_id');
+            $table->boolean('show_in_bot')->default(true);
             $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
