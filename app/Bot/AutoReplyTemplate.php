@@ -8,6 +8,7 @@ class AutoReplyTemplate
     private $post_id;
     private $recipient_id;
     private $page_id;
+    private $base_url;
 
     public function __construct($comment_id, $post_id, $recipient_id, $page_id)
     {
@@ -15,6 +16,7 @@ class AutoReplyTemplate
         $this->post_id = $post_id;
         $this->recipient_id = $recipient_id;
         $this->page_id = $page_id;
+        $this->base_url = env('APP_URL');
     }
 
     public function productsDetailsTemplate()
@@ -32,7 +34,7 @@ class AutoReplyTemplate
                         "buttons" => [
                             [
                                 "type" => "web_url",
-                                "url" => env("APP_URL") . "bot/" . $this->page_id . "/auto-reply-products/" .  $this->recipient_id . '/' . $this->post_id,
+                                "url" => $this->base_url . "bot/" . $this->page_id . "/auto-reply-products/" .  $this->recipient_id . '/' . $this->post_id,
                                 "title" => "View Details",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",

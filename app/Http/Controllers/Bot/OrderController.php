@@ -201,7 +201,7 @@ class OrderController extends Controller
             }*/
             $this->processReceipt($data['customer_fb_id'], $order_code);
         } catch (\Exception $e) {
-            Log::channel('page_add')->info('order_failed: ' . json_encode($e) . PHP_EOL);
+            Log::channel('order')->info('order_failed: ' . json_encode($e) . PHP_EOL);
             DB::rollBack();
             $this->common->sendAPIRequest($this->text_message->sendTextMessage("Your order cannot be processed. Please try again!"));
             $this->common->sendAPIRequest($this->template->orderProductTemplate());
@@ -213,7 +213,6 @@ class OrderController extends Controller
         $placed_order_data = Order::where('code', $order_code)->with('ordered_products')->first();
         $this->job_controller->sendReceiptJob($recipient_id, $placed_order_data, $this->page_token);
     }
-
 
     //Functions for Track orders
     public function viewTrackOrderForm(Request $request)

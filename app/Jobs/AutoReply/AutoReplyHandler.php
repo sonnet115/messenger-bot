@@ -43,8 +43,8 @@ class AutoReplyHandler implements ShouldQueue
         $common = new Common($this->page_access_token);
         $common->sendAPIRequest($form_template->productsDetailsTemplate());
 
-//        $auto_reply = AutoReply::where('shop_id', $this->page_id)->get();
-//        var_dump($auto_reply->contains('post_id', '304733696848773_678959172759555'));
+        /*$auto_reply = AutoReply::where('shop_id', $this->page_id)->get();
+        var_dump($auto_reply->contains('post_id', '304733696848773_678959172759555'));*/
 
         /*var_dump($form_template->productsDetailsTemplate());
         var_dump($this->changes->getVerb());

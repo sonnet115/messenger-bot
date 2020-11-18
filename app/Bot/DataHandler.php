@@ -3,6 +3,7 @@
 namespace App\Bot;
 
 use App\Customer;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class DataHandler
@@ -35,12 +36,13 @@ class DataHandler
 
     private function profileAPIRequest()
     {
-        $ch = curl_init('https://graph.facebook.com/' . $this->user_id . '?fields=first_name,last_name,profile_pic&access_token=' . $this->page_token);
+        $ch = curl_init('https://graph.facebook.com/' . $this->user_id . '?fields=first_name,last_name&access_token=' . $this->page_token);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
         curl_setopt($ch, CURLOPT_POST, false);
         $result = curl_exec($ch);
+        Log::channel('store_user_info')->info('facebook profile response: ' . json_encode($result).PHP_EOL);
         return json_decode($result, true);
     }
 

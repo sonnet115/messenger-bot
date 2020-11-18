@@ -35,9 +35,24 @@ return [
     */
 
     'channels' => [
-        'page_add' => [
+        'facebook_response' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/your_file_name.log'),
+            'path' => storage_path('logs/facebook_response.log'),
+        ],
+
+        'store_user_info' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/store_user_info.log'),
+        ],
+
+        'handover' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/handover.log'),
+        ],
+
+        'order' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/order.log'),
         ],
 
         'stack' => [

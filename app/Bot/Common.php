@@ -26,7 +26,8 @@ class Common
           curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
           $response = curl_exec($ch);
 
-          Log::channel('page_add')->info('bot response: ' . json_encode($response).PHP_EOL);
+          Log::channel('bot_response')->info('bot response: ' . json_encode($messageData).PHP_EOL);
+          Log::channel('facebook_response')->info('facebook response: ' . json_encode($response).PHP_EOL);
       }catch (\Exception $e){
           dd($e);
       }
@@ -42,7 +43,7 @@ class Common
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
         $response = curl_exec($ch);
 
-        Log::channel('page_add')->info('handover request: ' . json_encode($messageData).PHP_EOL);
-        Log::channel('page_add')->info('handover response: ' . json_encode($response).PHP_EOL);
+        Log::channel('handover')->info('handover request: ' . json_encode($messageData).PHP_EOL);
+        Log::channel('handover')->info('handover response: ' . json_encode($response).PHP_EOL);
     }
 }
