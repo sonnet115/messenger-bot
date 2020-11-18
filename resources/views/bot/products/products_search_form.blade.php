@@ -44,13 +44,15 @@
                     </div>
                     <br>
                     @foreach($categories as $cat)
-                        <div class="card shadow" style="cursor: pointer">
-                            <div class="card-header">
-                                <p class="category" data-cat-id="{{$cat->id}}"
-                                   data-category-name= {{$cat->name}}>{{$cat->name}}</p>
+                        @if(count($cat->products)>0)
+                            <div class="card shadow" style="cursor: pointer">
+                                <div class="card-header">
+                                    <p class="category" data-cat-id="{{$cat->id}}"
+                                       data-category-name= {{$cat->name}}>{{$cat->name}}</p>
+                                </div>
                             </div>
-                        </div>
-                        <br>
+                            <br>
+                        @endif
                     @endforeach
                 </div>
             </div>
