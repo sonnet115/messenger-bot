@@ -112,12 +112,12 @@
                                 <p id="shipping_address_error" class="text-danger" style="font-size: 13px"></p>
                             </div>
 
-{{--                            <div class="col-12 basic_info">--}}
-{{--                                <label>Billing Address <span class="text-danger"--}}
-{{--                                                             style="font-size: 11px">[Optional]</span></label>--}}
-{{--                                <textarea class="form-control" placeholder="Billing Address"--}}
-{{--                                          name="billing_address">{{$customer_info->billing_address != null ? $customer_info->billing_address : ""}}</textarea>--}}
-{{--                            </div>--}}
+                            {{--                            <div class="col-12 basic_info">--}}
+                            {{--                                <label>Billing Address <span class="text-danger"--}}
+                            {{--                                                             style="font-size: 11px">[Optional]</span></label>--}}
+                            {{--                                <textarea class="form-control" placeholder="Billing Address"--}}
+                            {{--                                          name="billing_address">{{$customer_info->billing_address != null ? $customer_info->billing_address : ""}}</textarea>--}}
+                            {{--                            </div>--}}
 
                             <div class="col-12 col-sm-12 basic_info">
                                 <div class="form-button text-center">
@@ -329,18 +329,22 @@
                             }).get();
 
                             if (!validate("First Name", first_name, "first_name_error", 1)) {
+                                $(this).attr("disabled", false);
                                 return;
                             }
 
                             if (!validate("Last Name", last_name, "last_name_error", 1)) {
+                                $(this).attr("disabled", false);
                                 return;
                             }
 
                             if (!validate("Contact Number", contact, "contact_error", 3)) {
+                                $(this).attr("disabled", false);
                                 return;
                             }
 
                             if (!validate("Shipping Address", shipping_address, "shipping_address_error", 2)) {
+                                $(this).attr("disabled", false);
                                 return;
                             }
 
@@ -444,7 +448,6 @@
                             return true;
                         }
                         break;
-
                     case 2:
                         if (value === "") {
                             $('#' + error_field).html(field_name + " cannot be empty.");
@@ -466,7 +469,6 @@
                             return true;
                         }
                 }
-
             }
 
             function deleteButton(product_code) {
