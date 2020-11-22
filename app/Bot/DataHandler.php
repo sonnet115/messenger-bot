@@ -27,9 +27,9 @@ class DataHandler
             $customer = new Customer();
             $customer->fb_id = $this->user_id;
             $customer->app_id = $this->app_id;
-            $customer->first_name = $user_info['first_name'];
+            /*$customer->first_name = $user_info['first_name'];
             $customer->last_name = $user_info['last_name'];
-            $customer->profile_pic = $user_info['profile_pic'];
+            $customer->profile_pic = $user_info['profile_pic'];*/
             $customer->save();
         }
     }
