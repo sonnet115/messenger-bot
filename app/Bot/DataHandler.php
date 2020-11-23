@@ -23,7 +23,7 @@ class DataHandler
     {
         $customer_exists = Customer::where("fb_id", $this->user_id)->get();
         if (count($customer_exists) <= 0) {
-            $user_info = $this->profileAPIRequest();
+            //$user_info = $this->profileAPIRequest();
             $customer = new Customer();
             $customer->fb_id = $this->user_id;
             $customer->app_id = $this->app_id;

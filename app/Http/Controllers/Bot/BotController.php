@@ -26,7 +26,7 @@ class BotController extends Controller
             $data = $entry->getChanges();
             $page_id = $entry->getId();
             $shop = Shop::where('page_id', $page_id)->first();
-            $auto_reply = AutoReply::where('shop_id', $shop->id)->get();
+            $auto_reply = AutoReply::where('shop_id', $shop->id)->where('status', 1)->get();
 
             foreach ($data as $changes) {
                 if ($auto_reply->contains('post_id', $changes->getPostId())) {
