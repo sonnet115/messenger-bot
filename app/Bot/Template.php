@@ -34,6 +34,7 @@ class Template
                                 "title" => "Order Product",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
+                                "webview_share_button" => "hide"
                             ]
                         ]
                     ]
@@ -61,6 +62,7 @@ class Template
                                 "title" => "Search Product",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
+                                "webview_share_button" => "hide"
                             ]
                         ]
                     ]
@@ -88,6 +90,7 @@ class Template
                                 "title" => "View Cart",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
+                                "webview_share_button" => "hide"
                             ]
                         ]
                     ]
@@ -115,6 +118,7 @@ class Template
                                 "title" => "Track Order",
                                 "messenger_extensions" => 'true',
                                 "webview_height_ratio" => "tall",
+                                "webview_share_button" => "hide"
                             ]
                         ]
                     ]
