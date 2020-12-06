@@ -160,10 +160,10 @@
                     '' + orderStatus(products[i].pivot.product_status) +
                     '        </div>\n' +
                     '  </div>';
-                subtotal = subtotal + (products[i].price * products[i].pivot.quantity);
-                discount = discount + (products[i].pivot.discount * products[i].pivot.quantity);
+                subtotal = parseFloat(subtotal) + (parseFloat(products[i].price) * parseFloat(products[i].pivot.quantity));
+                discount = parseFloat(discount) + (parseFloat(products[i].pivot.discount) * parseFloat(products[i].pivot.quantity));
             }
-            let total = (subtotal + delivery_charge) - discount;
+            let total = Math.ceil((parseFloat(subtotal) + parseFloat(delivery_charge)) - parseFloat(discount));
             product += this.displayCalculation(subtotal, discount, delivery_charge, total);
             return product;
         }
@@ -173,11 +173,11 @@
                 '        <div class="col-6">\n' +
                 '             <p class="total_title">Subtotal: </p>\n' +
                 '             <p class="total_title">Discount: </p>\n' +
-                '             <p class="total_title">Delivery Charge:</p>\n' +
+                '             <p class="total_title">Delivery Fee:</p>\n' +
                 '             <hr>\n' +
                 '             <p class="total_title"><b>Total: </b></p>\n' +
                 '       </div>\n' +
-                '       <div class="col-5">\n' +
+                '       <div class="col-6">\n' +
                 '             <p class="total_value"><span id="subtotal">' + subtotal + ' </span> Tk\n' +
                 '             </p>\n' +
                 '             <p class="total_value">-<span id="discount">' + discount + ' </span>\n' +
