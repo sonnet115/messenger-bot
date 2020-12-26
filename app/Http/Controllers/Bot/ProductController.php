@@ -59,6 +59,7 @@ class ProductController extends Controller
             $products = Product::where('category_id', request()->cat_id)
                 ->where('shop_id', $shop->id)
                 ->where('state', 1)
+                ->where('show_in_bot', 1)
                 ->with('images')
                 ->with('discounts')->paginate(2);
         }

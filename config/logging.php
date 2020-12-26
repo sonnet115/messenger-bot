@@ -39,6 +39,10 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/facebook_response.log'),
         ],
+        'bot_response' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/bot_response.log'),
+        ],
 
         'store_user_info' => [
             'driver' => 'daily',
