@@ -121,19 +121,19 @@
             let status = "Pending";
             let color = "badge-danger";
 
-            if (status_code === 0) {
+            if (status_code == 0) {
                 status = "Pending";
                 color = "badge-info";
-            } else if (status_code === 1) {
+            } else if (status_code == 1) {
                 status = "Processing";
                 color = "badge-primary";
-            } else if (status_code === 2) {
+            } else if (status_code == 2) {
                 status = "Shipping";
                 color = "badge-warning";
-            } else if (status_code === 3) {
+            } else if (status_code == 3) {
                 status = "Delivered";
                 color = "badge-success";
-            } else if (status_code === 4) {
+            } else if (status_code == 4) {
                 status = "Cancelled";
                 color = "badge-danger";
             }
@@ -160,8 +160,11 @@
                     '' + orderStatus(products[i].pivot.product_status) +
                     '        </div>\n' +
                     '  </div>';
-                subtotal = parseFloat(subtotal) + (parseFloat(products[i].price) * parseFloat(products[i].pivot.quantity));
-                discount = parseFloat(discount) + (parseFloat(products[i].pivot.discount) * parseFloat(products[i].pivot.quantity));
+
+                if (products[i].pivot.product_status != 4) {
+                    subtotal = parseFloat(subtotal) + (parseFloat(products[i].price) * parseFloat(products[i].pivot.quantity));
+                    discount = parseFloat(discount) + (parseFloat(products[i].pivot.discount) * parseFloat(products[i].pivot.quantity));
+                }
             }
             let total = Math.ceil((parseFloat(subtotal) + parseFloat(delivery_charge)) - parseFloat(discount));
             product += this.displayCalculation(subtotal, discount, delivery_charge, total);
