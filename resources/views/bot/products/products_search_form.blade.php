@@ -99,7 +99,6 @@
  --}}
 
     <!-- The Products Modal Starts-->
-
     <div class="modal fade" id="product_list_modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -111,6 +110,37 @@
                 <div class="modal-body ">
                     <div class="container" id="product_container">
                         {{--Products will be displayed here--}}
+                        <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">
+                            <div class="col-6" style="max-height: 200px">
+                                <div class="">
+                                    <img src="https://clients.howkar.com/images/products/Chat_Bot_BD/TH-2003_1.jpeg"
+                                         style="max-height: 170px;max-width: 100%"></div>
+                                <div class="col-sm-12 text-center" style="margin-top: 10px">
+                                    <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_TH-2003">
+                                        <i class="fa fa-shopping-cart"></i> Add to Cart</a></div>
+                            </div>
+                            <div class="col-6" style="font-size: 13px">
+                                <p><b>Name: </b>Tag Heuer</p>
+                                <p><b>Code: </b><span class="product_code">TH-2003</span></p>
+                                <p><b>Price: </b>30000 BDT</p>
+                                <p><b>Color:</b>
+                                    <select style="height: 25px">
+                                        <option>Red</option>
+                                        <option>Black</option>
+                                        <option>Blue</option>
+                                        <option>Yellow</option>
+                                    </select>
+                                </p>
+                                <p><b>Size:</b>
+                                    <select style="height: 25px">
+                                        <option>L(14 cm)</option>
+                                        <option>M(12 cm)</option>
+                                        <option>S(10 cm)</option>
+                                        <option>XS(8 cm)</option>
+                                    </select>
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="text-center row">
@@ -227,6 +257,7 @@
             hidePreloader();
 
             $(".category").on('click', function () {
+                $('.spinner-wrapper').show();
                 // let product_code = $("input[name='product_code']").val();//code for searching
                 let cat_id = $(this).attr("data-cat-id");
                 let cat_name = $(this).attr("data-category-name");
@@ -244,9 +275,10 @@
                         'cat_id': cat_id,
                     },
                     success: function (result) {
+                        $('.spinner-wrapper').fadeOut(this.preloaderFadeOutTime);
                         $("#searched_product_code").html(cat_name);
                         $("#total_results").html(result.total);
-                        product_container.html("");
+                        //product_container.html("");
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
                                 let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
@@ -255,7 +287,9 @@
                                 let order_pre_order_button = orderPreOrderButton(result.data[i].stock, result.data[i].code);
                                 let products = allProductDetails(product_details, discount_available, images, result.data[i].code, order_pre_order_button);
 
-                                product_container.append(products);
+                                let temp_prod = '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n    <div class="col-6" style="max-height: 200px">\n        <div class="">\n            <img src="https://clients.howkar.com/images/products/Chat_Bot_BD/TH-2003_1.jpeg" style="max-height: 170px;max-width: 100%">     </div>                            <div class="col-sm-12 text-center" style="margin-top: 10px">       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_TH-2003"><i class="fa fa-shopping-cart"></i> Add to Cart</a>    </div>                        </div>\n    <div class="col-6" style="font-size: 13px">\n        <p> <b>Name: </b>Tag Heuer</p>\n        <p><b>Code: </b><span class="product_code">TH-2003</span></p>\n        <p><b>Price: </b>30000 BDT</p>\n    </div>\n</div>';
+
+                                //product_container.append(temp_prod);
 
                                 $("#pre-order_" + result.data[i].code).on("click", function () {
                                     let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
