@@ -116,7 +116,9 @@
                                     <img src="https://clients.howkar.com/images/products/Chat_Bot_BD/TH-2003_1.jpeg"
                                          style="max-height: 170px;max-width: 100%"></div>
                                 <div class="col-sm-12 text-center" style="margin-top: 10px">
-                                    <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_TH-2003">
+                                    <a style="font-size: .6rem" href="javascript:void(0)"
+                                       class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm"
+                                       id="cart_button_TH-2003">
                                         <i class="fa fa-shopping-cart"></i> Add to Cart</a></div>
                             </div>
                             <div class="col-6" style="font-size: 13px">
@@ -278,66 +280,99 @@
                         $('.spinner-wrapper').fadeOut(this.preloaderFadeOutTime);
                         $("#searched_product_code").html(cat_name);
                         $("#total_results").html(result.total);
-                        //product_container.html("");
+                        product_container.html("");
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
-                                let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
-                                let discount_available = discountAvailable(result.data[i].discounts);
-                                let images = productImage(result.data[i].images);
-                                let order_pre_order_button = orderPreOrderButton(result.data[i].stock, result.data[i].code);
-                                let products = allProductDetails(product_details, discount_available, images, result.data[i].code, order_pre_order_button);
+                                for (let j = 0; j < result.data[i].child_products.length; j++) {
+                                    let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants,  result.data[i].id);
+                                    let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
+                                    let images = productImage(result.data[i].child_products[j].images);
+                                    let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
+                                    let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
 
-                                let temp_prod = '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n    <div class="col-6" style="max-height: 200px">\n        <div class="">\n            <img src="https://clients.howkar.com/images/products/Chat_Bot_BD/TH-2003_1.jpeg" style="max-height: 170px;max-width: 100%">     </div>                            <div class="col-sm-12 text-center" style="margin-top: 10px">       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_TH-2003"><i class="fa fa-shopping-cart"></i> Add to Cart</a>    </div>                        </div>\n    <div class="col-6" style="font-size: 13px">\n        <p> <b>Name: </b>Tag Heuer</p>\n        <p><b>Code: </b><span class="product_code">TH-2003</span></p>\n        <p><b>Price: </b>30000 BDT</p>\n    </div>\n</div>';
+                                    /*let temp_prod = '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">' +
+                                        '                            <div class="col-6" style="max-height: 200px">' +
+                                        '                                <div class="">' +
+                                        '                                    <img src="https://clients.howkar.com/images/products/Chat_Bot_BD/TH-2003_1.jpeg"' +
+                                        '                                         style="max-height: 170px;max-width: 100%"></div>' +
+                                        '                                <div class="col-sm-12 text-center" style="margin-top: 10px">' +
+                                        '                                    <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_TH-2003">' +
+                                        '                                        <i class="fa fa-shopping-cart"></i> Add to Cart</a></div>' +
+                                        '                            </div>' +
+                                        '                            <div class="col-6" style="font-size: 13px">' +
+                                        '                                <p><b>Name: </b>Tag Heuer</p>' +
+                                        '                                <p><b>Code: </b><span class="product_code">TH-2003</span></p>' +
+                                        '                                <p><b>Price: </b>30000 BDT</p>' +
+                                        '                                <p><b>Color:</b>' +
+                                        '                                    <select style="height: 25px">' +
+                                        '                                        <option>Red</option>' +
+                                        '                                        <option>Black</option>' +
+                                        '                                        <option>Blue</option>' +
+                                        '                                        <option>Yellow</option>' +
+                                        '                                    </select>' +
+                                        '                                </p>' +
+                                        '                                <p><b>Size:</b>' +
+                                        '                                    <select style="height: 25px">' +
+                                        '                                        <option>L(14 cm)</option>' +
+                                        '                                        <option>M(12 cm)</option>' +
+                                        '                                        <option>S(10 cm)</option>' +
+                                        '                                        <option>XS(8 cm)</option>' +
+                                        '                                    </select>' +
+                                        '                                </p>' +
+                                        '                            </div>' +
+                                        '                        </div>';*/
 
-                                //product_container.append(temp_prod);
+                                    product_container.append(products);
+                                    break;
 
-                                $("#pre-order_" + result.data[i].code).on("click", function () {
-                                    let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    let button = $(this);
-                                    button.html("Processing...")
+                                    $("#pre-order_" + result.data[i].code).on("click", function () {
+                                        let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                        let button = $(this);
+                                        button.html("Processing...")
 
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
-                                        type: "GET",
-                                        data: {
-                                            'pre_order_product_code': pre_order_product_code,
-                                            'customer_fb_id': $("#customer_id").val(),
-                                        },
-                                        success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success");
-                                            button.hide(300);
-                                        },
-                                        error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger");
-                                            button.hide(300);
-                                        }
+                                        $.ajax({
+                                            url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
+                                            type: "GET",
+                                            data: {
+                                                'pre_order_product_code': pre_order_product_code,
+                                                'customer_fb_id': $("#customer_id").val(),
+                                            },
+                                            success: function (result, jqXHR) {
+                                                // showNotification(result, "text-success");
+                                                button.hide(300);
+                                            },
+                                            error: function (error, jqXHR) {
+                                                showNotification(error.responseJSON, "text-danger");
+                                                button.hide(300);
+                                            }
+                                        });
                                     });
-                                });
 
-                                $("#cart_button_" + result.data[i].code).on("click", function () {
-                                    let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    let add_to_cart_button = $(this);
-                                    add_to_cart_button.html("Adding...");
+                                    $("#cart_button_" + result.data[i].code).on("click", function () {
+                                        let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                        let add_to_cart_button = $(this);
+                                        add_to_cart_button.html("Adding...");
 
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
-                                        type: "GET",
-                                        data: {
-                                            'cart_product_code': cart_product_code,
-                                            'customer_fb_id': $("#customer_id").val(),
-                                        },
-                                        success: function (result, jqXHR) {
-                                            showNotification(result, "text-success");
-                                            add_to_cart_button.off("click");
-                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                        },
-                                        error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger");
-                                            add_to_cart_button.off("click");
-                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                        }
+                                        $.ajax({
+                                            url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
+                                            type: "GET",
+                                            data: {
+                                                'cart_product_code': cart_product_code,
+                                                'customer_fb_id': $("#customer_id").val(),
+                                            },
+                                            success: function (result, jqXHR) {
+                                                showNotification(result, "text-success");
+                                                add_to_cart_button.off("click");
+                                                add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                            },
+                                            error: function (error, jqXHR) {
+                                                showNotification(error.responseJSON, "text-danger");
+                                                add_to_cart_button.off("click");
+                                                add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                            }
+                                        });
                                     });
-                                });
+                                }
                             }
                             pagination(result);
                             $("#product_list_modal").modal("toggle");
@@ -509,7 +544,7 @@
             });
         });
 
-        function productDetails(name, code, stock, price, discount) {
+        function productDetails(name, code, stock, price, discount, variants, product_id) {
             let discounts = '';
             let stock_available = 'Stocked Out';
             let color = 'text-danger';
@@ -523,11 +558,29 @@
                 discounts = '<p><b>Discount: </b><span class="' + color + '">' + discount.dis_percentage + '</span>%</p>\n' +
                     '<p>Discounted Price: <b><span class="' + color + '">' + (price - (price * discount.dis_percentage) / 100) + '</span></b> BDT</p>';
             }
+            let vari = this.productVariants(variants, product_id);
 
             return '<p> <b>Name: </b>' + name + '</p>\n' +
                 '<p><b>Code: </b><span class="product_code">' + code + '</span></p>\n' +
                 '<p><b>Price: </b>' + price + ' BDT</p>\n' +
-                '' + discounts;
+                '' + discounts + vari;
+        }
+
+        function productVariants(variants, product_id) {
+            let vari = '';
+            for (let i = 0; i < variants.length; i++) {
+                vari += '<p><b>' + variants[i].name + ':</b>' +
+                    '<select style="height: 25px">';
+                for (let j = 0; j < variants[i].variant_properties_name.length; j++) {
+                    if (variants[i].variant_properties_name[j].pivot.product_id == product_id) {
+                        vari += '<option>' + variants[i].variant_properties_name[j].property_name + '</option>'
+                    }
+                }
+                vari += '</select>' +
+                    '</p>';
+            }
+
+            return vari;
         }
 
         function discountAvailable(discount) {
@@ -545,11 +598,19 @@
 
         function productImage(all_images) {
             let image = '';
-            {{--let image_base_path = "{{asset('images/products')."/"}}";//dev--}}
-            let image_base_path = "https://clients.howkar.com/images/products/";//live
-            image = '<div class="">\n' +
-                '         <img src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
-                '     </div>';
+            let image_base_path = "{{asset('images/products')."/"}}";//dev
+            // let image_base_path = "https://clients.howkar.com/images/products/";//live
+
+            if (all_images.length > 0) {
+                image = '<div class="">\n' +
+                    '         <img src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
+                    '     </div>';
+            } else {
+                image = '<div class="">\n' +
+                    '         <img src="' + image_base_path + 'no.png" style="max-height: 170px;max-width: 100%">' +
+                    '     </div>';
+            }
+
             // for (let i = 0; i < all_images.length; i++) {
             //     if (i === 0) {
             //         image = '<div class="active">\n' +

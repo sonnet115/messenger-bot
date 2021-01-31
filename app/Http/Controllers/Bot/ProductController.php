@@ -63,6 +63,14 @@ class ProductController extends Controller
                 ->with('images')
                 ->with('discounts')->paginate(2);
         }
+        $products = Product::where('parent_product_id', '=', null)->with(['variants' => function ($query) {
+                $query->groupBy('variant_id', 'product_id');
+            }])
+            ->where('shop_id', $shop->id)
+            ->where('state', 1)
+            ->where('show_in_bot', 1)
+            ->with('childProducts')->paginate(20);
+
         return response()->json($products);
     }
 

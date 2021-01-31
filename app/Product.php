@@ -25,4 +25,17 @@ class Product extends Model
     {
         return $this->hasOne(Shop::class, 'id', 'shop_id');
     }
+
+    public function variants()
+    {
+        return $this->belongsToMany(Variant::class, ProductVariant::class, 'product_id', 'variant_id')
+            ->with('variantPropertiesName');
+    }
+
+    public function childProducts()
+    {
+        return $this->hasMany(self::class, 'parent_product_id', 'id')
+            ->with('discounts')
+            ->with('images');
+    }
 }
