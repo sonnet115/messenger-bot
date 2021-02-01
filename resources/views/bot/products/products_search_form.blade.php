@@ -280,15 +280,24 @@
                         $('.spinner-wrapper').fadeOut(this.preloaderFadeOutTime);
                         $("#searched_product_code").html(cat_name);
                         $("#total_results").html(result.total);
+                        let variants_list = [];
                         product_container.html("");
+
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
                                 for (let j = 0; j < result.data[i].child_products.length; j++) {
-                                    let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants,  result.data[i].id);
-                                    let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
-                                    let images = productImage(result.data[i].child_products[j].images);
-                                    let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
-                                    let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                    if (j == 0) {
+                                        let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants, result.data[i].id, result.data[i].child_products[j].id);
+                                        let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
+                                        let images = productImage(result.data[i].child_products[j].images);
+                                        let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
+                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                        product_container.append(products);
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id);
+                                    } else {
+                                        // variants_list.push(new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id));
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id);
+                                    }
 
                                     /*let temp_prod = '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">' +
                                         '                            <div class="col-6" style="max-height: 200px">' +
@@ -321,9 +330,6 @@
                                         '                                </p>' +
                                         '                            </div>' +
                                         '                        </div>';*/
-
-                                    product_container.append(products);
-                                    break;
 
                                     $("#pre-order_" + result.data[i].code).on("click", function () {
                                         let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
@@ -374,6 +380,41 @@
                                     });
                                 }
                             }
+
+                            $(".selected_variants").on("change", function () {
+                                let variations_combination = [];
+                                variations_combination.push($(this).parent().parent().find('.parent_id').val());
+
+                                let vari = $(this).val();
+                                variations_combination.push(vari);
+
+                                $(this).parent().parent().find('.selected_variants').each(function () {
+                                    if (vari != $(this).val()) {
+                                        variations_combination.push($(this).val());
+                                    }
+                                });
+
+                                /*console.log(variations_combination.join('_'));
+                                console.log(variants_list[variations_combination.join('_')]);
+                                console.log(shuffle(variations_combination));*/
+                                /*console.log(variations_combination);
+
+
+                                console.log(variations_combination);
+                                for (let i = 0; i < variations_combination.length; i++) {
+                                    console.log(variations_combination[i]);
+                                    console.log(variants_list[variations_combination[i].join('_')]);
+                                }*/
+                                let permu = perm(variations_combination);
+                                for (let i = 0; i < permu.length; i++) {
+                                    if(variants_list[permu[i].join('_')]) {
+                                        console.log(permu[i]);
+                                        console.log(variants_list[permu[i].join('_')]);
+                                    }
+                                }
+
+                            });
+                            console.log(variants_list);
                             pagination(result);
                             $("#product_list_modal").modal("toggle");
                         } else {
@@ -544,7 +585,24 @@
             });
         });
 
-        function productDetails(name, code, stock, price, discount, variants, product_id) {
+        function perm(xs) {
+            let ret = [];
+
+            for (let i = 0; i < xs.length; i = i + 1) {
+                let rest = perm(xs.slice(0, i).concat(xs.slice(i + 1)));
+
+                if(!rest.length) {
+                    ret.push([xs[i]])
+                } else {
+                    for(let j = 0; j < rest.length; j = j + 1) {
+                        ret.push([xs[i]].concat(rest[j]))
+                    }
+                }
+            }
+            return ret;
+        }
+
+        function productDetails(name, code, stock, price, discount, variants, parent_id, product_id) {
             let discounts = '';
             let stock_available = 'Stocked Out';
             let color = 'text-danger';
@@ -558,22 +616,24 @@
                 discounts = '<p><b>Discount: </b><span class="' + color + '">' + discount.dis_percentage + '</span>%</p>\n' +
                     '<p>Discounted Price: <b><span class="' + color + '">' + (price - (price * discount.dis_percentage) / 100) + '</span></b> BDT</p>';
             }
-            let vari = this.productVariants(variants, product_id);
+            let vari = this.productVariants(variants, parent_id, product_id);
 
             return '<p> <b>Name: </b>' + name + '</p>\n' +
                 '<p><b>Code: </b><span class="product_code">' + code + '</span></p>\n' +
                 '<p><b>Price: </b>' + price + ' BDT</p>\n' +
-                '' + discounts + vari;
+                '' + discounts + vari + '<input class="parent_id" value="' + parent_id + '">';
         }
 
-        function productVariants(variants, product_id) {
+        function productVariants(variants, parent_id, product_id) {
             let vari = '';
             for (let i = 0; i < variants.length; i++) {
                 vari += '<p><b>' + variants[i].name + ':</b>' +
-                    '<select style="height: 25px">';
+                    '<select style="height: 25px" class="selected_variants">' +
+                    '<option class="selected disabled">Choose</option>';
+
                 for (let j = 0; j < variants[i].variant_properties_name.length; j++) {
-                    if (variants[i].variant_properties_name[j].pivot.product_id == product_id) {
-                        vari += '<option>' + variants[i].variant_properties_name[j].property_name + '</option>'
+                    if (variants[i].variant_properties_name[j].pivot.product_id == parent_id) {
+                        vari += '<option value="' + variants[i].variant_properties_name[j].id + '">' + variants[i].variant_properties_name[j].property_name + '</option>'
                     }
                 }
                 vari += '</select>' +
@@ -602,11 +662,11 @@
             // let image_base_path = "https://clients.howkar.com/images/products/";//live
 
             if (all_images.length > 0) {
-                image = '<div class="">\n' +
+                image = '<div class="text-center">\n' +
                     '         <img src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
                     '     </div>';
             } else {
-                image = '<div class="">\n' +
+                image = '<div class="text-center">\n' +
                     '         <img src="' + image_base_path + 'no.png" style="max-height: 170px;max-width: 100%">' +
                     '     </div>';
             }
@@ -707,6 +767,14 @@
             } else {
                 $("#next_button").hide();
             }
+        }
+
+        function Variants(name, code, price, variant_combination_ids, parent_product_id) {
+            this.name = name;
+            this.code = code;
+            this.price = price;
+            this.variant_combination_ids = variant_combination_ids;
+            this.parent_product_id = parent_product_id;
         }
     </script>
 @endsection
