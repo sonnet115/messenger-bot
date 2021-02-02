@@ -293,93 +293,60 @@
                                         let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
                                         let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
                                         product_container.append(products);
-                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id);
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
                                     } else {
                                         // variants_list.push(new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id));
-                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id);
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
                                     }
-
-                                    /*let temp_prod = '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">' +
-                                        '                            <div class="col-6" style="max-height: 200px">' +
-                                        '                                <div class="">' +
-                                        '                                    <img src="https://clients.howkar.com/images/products/Chat_Bot_BD/TH-2003_1.jpeg"' +
-                                        '                                         style="max-height: 170px;max-width: 100%"></div>' +
-                                        '                                <div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                                        '                                    <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_TH-2003">' +
-                                        '                                        <i class="fa fa-shopping-cart"></i> Add to Cart</a></div>' +
-                                        '                            </div>' +
-                                        '                            <div class="col-6" style="font-size: 13px">' +
-                                        '                                <p><b>Name: </b>Tag Heuer</p>' +
-                                        '                                <p><b>Code: </b><span class="product_code">TH-2003</span></p>' +
-                                        '                                <p><b>Price: </b>30000 BDT</p>' +
-                                        '                                <p><b>Color:</b>' +
-                                        '                                    <select style="height: 25px">' +
-                                        '                                        <option>Red</option>' +
-                                        '                                        <option>Black</option>' +
-                                        '                                        <option>Blue</option>' +
-                                        '                                        <option>Yellow</option>' +
-                                        '                                    </select>' +
-                                        '                                </p>' +
-                                        '                                <p><b>Size:</b>' +
-                                        '                                    <select style="height: 25px">' +
-                                        '                                        <option>L(14 cm)</option>' +
-                                        '                                        <option>M(12 cm)</option>' +
-                                        '                                        <option>S(10 cm)</option>' +
-                                        '                                        <option>XS(8 cm)</option>' +
-                                        '                                    </select>' +
-                                        '                                </p>' +
-                                        '                            </div>' +
-                                        '                        </div>';*/
-
-                                    $("#pre-order_" + result.data[i].code).on("click", function () {
-                                        let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                        let button = $(this);
-                                        button.html("Processing...")
-
-                                        $.ajax({
-                                            url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
-                                            type: "GET",
-                                            data: {
-                                                'pre_order_product_code': pre_order_product_code,
-                                                'customer_fb_id': $("#customer_id").val(),
-                                            },
-                                            success: function (result, jqXHR) {
-                                                // showNotification(result, "text-success");
-                                                button.hide(300);
-                                            },
-                                            error: function (error, jqXHR) {
-                                                showNotification(error.responseJSON, "text-danger");
-                                                button.hide(300);
-                                            }
-                                        });
-                                    });
-
-                                    $("#cart_button_" + result.data[i].code).on("click", function () {
-                                        let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                        let add_to_cart_button = $(this);
-                                        add_to_cart_button.html("Adding...");
-
-                                        $.ajax({
-                                            url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
-                                            type: "GET",
-                                            data: {
-                                                'cart_product_code': cart_product_code,
-                                                'customer_fb_id': $("#customer_id").val(),
-                                            },
-                                            success: function (result, jqXHR) {
-                                                showNotification(result, "text-success");
-                                                add_to_cart_button.off("click");
-                                                add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                            },
-                                            error: function (error, jqXHR) {
-                                                showNotification(error.responseJSON, "text-danger");
-                                                add_to_cart_button.off("click");
-                                                add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                            }
-                                        });
-                                    });
                                 }
                             }
+                            $(".pre-order").on("click", function () {
+                                let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                let button = $(this);
+                                button.html("Processing...")
+
+                                $.ajax({
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
+                                    type: "GET",
+                                    data: {
+                                        'pre_order_product_code': pre_order_product_code,
+                                        'customer_fb_id': $("#customer_id").val(),
+                                    },
+                                    success: function (result, jqXHR) {
+                                        // showNotification(result, "text-success");
+                                        button.hide(300);
+                                    },
+                                    error: function (error, jqXHR) {
+                                        showNotification(error.responseJSON, "text-danger");
+                                        button.hide(300);
+                                    }
+                                });
+                            });
+
+                            $(".cart_button").on("click", function () {
+                                let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
+                                let add_to_cart_button = $(this);
+                                add_to_cart_button.html("Adding...");
+
+                                $.ajax({
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
+                                    type: "GET",
+                                    data: {
+                                        'cart_product_id': cart_product_id,
+                                        'customer_fb_id': $("#customer_id").val(),
+                                    },
+                                    success: function (result, jqXHR) {
+                                        showNotification(result, "text-success");
+                                        add_to_cart_button.off("click");
+                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                    },
+                                    error: function (error, jqXHR) {
+                                        showNotification(error.responseJSON, "text-danger");
+                                        add_to_cart_button.off("click");
+                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                    }
+                                });
+                            });
 
                             $(".selected_variants").on("change", function () {
                                 let variations_combination = [];
@@ -393,23 +360,24 @@
                                         variations_combination.push($(this).val());
                                     }
                                 });
-
-                                /*console.log(variations_combination.join('_'));
-                                console.log(variants_list[variations_combination.join('_')]);
-                                console.log(shuffle(variations_combination));*/
-                                /*console.log(variations_combination);
-
-
-                                console.log(variations_combination);
-                                for (let i = 0; i < variations_combination.length; i++) {
-                                    console.log(variations_combination[i]);
-                                    console.log(variants_list[variations_combination[i].join('_')]);
-                                }*/
+                                let image_base_path = "{{asset('images/products')."/"}}";//dev
+                                // let image_base_path = "https://clients.howkar.com/images/products/";//live
                                 let permu = perm(variations_combination);
                                 for (let i = 0; i < permu.length; i++) {
-                                    if(variants_list[permu[i].join('_')]) {
+                                    let var_product = variants_list[permu[i].join('_')];
+                                    if (var_product) {
                                         console.log(permu[i]);
-                                        console.log(variants_list[permu[i].join('_')]);
+                                        console.log(var_product);
+                                        $(this).parent().parent().find('.product_name').html(var_product['name']);
+                                        $(this).parent().parent().find('.product_code').html(var_product['code']);
+                                        $(this).parent().parent().find('.product_price').html(var_product['price']);
+                                        $(this).parent().parent().find('.product_id').val(var_product['product_id']);
+                                        $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
+
+                                        if (var_product['images'].length > 0)
+                                            $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
+                                        else
+                                            $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + 'no.png');
                                     }
                                 }
 
@@ -591,10 +559,10 @@
             for (let i = 0; i < xs.length; i = i + 1) {
                 let rest = perm(xs.slice(0, i).concat(xs.slice(i + 1)));
 
-                if(!rest.length) {
+                if (!rest.length) {
                     ret.push([xs[i]])
                 } else {
-                    for(let j = 0; j < rest.length; j = j + 1) {
+                    for (let j = 0; j < rest.length; j = j + 1) {
                         ret.push([xs[i]].concat(rest[j]))
                     }
                 }
@@ -616,15 +584,17 @@
                 discounts = '<p><b>Discount: </b><span class="' + color + '">' + discount.dis_percentage + '</span>%</p>\n' +
                     '<p>Discounted Price: <b><span class="' + color + '">' + (price - (price * discount.dis_percentage) / 100) + '</span></b> BDT</p>';
             }
-            let vari = this.productVariants(variants, parent_id, product_id);
+            let vari = this.productVariants(variants, parent_id);
 
-            return '<p> <b>Name: </b>' + name + '</p>\n' +
+            return '<p><b>Name: </b><span class="product_name">' + name + '</span></p>\n' +
                 '<p><b>Code: </b><span class="product_code">' + code + '</span></p>\n' +
-                '<p><b>Price: </b>' + price + ' BDT</p>\n' +
-                '' + discounts + vari + '<input class="parent_id" value="' + parent_id + '">';
+                '<p><b>Price: </b><span class="product_price">' + price + '</span> BDT</p>\n' +
+                '' + discounts + vari + '' +
+                '<input class="parent_id" type="hidden" value="' + parent_id + '">' +
+                '<input class="product_id" type="text" value="' + product_id + '">';
         }
 
-        function productVariants(variants, parent_id, product_id) {
+        function productVariants(variants, parent_id) {
             let vari = '';
             for (let i = 0; i < variants.length; i++) {
                 vari += '<p><b>' + variants[i].name + ':</b>' +
@@ -663,11 +633,11 @@
 
             if (all_images.length > 0) {
                 image = '<div class="text-center">\n' +
-                    '         <img src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
+                    '         <img class="product_image" src="' + image_base_path + all_images[0].image_url + '" style="max-height: 170px;max-width: 100%">' +
                     '     </div>';
             } else {
-                image = '<div class="text-center">\n' +
-                    '         <img src="' + image_base_path + 'no.png" style="max-height: 170px;max-width: 100%">' +
+                image = '<div class="text-center ">\n' +
+                    '         <img class="product_image" src="' + image_base_path + 'no.png" style="max-height: 170px;max-width: 100%">' +
                     '     </div>';
             }
 
@@ -687,7 +657,7 @@
 
         function orderPreOrderButton(stock, product_code) {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn outline_btn btn btn-outline-success btn-sm" id="cart_button_' + product_code + '"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
+                '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn cart_button outline_btn btn btn-outline-success btn-sm"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
                 '   </div>';
             // Pre-order
             // if (stock > 0) {
@@ -703,7 +673,7 @@
 
         function allProductDetails(product_details, discount_available, images, code, order_pre_order_button) {
 
-            return '  <div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n' +
+            return '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n' +
                 '                        ' + discount_available +
                 '                        <div class="col-6" style="max-height: 200px">\n' +
                 '                            ' + images +
@@ -769,12 +739,13 @@
             }
         }
 
-        function Variants(name, code, price, variant_combination_ids, parent_product_id) {
+        function Variants(name, code, price, product_id, images) {
             this.name = name;
             this.code = code;
             this.price = price;
-            this.variant_combination_ids = variant_combination_ids;
-            this.parent_product_id = parent_product_id;
+            this.product_id = product_id;
+            this.images = images;
+
         }
     </script>
 @endsection

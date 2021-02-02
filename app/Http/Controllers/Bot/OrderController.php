@@ -62,7 +62,7 @@ class OrderController extends Controller
     public function addToCart(Request $request)
     {
         $customer_id = Customer::select('id')->where('fb_id', $request->customer_fb_id)->first();
-        $product_id = Product::select('id')->where('code', $request->cart_product_code)->first();
+        $product_id = Product::select('id')->where('id', $request->cart_product_id)->first();
         $product_exists_in_cart = Cart::where('pid', $product_id->id)->where('customer_id', $customer_id->id)->first();
 
         if ($product_exists_in_cart) {
