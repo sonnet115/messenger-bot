@@ -69,7 +69,7 @@ class ProductController extends Controller
             ->where('shop_id', $shop->id)
             ->where('state', 1)
             ->where('show_in_bot', 1)
-            ->with('childProducts')->paginate(20);
+            ->with('childProducts')->paginate(2);
 
         return response()->json($products);
     }

@@ -22,7 +22,56 @@
                             </div>
 
                             <div id="product_info_container" class="col-12 col-sm-12" style="margin-bottom: 20px">
+                                {{--   <div style="padding: 10px 0;">
+                                       <div class="card shadow-sm" style="padding: 10px 0;">
+                                           <div class="row product_container">
+                                               <div class="col-2 col-sm-2 text-right" style="padding: 30px 10px 0 25px">
+                                                   <button id="delete_btn_DP-1" class="btn btn-sm btn-danger"
+                                                           style="padding: 5px 10px;font-size: 12px;border-radius: 2px">
+                                                       <i class="fa fa-trash-alt"></i>
+                                                   </button>
+                                               </div>
+                                               <div class="col-7 col-sm-7">
+                                                   <p class="product_details"><b class="text-primary"> Name:</b> Demo
+                                                       product 1
+                                                   </p>
+                                                   <p class="product_details"><b class="text-primary"> Code:</b> DP-1 </p>
+                                                   <p class="product_details"><b class="text-primary"> Price:</b> 470 </p>
+                                                   <span class="badge badge-pill badge-dark"
+                                                         style="padding: 5px 15px;font-size: 11px;background: none; border: 1px solid #95949a;color: #007bff">
+                                                       L (25cm)
+                                                   </span>
 
+                                                   <input type="hidden" class="form-control" required=""
+                                                          name="product_code[]" value="DP-1">
+                                                   <input type="hidden" class="form-control" required=""
+                                                          name="product_price[]" value="470">
+                                                   <input type="hidden" class="form-control" required=""
+                                                          name="product_discount[]" value="0">
+                                               </div>
+                                               <div class="col-3 col-sm-3 text-right" style="padding-right: 25px">
+                                                   <button id="increment_btn_DP-1"
+                                                           class="outline_btn btn btn-sm btn-outline-success shadow-sm"
+                                                           style="padding: 5px 10px;font-size: 12px;border-radius: 2px">
+                                                       <i class="fa fa-plus-square"></i>
+                                                   </button>
+                                                   <button class="btn btn-sm"
+                                                           style="padding: 5px 10px;font-size: 12px;border-radius: 2px;background: white">
+                                                       <span style="text-align: center;font-size: 15px;margin: 0px"
+                                                             class="product_qty">1</span>
+                                                   </button>
+                                                   <input type="hidden" class="form-control" value="1"
+                                                          placeholder="Product Qty" required="" name="product_qty[]"
+                                                          id="qty_DP-1">
+                                                   <button id="decrement_btn_DP-1"
+                                                           class="outline_btn btn btn-sm btn-outline-danger shadow-sm"
+                                                           style="padding: 5px 10px;font-size: 12px;border-radius: 2px;">
+                                                       <i class="fa fa-minus-square"></i>
+                                                   </button>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>--}}
                             </div>
 
                             <div class="col-7" style="margin-bottom: 20px" id="delivery_area_container">
@@ -169,14 +218,14 @@
                 },
 
                 success: function (result) {
-                    product_info_container.html("");
+                    // product_info_container.html("");
 
                     if (result.length > 0) {
                         for (let i = 0; i < result.length; i++) {
-                            let delete_btn_content = deleteButton(result[i].products.code);
-                            let increment_decrement_btn_content = incrementDecrementButton(result[i].products.code);
+                            let delete_btn_content = deleteButton();
+                            let increment_decrement_btn_content = incrementDecrementButton(result[i].products.id);
                             let discounts = discountDetails(result[i].products);
-                            let product_details_content = productDetails(result[i].products.name, result[i].products.code, result[i].products.price, discounts);
+                            let product_details_content = productDetails(result[i].products.name, result[i].products.id, result[i].products.price, discounts, result[i].products.variants_name);
 
                             let cart_products = '<div style="padding: 10px 0;">' +
                                 '                      <div class="card shadow-sm" style="padding: 10px 0;">\n' +
@@ -194,114 +243,115 @@
                             $("#delivery_charge_value").html($("#selected_delivery_charge").val());
 
                             calculateTotal($(".product_container"));
+                        }
 
-                            $("#delete_btn_" + result[i].products.code).on("click", function () {
-                                let delete_btn = $(this);
-                                delete_btn.html("<i class='fas fa-sync fa-spin'></i>");
-                                $.ajax({
-                                    url: base_url + 'bot/' + $("#app_id").val() + '/remove-cart-product',
-                                    type: "GET",
-                                    data: {
-                                        "product_code": result[i].products.code,
-                                        "customer_fb_id": customer_fb_id
-                                    },
+                        $(".delete_btn").on("click", function () {
+                            let delete_btn = $(this);
+                            let product_id = $(this).parent().parent().find('.product_id').val();
+                            delete_btn.html("<i class='fas fa-sync fa-spin'></i>");
+                            $.ajax({
+                                url: base_url + 'bot/' + $("#app_id").val() + '/remove-cart-product',
+                                type: "GET",
+                                data: {
+                                    "product_id": product_id,
+                                    "customer_fb_id": customer_fb_id
+                                },
 
-                                    success: function (result, jqXHR) {
-                                        delete_btn.parent().parent().parent().parent().hide(500, function () {
-                                            $(this).remove();
-                                            let count = product_info_container.children().length;
+                                success: function (result, jqXHR) {
+                                    delete_btn.parent().parent().parent().parent().hide(500, function () {
+                                        $(this).remove();
+                                        let count = product_info_container.children().length;
 
-                                            if (count < 1) {
-                                                hideContainers();
-                                                let no_product = noProductFound(product_search_url);
-                                                product_info_container.html(no_product);
-                                            } else {
-                                                calculateTotal($(".product_container"));
-                                            }
-                                        });
-                                    },
-                                    error: function (error, jqXHR) {
-                                        delete_btn.html("<i class='fa fa-trash-alt'></i>");
-                                        showNotification(error.responseJSON, "text-danger", 2000);
-                                    }
-                                });
-
+                                        if (count < 1) {
+                                            hideContainers();
+                                            let no_product = noProductFound(product_search_url);
+                                            product_info_container.html(no_product);
+                                        } else {
+                                            calculateTotal($(".product_container"));
+                                        }
+                                    });
+                                },
+                                error: function (error, jqXHR) {
+                                    delete_btn.html("<i class='fa fa-trash-alt'></i>");
+                                    showNotification(error.responseJSON, "text-danger", 2000);
+                                }
                             });
 
-                            $("#increment_btn_" + result[i].products.code).on("click", function () {
-                                $("#submit").attr("disabled", true);
-                                let increment_btn = $(this);
-                                let decrement_btn = $("#decrement_btn_" + result[i].products.code);
-                                increment_btn.attr("disabled", true);
-                                increment_btn.html("<i class='fas fa-spinner fa-spin'></i>");
+                        });
 
-                                let qty_container = $(this).parent().find('.product_qty');
-                                let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
-                                let new_qty = parseInt(qty_container.text()) + 1;
+                        $(".increment_btn").on("click", function () {
+                            $("#submit").attr("disabled", true);
+                            let increment_btn = $(this);
+                            let decrement_btn = $("#decrement_btn_" + result[i].products.code);
+                            increment_btn.attr("disabled", true);
+                            increment_btn.html("<i class='fas fa-spinner fa-spin'></i>");
+
+                            let qty_container = $(this).parent().find('.product_qty');
+                            let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
+                            let new_qty = parseInt(qty_container.text()) + 1;
+                            $.ajax({
+                                url: base_url + 'bot/' + $("#app_id").val() + '/check-qty',
+                                type: "GET",
+                                data: {
+                                    "product_code": result[i].products.code
+                                },
+
+                                success: function (result) {
+                                    if (new_qty > parseInt(result.stock)) {
+                                        showNotification("Not enough in stock", "text-danger", 3000);
+                                    } else {
+                                        qty_container.html(new_qty);
+                                        qty_input_field.val(new_qty);
+                                        increment_btn.attr("disabled", false);
+                                        decrement_btn.attr("disabled", false);
+                                    }
+                                    $("#submit").attr("disabled", false);
+                                    increment_btn.html("<i class='fa fa-plus-square'></i>");
+                                    calculateTotal($(".product_container"));
+                                }
+                            });
+                        });
+
+                        $(".decrement_btn").on("click", function () {
+                            $("#submit").attr("disabled", true);
+                            let decrement_btn = $(this);
+                            let increment_btn = $("#increment_btn_" + result[i].products.code);
+                            decrement_btn.attr("disabled", true);
+
+                            let qty_container = $(this).parent().find('.product_qty');
+                            let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
+                            let new_qty = parseInt(qty_container.text()) - 1;
+
+                            if (new_qty <= 0) {
+                                qty_container.html(1);
+                                qty_input_field.val(1);
+                                $("#submit").attr("disabled", false);
+                                calculateTotal(product_container);
+                            } else {
+                                decrement_btn.html("<i class='fas fa-spinner fa-spin'></i>");
                                 $.ajax({
                                     url: base_url + 'bot/' + $("#app_id").val() + '/check-qty',
                                     type: "GET",
                                     data: {
                                         "product_code": result[i].products.code
                                     },
-
                                     success: function (result) {
                                         if (new_qty > parseInt(result.stock)) {
                                             showNotification("Not enough in stock", "text-danger", 3000);
                                         } else {
                                             qty_container.html(new_qty);
                                             qty_input_field.val(new_qty);
-                                            increment_btn.attr("disabled", false);
                                             decrement_btn.attr("disabled", false);
+                                            increment_btn.attr("disabled", false);
                                         }
                                         $("#submit").attr("disabled", false);
-                                        increment_btn.html("<i class='fa fa-plus-square'></i>");
+                                        decrement_btn.html("<i class='fa fa-minus-square'></i>");
                                         calculateTotal($(".product_container"));
                                     }
                                 });
-                            });
 
-                            $("#decrement_btn_" + result[i].products.code).on("click", function () {
-                                $("#submit").attr("disabled", true);
-                                let decrement_btn = $(this);
-                                let increment_btn = $("#increment_btn_" + result[i].products.code);
-                                decrement_btn.attr("disabled", true);
-
-                                let qty_container = $(this).parent().find('.product_qty');
-                                let qty_input_field = $(this).parent().find('#qty_' + result[i].products.code);
-                                let new_qty = parseInt(qty_container.text()) - 1;
-
-                                if (new_qty <= 0) {
-                                    qty_container.html(1);
-                                    qty_input_field.val(1);
-                                    $("#submit").attr("disabled", false);
-                                    calculateTotal(product_container);
-                                } else {
-                                    decrement_btn.html("<i class='fas fa-spinner fa-spin'></i>");
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/check-qty',
-                                        type: "GET",
-                                        data: {
-                                            "product_code": result[i].products.code
-                                        },
-                                        success: function (result) {
-                                            if (new_qty > parseInt(result.stock)) {
-                                                showNotification("Not enough in stock", "text-danger", 3000);
-                                            } else {
-                                                qty_container.html(new_qty);
-                                                qty_input_field.val(new_qty);
-                                                decrement_btn.attr("disabled", false);
-                                                increment_btn.attr("disabled", false);
-                                            }
-                                            $("#submit").attr("disabled", false);
-                                            decrement_btn.html("<i class='fa fa-minus-square'></i>");
-                                            calculateTotal($(".product_container"));
-                                        }
-                                    });
-
-                                }
-                            });
-                        }
+                            }
+                        });
 
                         $("#more_products_btn").attr('href', product_search_url);
 
@@ -320,7 +370,7 @@
                             let customer_fb_id = $("input[name=customer_fb_id]").val();
                             let delivery_charge = $("#selected_delivery_charge").val();
 
-                            let product_code = $("input[name='product_code[]']").map(function () {
+                            let product_id = $("input[name='product_id[]']").map(function () {
                                 return $(this).val();
                             }).get();
 
@@ -357,7 +407,7 @@
                                     'contact': contact,
                                     'shipping_address': shipping_address,
                                     'billing_address': billing_address,
-                                    'product_code': product_code,
+                                    'product_id': product_id,
                                     'product_qty': product_qty,
                                     'customer_fb_id': customer_fb_id,
                                     'delivery_charge': delivery_charge,
@@ -471,28 +521,46 @@
                 }
             }
 
-            function deleteButton(product_code) {
+            function deleteButton() {
                 return '<div class="col-2 col-sm-2 text-right" style="padding: 30px 10px 0 25px">\n' +
-                    '        <button id="delete_btn_' + product_code + '" class="btn btn-sm btn-danger"\n' +
+                    '        <button class="delete_btn btn btn-sm btn-danger"\n' +
                     '            style="padding: 5px 10px;font-size: 12px;border-radius: 2px">\n' +
                     '             <i class="fa fa-trash-alt"></i>\n' +
                     '         </button>\n' +
                     '   </div>\n';
             }
 
-            function productDetails(name, code, price, discount) {
+            function productDetails(name, code, price, discount, variants_name) {
                 return '<div class="col-7 col-sm-7">\n' +
                     '        <p class="product_details"><b class="text-primary"> Name:</b> ' + name + '\n' +
                     '        </p>\n' +
                     '        <p class="product_details"><b class="text-primary"> Code:</b> ' + code + ' </p>\n' +
                     '        <p class="product_details"><b class="text-primary"> Price:</b> ' + price + ' </p>\n' +
-                    '        <input type="hidden" class="form-control" required\n' +
-                    '                                               name="product_code[]" value="' + code + '">\n' +
+                    '        <input type="hidden" class="product_id" required\n' +
+                    '                                               name="product_id[]" value="' + code + '">\n' +
                     '        <input type="hidden" class="form-control" required\n' +
                     '                                               name="product_price[]" value="' + price + '">\n' +
                     '        <input type="hidden" class="form-control" required\n' +
                     '                                               name="product_discount[]" value="' + discount + '">\n' +
+                    '' + productSpecification(variants_name) +
                     '   </div>\n';
+            }
+
+            function productSpecification(variants_name) {
+                let spec = '';
+                for (let i = 0; i < variants_name.length; i++) {
+                    if (variants_name[i].description != null) {
+                        spec += '<span style="margin:2px;padding: 5px 15px;font-size: 11px;background: none; border: 1px solid #95949a;color: #00224e"' +
+                            '      class="badge badge-pill">' + variants_name[i].property_name + ' (' + variants_name[i].description + ')' +
+                            '</span>';
+                    } else {
+                        spec += '<span style="margin:2px;padding: 5px 15px;font-size: 11px;background: none; border: 1px solid #95949a;color: #00224e"' +
+                            '      class="badge badge-pill">' + variants_name[i].property_name + '                                             ' +
+                            '</span>';
+                    }
+                }
+
+                return spec;
             }
 
             function discountDetails(products) {

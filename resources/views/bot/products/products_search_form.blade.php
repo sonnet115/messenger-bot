@@ -323,7 +323,7 @@
                                 });
                             });
 
-                            $(".cart_button").on("click", function () {
+                         let eventH = $(".cart_button").on("click", function () {
                                 let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
                                 let add_to_cart_button = $(this);
                                 add_to_cart_button.html("Adding...");
@@ -360,19 +360,23 @@
                                         variations_combination.push($(this).val());
                                     }
                                 });
+
                                 let image_base_path = "{{asset('images/products')."/"}}";//dev
                                 // let image_base_path = "https://clients.howkar.com/images/products/";//live
                                 let permu = perm(variations_combination);
+
                                 for (let i = 0; i < permu.length; i++) {
                                     let var_product = variants_list[permu[i].join('_')];
                                     if (var_product) {
                                         console.log(permu[i]);
                                         console.log(var_product);
+
                                         $(this).parent().parent().find('.product_name').html(var_product['name']);
                                         $(this).parent().parent().find('.product_code').html(var_product['code']);
                                         $(this).parent().parent().find('.product_price').html(var_product['price']);
                                         $(this).parent().parent().find('.product_id').val(var_product['product_id']);
                                         $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
+                                        $(this).parent().parent().parent().find('.cart_button').on("click", eventH);
 
                                         if (var_product['images'].length > 0)
                                             $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
@@ -388,7 +392,6 @@
                         } else {
                             showNotification("No Products Found", "text-danger", null);
                         }
-
                     }
                 });
             });
@@ -404,70 +407,117 @@
                         'cat_id': $("#category_id").val(),
                     },
                     success: function (result) {
+                        let variants_list = [];
                         product_container.html("");
+
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
-                                let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
-                                let discount_available = discountAvailable(result.data[i].discounts);
-                                let images = productImage(result.data[i].images);
-                                let order_pre_order_button = orderPreOrderButton(result.data[i].stock, result.data[i].code);
-                                let products = allProductDetails(product_details, discount_available, images, result.data[i].code, order_pre_order_button);
-
-                                product_container.append(products);
-
-                                $("#pre-order_" + result.data[i].code).on("click", function () {
-                                    let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    let button = $(this);
-                                    button.html("Processing...")
-
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
-                                        type: "GET",
-                                        data: {
-                                            'pre_order_product_code': pre_order_product_code,
-                                            'customer_fb_id': $("#customer_id").val(),
-                                        },
-                                        success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success");
-                                            button.hide(300);
-                                        },
-                                        error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger");
-                                            button.hide(300);
-                                        }
-                                    });
-                                });
-
-                                $("#cart_button_" + result.data[i].code).on("click", function () {
-                                    let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    let add_to_cart_button = $(this);
-                                    add_to_cart_button.html("Adding...");
-
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
-                                        type: "GET",
-                                        data: {
-                                            'cart_product_code': cart_product_code,
-                                            'customer_fb_id': $("#customer_id").val(),
-                                        },
-                                        success: function (result, jqXHR) {
-                                            showNotification(result, "text-success");
-                                            add_to_cart_button.off("click");
-                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                        },
-                                        error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger");
-                                            add_to_cart_button.off("click");
-                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                        }
-                                    });
-                                });
+                                for (let j = 0; j < result.data[i].child_products.length; j++) {
+                                    if (j == 0) {
+                                        let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants, result.data[i].id, result.data[i].child_products[j].id);
+                                        let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
+                                        let images = productImage(result.data[i].child_products[j].images);
+                                        let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
+                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                        product_container.append(products);
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
+                                    } else {
+                                        // variants_list.push(new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id));
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
+                                    }
+                                }
                             }
+                            $(".pre-order").on("click", function () {
+                                let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                let button = $(this);
+                                button.html("Processing...")
+
+                                $.ajax({
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
+                                    type: "GET",
+                                    data: {
+                                        'pre_order_product_code': pre_order_product_code,
+                                        'customer_fb_id': $("#customer_id").val(),
+                                    },
+                                    success: function (result, jqXHR) {
+                                        // showNotification(result, "text-success");
+                                        button.hide(300);
+                                    },
+                                    error: function (error, jqXHR) {
+                                        showNotification(error.responseJSON, "text-danger");
+                                        button.hide(300);
+                                    }
+                                });
+                            });
+
+                            let eventH = $(".cart_button").on("click", function () {
+                                let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
+                                let add_to_cart_button = $(this);
+                                add_to_cart_button.html("Adding...");
+
+                                $.ajax({
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
+                                    type: "GET",
+                                    data: {
+                                        'cart_product_id': cart_product_id,
+                                        'customer_fb_id': $("#customer_id").val(),
+                                    },
+                                    success: function (result, jqXHR) {
+                                        showNotification(result, "text-success");
+                                        add_to_cart_button.off("click");
+                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                    },
+                                    error: function (error, jqXHR) {
+                                        showNotification(error.responseJSON, "text-danger");
+                                        add_to_cart_button.off("click");
+                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                    }
+                                });
+                            });
+
+                            $(".selected_variants").on("change", function () {
+                                let variations_combination = [];
+                                variations_combination.push($(this).parent().parent().find('.parent_id').val());
+
+                                let vari = $(this).val();
+                                variations_combination.push(vari);
+
+                                $(this).parent().parent().find('.selected_variants').each(function () {
+                                    if (vari != $(this).val()) {
+                                        variations_combination.push($(this).val());
+                                    }
+                                });
+
+                                let image_base_path = "{{asset('images/products')."/"}}";//dev
+                                // let image_base_path = "https://clients.howkar.com/images/products/";//live
+                                let permu = perm(variations_combination);
+
+                                for (let i = 0; i < permu.length; i++) {
+                                    let var_product = variants_list[permu[i].join('_')];
+                                    if (var_product) {
+                                        console.log(permu[i]);
+                                        console.log(var_product);
+
+                                        $(this).parent().parent().find('.product_name').html(var_product['name']);
+                                        $(this).parent().parent().find('.product_code').html(var_product['code']);
+                                        $(this).parent().parent().find('.product_price').html(var_product['price']);
+                                        $(this).parent().parent().find('.product_id').val(var_product['product_id']);
+                                        $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
+                                        $(this).parent().parent().parent().find('.cart_button').on("click", eventH);
+
+                                        if (var_product['images'].length > 0)
+                                            $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
+                                        else
+                                            $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + 'no.png');
+                                    }
+                                }
+
+                            });
+                            console.log(variants_list);
                             pagination(result);
                         } else {
                             showNotification("No Products Found", "text-danger", null);
                         }
-
                     }
                 });
 
@@ -484,65 +534,113 @@
                         'cat_id': $("#category_id").val(),
                     },
                     success: function (result) {
+                        let variants_list = [];
                         product_container.html("");
+
                         if (result.data.length > 0) {
                             for (let i = 0; i < result.data.length; i++) {
-                                let product_details = productDetails(result.data[i].name, result.data[i].code, result.data[i].stock, result.data[i].price, result.data[i].discounts);
-                                let discount_available = discountAvailable(result.data[i].discounts);
-                                let images = productImage(result.data[i].images);
-                                let order_pre_order_button = orderPreOrderButton(result.data[i].stock, result.data[i].code);
-                                let products = allProductDetails(product_details, discount_available, images, result.data[i].code, order_pre_order_button);
-
-                                product_container.append(products);
-
-                                $("#pre-order_" + result.data[i].code).on("click", function () {
-                                    let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    let button = $(this);
-                                    button.html("Processing...")
-
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
-                                        type: "GET",
-                                        data: {
-                                            'pre_order_product_code': pre_order_product_code,
-                                            'customer_fb_id': $("#customer_id").val(),
-                                        },
-                                        success: function (result, jqXHR) {
-                                            // showNotification(result, "text-success");
-                                            button.hide(300);
-                                        },
-                                        error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger");
-                                            button.hide(300);
-                                        }
-                                    });
-                                });
-
-                                $("#cart_button_" + result.data[i].code).on("click", function () {
-                                    let cart_product_code = $(this).parent().parent().parent().find('.product_code').html();
-                                    let add_to_cart_button = $(this);
-                                    add_to_cart_button.html("Adding...");
-
-                                    $.ajax({
-                                        url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
-                                        type: "GET",
-                                        data: {
-                                            'cart_product_code': cart_product_code,
-                                            'customer_fb_id': $("#customer_id").val(),
-                                        },
-                                        success: function (result, jqXHR) {
-                                            showNotification(result, "text-success");
-                                            add_to_cart_button.off("click");
-                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                        },
-                                        error: function (error, jqXHR) {
-                                            showNotification(error.responseJSON, "text-danger");
-                                            add_to_cart_button.off("click");
-                                            add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
-                                        }
-                                    });
-                                });
+                                for (let j = 0; j < result.data[i].child_products.length; j++) {
+                                    if (j == 0) {
+                                        let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants, result.data[i].id, result.data[i].child_products[j].id);
+                                        let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
+                                        let images = productImage(result.data[i].child_products[j].images);
+                                        let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
+                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                        product_container.append(products);
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
+                                    } else {
+                                        // variants_list.push(new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].variant_combination_ids, result.data[i].child_products[j].parent_product_id));
+                                        variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
+                                    }
+                                }
                             }
+                            $(".pre-order").on("click", function () {
+                                let pre_order_product_code = $(this).parent().parent().parent().find('.product_code').html();
+                                let button = $(this);
+                                button.html("Processing...")
+
+                                $.ajax({
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/pre-order',
+                                    type: "GET",
+                                    data: {
+                                        'pre_order_product_code': pre_order_product_code,
+                                        'customer_fb_id': $("#customer_id").val(),
+                                    },
+                                    success: function (result, jqXHR) {
+                                        // showNotification(result, "text-success");
+                                        button.hide(300);
+                                    },
+                                    error: function (error, jqXHR) {
+                                        showNotification(error.responseJSON, "text-danger");
+                                        button.hide(300);
+                                    }
+                                });
+                            });
+
+                            let eventH = $(".cart_button").on("click", function () {
+                                let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
+                                let add_to_cart_button = $(this);
+                                add_to_cart_button.html("Adding...");
+
+                                $.ajax({
+                                    url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
+                                    type: "GET",
+                                    data: {
+                                        'cart_product_id': cart_product_id,
+                                        'customer_fb_id': $("#customer_id").val(),
+                                    },
+                                    success: function (result, jqXHR) {
+                                        showNotification(result, "text-success");
+                                        add_to_cart_button.off("click");
+                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                    },
+                                    error: function (error, jqXHR) {
+                                        showNotification(error.responseJSON, "text-danger");
+                                        add_to_cart_button.off("click");
+                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                    }
+                                });
+                            });
+
+                            $(".selected_variants").on("change", function () {
+                                let variations_combination = [];
+                                variations_combination.push($(this).parent().parent().find('.parent_id').val());
+
+                                let vari = $(this).val();
+                                variations_combination.push(vari);
+
+                                $(this).parent().parent().find('.selected_variants').each(function () {
+                                    if (vari != $(this).val()) {
+                                        variations_combination.push($(this).val());
+                                    }
+                                });
+
+                                let image_base_path = "{{asset('images/products')."/"}}";//dev
+                                // let image_base_path = "https://clients.howkar.com/images/products/";//live
+                                let permu = perm(variations_combination);
+
+                                for (let i = 0; i < permu.length; i++) {
+                                    let var_product = variants_list[permu[i].join('_')];
+                                    if (var_product) {
+                                        console.log(permu[i]);
+                                        console.log(var_product);
+
+                                        $(this).parent().parent().find('.product_name').html(var_product['name']);
+                                        $(this).parent().parent().find('.product_code').html(var_product['code']);
+                                        $(this).parent().parent().find('.product_price').html(var_product['price']);
+                                        $(this).parent().parent().find('.product_id').val(var_product['product_id']);
+                                        $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
+                                        $(this).parent().parent().parent().find('.cart_button').on("click", eventH);
+
+                                        if (var_product['images'].length > 0)
+                                            $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
+                                        else
+                                            $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + 'no.png');
+                                    }
+                                }
+
+                            });
+                            console.log(variants_list);
                             pagination(result);
                         } else {
                             showNotification("No Products Found", "text-danger", null);
@@ -591,14 +689,15 @@
                 '<p><b>Price: </b><span class="product_price">' + price + '</span> BDT</p>\n' +
                 '' + discounts + vari + '' +
                 '<input class="parent_id" type="hidden" value="' + parent_id + '">' +
-                '<input class="product_id" type="text" value="' + product_id + '">';
+                '<input class="product_id" type="hidden" value="' + product_id + '">';
         }
 
         function productVariants(variants, parent_id) {
             let vari = '';
             for (let i = 0; i < variants.length; i++) {
                 vari += '<p><b>' + variants[i].name + ':</b>' +
-                    '<select style="height: 25px" class="selected_variants">' +
+                    '<select style="height: 30px;margin-left: 5px;border: 1px solid #d6c8c8;border-radius: 5px;" ' +
+                    'class="selected_variants">' +
                     '<option class="selected disabled">Choose</option>';
 
                 for (let j = 0; j < variants[i].variant_properties_name.length; j++) {

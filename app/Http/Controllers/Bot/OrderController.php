@@ -57,7 +57,6 @@ class OrderController extends Controller
             ->with('title', 'Cart || ' . $this->shop->page_name);
     }
 
-
     //Functions for carts
     public function addToCart(Request $request)
     {
@@ -91,17 +90,16 @@ class OrderController extends Controller
 
     public function removeCartProducts(Request $request)
     {
-        if ($this->processRemoveCartProducts($request->product_code, $request->customer_fb_id)) {
+        if ($this->processRemoveCartProducts($request->product_id, $request->customer_fb_id)) {
             return response()->json("Product removed from cart successfully.", 200);
         } else {
             return response()->json("Cannot remove product. Please try again!", 400);
         }
     }
 
-    public function processRemoveCartProducts($product_code, $customer_fb_id)
+    public function processRemoveCartProducts($product_id, $customer_fb_id)
     {
-        $product_id = Product::select('id')->where('code', $product_code)->where('shop_id', $this->shop_id)->first();
-        return Cart::where('pid', $product_id->id)->where('customer_fb_id', $customer_fb_id)->delete();
+        return Cart::where('pid', $product_id)->where('customer_fb_id', $customer_fb_id)->delete();
     }
 
 
@@ -126,7 +124,7 @@ class OrderController extends Controller
             $customer_details->shipping_address = $data['shipping_address'];
             $customer_details->save();
 
-            $product_codes = $data['product_code'];
+            $product_ids = $data['product_id'];
             $product_qty = $data['product_qty'];
 
             $stock_out_product = array();
@@ -146,9 +144,9 @@ class OrderController extends Controller
             $order_code_update->code = $order_code;
             $order_code_update->save();
 
-            for ($i = 0; $i < sizeof($product_codes); $i++) {
-                if ($product_codes[$i] != null) {
-                    $product_details = $this->getProductCodeAndPrice($product_codes[$i]);
+            for ($i = 0; $i < sizeof($product_ids); $i++) {
+                if ($product_ids[$i] != null) {
+                    $product_details = $this->getProductCodeAndPrice($product_ids[$i]);
                     if ($product_qty[$i] == 0 || $product_qty[$i] == "") {
                         $qty = 1;
                     } else {
@@ -163,7 +161,7 @@ class OrderController extends Controller
                         $discounted_price = 0;
                     }
 
-                    $this->processRemoveCartProducts($product_codes[$i], $data['customer_fb_id']);
+                    $this->processRemoveCartProducts($product_ids[$i], $data['customer_fb_id']);
 
                     //Pre order
                     /* if ($qty > $product_details->stock) {
@@ -270,9 +268,9 @@ class OrderController extends Controller
 
 
     //Helper Functions
-    public function getProductCodeAndPrice($product_code)
+    public function getProductCodeAndPrice($product_id)
     {
-        return Product::select('id', 'price', 'stock')->where('code', $product_code)->where('shop_id', $this->shop_id)->with('discounts')->first();
+        return Product::select('id', 'price', 'stock')->where('id', $product_id)->where('shop_id', $this->shop_id)->with('discounts')->first();
     }
 
     public function updateProductStock($product_id, $qty)

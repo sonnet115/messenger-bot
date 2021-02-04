@@ -32,6 +32,11 @@ class Product extends Model
             ->with('variantPropertiesName');
     }
 
+    public function variantsName()
+    {
+        return $this->belongsToMany(VariantProperty::class, ProductVariant::class, 'product_id', 'variant_property_ids');
+    }
+
     public function childProducts()
     {
         return $this->hasMany(self::class, 'parent_product_id', 'id')
