@@ -290,8 +290,9 @@
                                         let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants, result.data[i].id, result.data[i].child_products[j].id);
                                         let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
                                         let images = productImage(result.data[i].child_products[j].images);
-                                        let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
-                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                        let add_cart_button = addToCartButton();
+                                        let view_cart_button = viewCartButton(cart_url);
+                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, add_cart_button, view_cart_button);
                                         product_container.append(products);
                                         variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
                                     } else {
@@ -323,10 +324,10 @@
                                 });
                             });
 
-                         let eventH = $(".cart_button").on("click", function () {
+                            $(".add_cart_button").on("click", function () {
                                 let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
                                 let add_to_cart_button = $(this);
-                                add_to_cart_button.html("Adding...");
+                                add_to_cart_button.html('<i class="fa fa-shopping-cart"></i> Adding...');
 
                                 $.ajax({
                                     url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
@@ -337,13 +338,14 @@
                                     },
                                     success: function (result, jqXHR) {
                                         showNotification(result, "text-success");
-                                        add_to_cart_button.off("click");
-                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        add_to_cart_button.parent().hide();
+                                        add_to_cart_button.parent().parent().find('.view_cart_button').parent().show();
                                     },
                                     error: function (error, jqXHR) {
                                         showNotification(error.responseJSON, "text-danger");
-                                        add_to_cart_button.off("click");
-                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        console.log(add_to_cart_button);
+                                        add_to_cart_button.parent().hide();
+                                        add_to_cart_button.parent().parent().find('.view_cart_button').parent().show();
                                     }
                                 });
                             });
@@ -375,8 +377,10 @@
                                         $(this).parent().parent().find('.product_code').html(var_product['code']);
                                         $(this).parent().parent().find('.product_price').html(var_product['price']);
                                         $(this).parent().parent().find('.product_id').val(var_product['product_id']);
-                                        $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
-                                        $(this).parent().parent().parent().find('.cart_button').on("click", eventH);
+
+                                        $(this).parent().parent().parent().find('.view_cart_button').parent().hide();
+                                        $(this).parent().parent().parent().find('.add_cart_button').parent().show();
+                                        $(this).parent().parent().parent().find('.add_cart_button').html("<i class='fa fa-shopping-cart'></i> Add to Cart");
 
                                         if (var_product['images'].length > 0)
                                             $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
@@ -417,8 +421,9 @@
                                         let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants, result.data[i].id, result.data[i].child_products[j].id);
                                         let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
                                         let images = productImage(result.data[i].child_products[j].images);
-                                        let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
-                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                        let add_cart_button = addToCartButton();
+                                        let view_cart_button = viewCartButton();
+                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, add_cart_button, view_cart_button);
                                         product_container.append(products);
                                         variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
                                     } else {
@@ -450,10 +455,10 @@
                                 });
                             });
 
-                            let eventH = $(".cart_button").on("click", function () {
+                            $(".add_cart_button").on("click", function () {
                                 let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
                                 let add_to_cart_button = $(this);
-                                add_to_cart_button.html("Adding...");
+                                add_to_cart_button.html('<i class="fa fa-shopping-cart"></i> Adding...');
 
                                 $.ajax({
                                     url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
@@ -464,13 +469,14 @@
                                     },
                                     success: function (result, jqXHR) {
                                         showNotification(result, "text-success");
-                                        add_to_cart_button.off("click");
-                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        add_to_cart_button.parent().hide();
+                                        add_to_cart_button.parent().parent().find('.view_cart_button').parent().show();
                                     },
                                     error: function (error, jqXHR) {
                                         showNotification(error.responseJSON, "text-danger");
-                                        add_to_cart_button.off("click");
-                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        console.log(add_to_cart_button);
+                                        add_to_cart_button.parent().hide();
+                                        add_to_cart_button.parent().parent().find('.view_cart_button').parent().show();
                                     }
                                 });
                             });
@@ -502,8 +508,10 @@
                                         $(this).parent().parent().find('.product_code').html(var_product['code']);
                                         $(this).parent().parent().find('.product_price').html(var_product['price']);
                                         $(this).parent().parent().find('.product_id').val(var_product['product_id']);
-                                        $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
-                                        $(this).parent().parent().parent().find('.cart_button').on("click", eventH);
+
+                                        $(this).parent().parent().parent().find('.view_cart_button').parent().hide();
+                                        $(this).parent().parent().parent().find('.add_cart_button').parent().show();
+                                        $(this).parent().parent().parent().find('.add_cart_button').html("<i class='fa fa-shopping-cart'></i> Add to Cart");
 
                                         if (var_product['images'].length > 0)
                                             $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
@@ -515,6 +523,7 @@
                             });
                             console.log(variants_list);
                             pagination(result);
+                            $("#product_list_modal").modal("toggle");
                         } else {
                             showNotification("No Products Found", "text-danger", null);
                         }
@@ -544,8 +553,9 @@
                                         let product_details = productDetails(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].stock, result.data[i].child_products[j].price, result.data[i].child_products[j].discounts, result.data[i].variants, result.data[i].id, result.data[i].child_products[j].id);
                                         let discount_available = discountAvailable(result.data[i].child_products[j].discounts);
                                         let images = productImage(result.data[i].child_products[j].images);
-                                        let order_pre_order_button = orderPreOrderButton(result.data[i].child_products[j].stock, result.data[i].child_products[j].code);
-                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, order_pre_order_button);
+                                        let add_cart_button = addToCartButton();
+                                        let view_cart_button = viewCartButton();
+                                        let products = allProductDetails(product_details, discount_available, images, result.data[i].child_products[j].code, add_cart_button, view_cart_button);
                                         product_container.append(products);
                                         variants_list[result.data[i].child_products[j].parent_product_id + '_' + result.data[i].child_products[j].variant_combination_ids] = new Variants(result.data[i].child_products[j].name, result.data[i].child_products[j].code, result.data[i].child_products[j].price, result.data[i].child_products[j].id, result.data[i].child_products[j].images);
                                     } else {
@@ -577,10 +587,10 @@
                                 });
                             });
 
-                            let eventH = $(".cart_button").on("click", function () {
+                            $(".add_cart_button").on("click", function () {
                                 let cart_product_id = $(this).parent().parent().parent().find('.product_id').val();
                                 let add_to_cart_button = $(this);
-                                add_to_cart_button.html("Adding...");
+                                add_to_cart_button.html('<i class="fa fa-shopping-cart"></i> Adding...');
 
                                 $.ajax({
                                     url: base_url + 'bot/' + $("#app_id").val() + '/add-to-cart',
@@ -591,13 +601,14 @@
                                     },
                                     success: function (result, jqXHR) {
                                         showNotification(result, "text-success");
-                                        add_to_cart_button.off("click");
-                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        add_to_cart_button.parent().hide();
+                                        add_to_cart_button.parent().parent().find('.view_cart_button').parent().show();
                                     },
                                     error: function (error, jqXHR) {
                                         showNotification(error.responseJSON, "text-danger");
-                                        add_to_cart_button.off("click");
-                                        add_to_cart_button.attr("href", cart_url).html("View Cart").addClass(" btn-primary").removeClass("btn-outline-success");
+                                        console.log(add_to_cart_button);
+                                        add_to_cart_button.parent().hide();
+                                        add_to_cart_button.parent().parent().find('.view_cart_button').parent().show();
                                     }
                                 });
                             });
@@ -629,8 +640,10 @@
                                         $(this).parent().parent().find('.product_code').html(var_product['code']);
                                         $(this).parent().parent().find('.product_price').html(var_product['price']);
                                         $(this).parent().parent().find('.product_id').val(var_product['product_id']);
-                                        $(this).parent().parent().parent().find('.cart_button').attr("href", 'javascript:void(0)').html("Add to Cart").addClass(" btn-outline-success").removeClass("btn-primary");
-                                        $(this).parent().parent().parent().find('.cart_button').on("click", eventH);
+
+                                        $(this).parent().parent().parent().find('.view_cart_button').parent().hide();
+                                        $(this).parent().parent().parent().find('.add_cart_button').parent().show();
+                                        $(this).parent().parent().parent().find('.add_cart_button').html("<i class='fa fa-shopping-cart'></i> Add to Cart");
 
                                         if (var_product['images'].length > 0)
                                             $(this).parent().parent().parent().find('.product_image').attr("src", image_base_path + var_product['images'][0].image_url);
@@ -642,6 +655,7 @@
                             });
                             console.log(variants_list);
                             pagination(result);
+                            $("#product_list_modal").modal("toggle");
                         } else {
                             showNotification("No Products Found", "text-danger", null);
                         }
@@ -754,9 +768,9 @@
             return image;
         }
 
-        function orderPreOrderButton(stock, product_code) {
+        function addToCartButton() {
             return '<div class="col-sm-12 text-center" style="margin-top: 10px">' +
-                '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn cart_button outline_btn btn btn-outline-success btn-sm"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
+                '       <a style="font-size: .6rem" href="javascript:void(0)" class="order_pre_order_btn add_cart_button outline_btn btn btn-outline-success btn-sm"><i class="fa fa-shopping-cart"></i> Add to Cart</a> ' +
                 '   </div>';
             // Pre-order
             // if (stock > 0) {
@@ -770,13 +784,20 @@
             // }
         }
 
-        function allProductDetails(product_details, discount_available, images, code, order_pre_order_button) {
+        function viewCartButton(cart_url) {
+            return '<div class="col-sm-12 text-center" style="margin-top: 10px;display: none">' +
+                '       <a style="font-size: .6rem" href="' + cart_url + '" class="order_pre_order_btn view_cart_button outline_btn btn btn-primary btn-sm"><i class="fa fa-eye"></i> View Cart</a> ' +
+                '   </div>';
+        }
+
+        function allProductDetails(product_details, discount_available, images, code, add_cart_button, view_cart_button) {
 
             return '<div class="row shadow-sm pt-4 pb-4" style="margin-bottom: 20px">\n' +
                 '                        ' + discount_available +
                 '                        <div class="col-6" style="max-height: 200px">\n' +
                 '                            ' + images +
-                '                            ' + order_pre_order_button +
+                '                            ' + add_cart_button +
+                '                            ' + view_cart_button +
                 '                        </div>\n' +
                 '                         <div class="col-6" style="font-size: 13px">\n' +
                 '                            ' + product_details +
